@@ -1,0 +1,38 @@
+{
+  "name": "customer-management-frontend",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {
+    "flow-bin": "^0.75.0",
+    "react-scripts": "1.1.4",
+    "redux-devtools": "^3.4.1"
+  },
+  "dependencies": {
+    "@brigad/redux-rest-easy": "^2.9.3",
+    "documentation": "^8.0.0",
+    "moment": "^2.22.2",
+    "normalizr": "^3.2.4",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-redux": "^5.0.7",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "react-stomp": "^3.3.0",
+    "redux": "^4.0.0",
+    "redux-thunk": "^2.3.0",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.81.2",
+    "whatwg-fetch": "^2.0.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "doc": "documentation build src/** -f html -o docs"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "semi": false
+  }
+}

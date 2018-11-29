@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package riskmanagement;
+
+service RiskManagement {
+  rpc Trigger (TriggerRequest) returns (stream TriggerReply) {}
+}
+
+message TriggerRequest {}
+
+message TriggerReply {
+  oneof report_or_progress {
+    Report report = 1;
+    int32 progress = 2;
+  }
+}
+
+message Report {
+  string csv = 1;
+}

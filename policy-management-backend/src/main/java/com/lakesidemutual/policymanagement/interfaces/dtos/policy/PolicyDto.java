@@ -1,0 +1,122 @@
+package com.lakesidemutual.policymanagement.interfaces.dtos.policy;
+
+import java.util.Date;
+
+import org.springframework.hateoas.ResourceSupport;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+/**
+ * The PolicyDto class is a data transfer object (DTO) that represents a single insurance policy.
+ * It inherits from the ResourceSupport class which allows us to create a REST representation (e.g., JSON, XML)
+ * that follows the HATEOAS principle. For example, links can be added to the representation (e.g., self, address.change)
+ * which means that future actions the client may take can be discovered from the resource representation.
+ *
+ * @see <a href="https://docs.spring.io/spring-hateoas/docs/current/reference/html/">Spring HATEOAS - Reference Documentation</a>
+ */
+public class PolicyDto extends ResourceSupport {
+	private String policyId;
+	private Object customer;
+	private Date creationDate;
+	private PolicyPeriodDto policyPeriod;
+	private String policyType;
+	private MoneyAmountDto policyLimit;
+	private MoneyAmountDto insurancePremium;
+	private InsuringAgreementDto insuringAgreement;
+	@JsonProperty("_expandable")
+	private String[] expandable;
+
+	public PolicyDto() {}
+
+	public PolicyDto(
+			String policyId,
+			Object customer,
+			Date creationDate,
+			PolicyPeriodDto policyPeriod,
+			String policyType,
+			MoneyAmountDto policyLimit,
+			MoneyAmountDto insurancePremium,
+			InsuringAgreementDto insuringAgreement) {
+		this.policyId = policyId;
+		this.customer = customer;
+		this.creationDate = creationDate;
+		this.policyPeriod = policyPeriod;
+		this.policyType = policyType;
+		this.policyLimit = policyLimit;
+		this.insurancePremium = insurancePremium;
+		this.insuringAgreement = insuringAgreement;
+		this.expandable = new String[]{"customer"};
+	}
+
+	public Object getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Object customer) {
+		this.customer = customer;
+	}
+
+	public String getPolicyId() {
+		return policyId;
+	}
+
+	public void setPolicyId(String policyId) {
+		this.policyId = policyId;
+	}
+
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public PolicyPeriodDto getPolicyPeriod() {
+		return policyPeriod;
+	}
+
+	public void setPolicyPeriod(PolicyPeriodDto policyPeriod) {
+		this.policyPeriod = policyPeriod;
+	}
+
+	public String getPolicyType() {
+		return policyType;
+	}
+
+	public void setPolicyType(String policyType) {
+		this.policyType = policyType;
+	}
+
+	public MoneyAmountDto getPolicyLimit() {
+		return policyLimit;
+	}
+
+	public void setPolicyLimit(MoneyAmountDto policyLimit) {
+		this.policyLimit = policyLimit;
+	}
+
+	public MoneyAmountDto getInsurancePremium() {
+		return insurancePremium;
+	}
+
+	public void setInsurancePremium(MoneyAmountDto insurancePremium) {
+		this.insurancePremium = insurancePremium;
+	}
+
+	public InsuringAgreementDto getInsuringAgreement() {
+		return insuringAgreement;
+	}
+
+	public void setInsuringAgreement(InsuringAgreementDto insuringAgreement) {
+		this.insuringAgreement = insuringAgreement;
+	}
+
+	public String[] getExpandable() {
+		return expandable;
+	}
+
+	public void setExpandable(String[] expandable) {
+		this.expandable = expandable;
+	}
+}

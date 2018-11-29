@@ -1,0 +1,6 @@
+{
+  "javascript.validate.enable": false,
+  "files.autoSave": "onFocusChange",
+  "editor.formatOnSave": true,
+  "flow.useNPMPackagedFlow": true
+}
