@@ -3,7 +3,7 @@ ARG BASE=/usr/src/app
 COPY pom.xml ${BASE}/
 COPY lib ${BASE}/lib
 COPY src ${BASE}/src
-RUN mvn  -Dmaven.gitcommitid.skip=true -f ${BASE}/pom.xml install
+RUN mvn -f ${BASE}/pom.xml install
 
 FROM openjdk:8-jdk-alpine
 COPY --from=build /usr/src/app/lib /app/lib
