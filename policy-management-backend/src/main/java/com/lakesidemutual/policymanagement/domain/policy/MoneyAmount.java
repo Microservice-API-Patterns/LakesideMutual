@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import javax.persistence.Embeddable;
 
-import com.lakesidemutual.domaindrivendesign.ValueObject;
+import org.microserviceapipatterns.domaindrivendesign.ValueObject;
 
 /**
  * An instance of MoneyAmount is a value object that represents an amount of money in a specific currency.

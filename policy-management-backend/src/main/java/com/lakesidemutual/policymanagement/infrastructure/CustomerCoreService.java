@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.microserviceapipatterns.domaindrivendesign.InfrastructureService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +21,6 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.lakesidemutual.domaindrivendesign.InfrastructureService;
 import com.lakesidemutual.policymanagement.domain.customer.CustomerId;
 import com.lakesidemutual.policymanagement.interfaces.dtos.CustomerCoreNotAvailableException;
 import com.lakesidemutual.policymanagement.interfaces.dtos.customer.CustomerDto;

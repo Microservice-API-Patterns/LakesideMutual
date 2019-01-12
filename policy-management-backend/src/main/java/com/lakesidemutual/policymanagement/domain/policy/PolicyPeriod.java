@@ -5,7 +5,7 @@ import java.util.Objects;
 
 import javax.persistence.Embeddable;
 
-import com.lakesidemutual.domaindrivendesign.ValueObject;
+import org.microserviceapipatterns.domaindrivendesign.ValueObject;
 
 /**
  * A PolicyPeriod is a value object that is used to represent the period during which a policy is valid.

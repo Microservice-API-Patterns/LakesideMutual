@@ -2,7 +2,7 @@ package com.lakesidemutual.policymanagement.domain.policy;
 
 import java.util.Objects;
 
-import com.lakesidemutual.domaindrivendesign.ValueObject;
+import org.microserviceapipatterns.domaindrivendesign.ValueObject;
 
 /**
  * A PolicyType is a value object that is used to represent the type of a policy (e.g., health insurance, life insurance, etc).

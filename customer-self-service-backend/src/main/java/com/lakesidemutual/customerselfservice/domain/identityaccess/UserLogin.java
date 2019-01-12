@@ -16,7 +16,7 @@ import com.lakesidemutual.customerselfservice.domain.customer.CustomerId;
  */
 @Entity
 @Table(name = "user_logins")
-public class UserLogin implements com.lakesidemutual.domaindrivendesign.Entity {
+public class UserLogin implements org.microserviceapipatterns.domaindrivendesign.Entity {
 
 	@Id
 	@GeneratedValue

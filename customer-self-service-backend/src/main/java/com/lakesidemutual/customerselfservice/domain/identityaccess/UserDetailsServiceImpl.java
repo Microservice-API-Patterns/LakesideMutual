@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import com.lakesidemutual.customerselfservice.infrastructure.UserLoginRepository;
-import com.lakesidemutual.domaindrivendesign.DomainService;
+import org.microserviceapipatterns.domaindrivendesign.DomainService;
 
 /**
  * UserDetailsServiceImpl is a domain service that can load user logins from the UserLoginRepository.

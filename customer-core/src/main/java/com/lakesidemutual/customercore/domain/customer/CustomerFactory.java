@@ -8,7 +8,7 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 import com.lakesidemutual.customercore.infrastructure.CustomerRepository;
-import com.lakesidemutual.domaindrivendesign.Factory;
+import org.microserviceapipatterns.domaindrivendesign.Factory;
 
 /**
  * CustomerFactory is a factory that is responsible for the creation of CustomerAggregateRoot objects.

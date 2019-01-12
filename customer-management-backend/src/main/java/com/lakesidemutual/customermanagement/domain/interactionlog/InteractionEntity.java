@@ -11,7 +11,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "interactions")
-public class InteractionEntity implements com.lakesidemutual.domaindrivendesign.Entity {
+public class InteractionEntity implements org.microserviceapipatterns.domaindrivendesign.Entity {
 	@Id
 	private String id;
 	private Date date;

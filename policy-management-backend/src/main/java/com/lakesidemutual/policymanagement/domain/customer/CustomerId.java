@@ -5,8 +5,8 @@ import java.util.Objects;
 
 import javax.persistence.Embeddable;
 
-import com.lakesidemutual.domaindrivendesign.EntityIdentifier;
-import com.lakesidemutual.domaindrivendesign.ValueObject;
+import org.microserviceapipatterns.domaindrivendesign.EntityIdentifier;
+import org.microserviceapipatterns.domaindrivendesign.ValueObject;
 
 import io.github.adr.embedded.MADR;
 

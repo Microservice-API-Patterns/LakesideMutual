@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import com.lakesidemutual.domaindrivendesign.BoundedContext;
+import org.microserviceapipatterns.domaindrivendesign.BoundedContext;
 
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;

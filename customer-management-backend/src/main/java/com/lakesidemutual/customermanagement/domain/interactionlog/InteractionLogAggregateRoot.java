@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.lakesidemutual.domaindrivendesign.RootEntity;
+import org.microserviceapipatterns.domaindrivendesign.RootEntity;
 
 /**
  * InteractionLogAggregateRoot is the root entity of the InteractionLog aggregate. Note that there is

@@ -7,7 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.lakesidemutual.domaindrivendesign.ValueObject;
+import org.microserviceapipatterns.domaindrivendesign.ValueObject;
 
 /**
  * An Address is a value object that is used to represent the postal address of a customer.

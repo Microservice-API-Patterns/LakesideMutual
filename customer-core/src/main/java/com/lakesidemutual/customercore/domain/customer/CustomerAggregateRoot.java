@@ -5,7 +5,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.lakesidemutual.domaindrivendesign.RootEntity;
+import org.microserviceapipatterns.domaindrivendesign.RootEntity;
 
 import io.github.adr.embedded.MADR;
 

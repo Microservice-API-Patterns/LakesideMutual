@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.lakesidemutual.customercore.domain.customer.CustomerAggregateRoot;
 import com.lakesidemutual.customercore.domain.customer.CustomerId;
-import com.lakesidemutual.domaindrivendesign.Repository;
+import org.microserviceapipatterns.domaindrivendesign.Repository;
 
 /**
  * The CustomerRepository can be used to read and write CustomerAggregateRoot objects from and to the backing database. Spring automatically

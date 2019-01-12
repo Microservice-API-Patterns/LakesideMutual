@@ -11,7 +11,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.google.common.base.Objects;
-import com.lakesidemutual.domaindrivendesign.Entity;
+import org.microserviceapipatterns.domaindrivendesign.Entity;
 
 /**
  * CustomerProfileEntity is an entity that contains the personal data (customer profile) of a CustomerAggregateRoot.

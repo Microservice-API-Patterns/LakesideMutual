@@ -16,7 +16,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.TreeMultimap;
-import com.lakesidemutual.domaindrivendesign.DomainService;
+import org.microserviceapipatterns.domaindrivendesign.DomainService;
 
 /**
  * This is a DDD Domain Service and is automatically injected thanks

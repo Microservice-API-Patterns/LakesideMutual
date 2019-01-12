@@ -7,8 +7,8 @@ import javax.persistence.Embeddable;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
-import com.lakesidemutual.domaindrivendesign.EntityIdentifier;
-import com.lakesidemutual.domaindrivendesign.ValueObject;
+import org.microserviceapipatterns.domaindrivendesign.EntityIdentifier;
+import org.microserviceapipatterns.domaindrivendesign.ValueObject;
 
 /**
  * A PolicyId is a value object that is used to represent the unique id of a policy.

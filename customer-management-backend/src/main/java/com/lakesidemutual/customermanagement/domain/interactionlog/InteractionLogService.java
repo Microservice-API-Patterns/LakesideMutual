@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.lakesidemutual.customermanagement.infrastructure.InteractionLogRepository;
-import com.lakesidemutual.domaindrivendesign.DomainService;
+import org.microserviceapipatterns.domaindrivendesign.DomainService;
 
 /**
  * InteractionLogService is a domain service which generates notification objects for any unacknowledged interactions.

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.microserviceapipatterns.domaindrivendesign.InfrastructureService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +29,6 @@ import com.lakesidemutual.customerselfservice.interfaces.dtos.customer.CustomerC
 import com.lakesidemutual.customerselfservice.interfaces.dtos.customer.CustomerDto;
 import com.lakesidemutual.customerselfservice.interfaces.dtos.customer.CustomerProfileUpdateRequestDto;
 import com.lakesidemutual.customerselfservice.interfaces.dtos.customer.CustomersDto;
-import com.lakesidemutual.domaindrivendesign.InfrastructureService;
 
 /**
  * CustomerCoreService is a remote proxy that interacts with the Customer Core in order to give

@@ -17,7 +17,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "insuringagreements")
-public class InsuringAgreementEntity implements com.lakesidemutual.domaindrivendesign.Entity {
+public class InsuringAgreementEntity implements org.microserviceapipatterns.domaindrivendesign.Entity {
 	@GeneratedValue
 	@Id
 	private Long id;

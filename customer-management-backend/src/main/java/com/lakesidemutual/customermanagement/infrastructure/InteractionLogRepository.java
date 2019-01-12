@@ -3,7 +3,7 @@ package com.lakesidemutual.customermanagement.infrastructure;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.lakesidemutual.customermanagement.domain.interactionlog.InteractionLogAggregateRoot;
-import com.lakesidemutual.domaindrivendesign.Repository;
+import org.microserviceapipatterns.domaindrivendesign.Repository;
 
 /**
  * The InteractionLogRepository can be used to read and write InteractionLogAggregateRoot objects from and to the backing database. Spring automatically

@@ -12,7 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.lakesidemutual.domaindrivendesign.RootEntity;
+import org.microserviceapipatterns.domaindrivendesign.RootEntity;
 import com.lakesidemutual.policymanagement.domain.customer.CustomerId;
 
 import io.github.adr.embedded.MADR;

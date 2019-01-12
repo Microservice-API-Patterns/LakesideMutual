@@ -16,7 +16,7 @@ import com.lakesidemutual.customercore.domain.customer.CustomerFactory;
 import com.lakesidemutual.customercore.domain.customer.CustomerId;
 import com.lakesidemutual.customercore.domain.customer.CustomerProfileEntity;
 import com.lakesidemutual.customercore.infrastructure.CustomerRepository;
-import com.lakesidemutual.domaindrivendesign.ApplicationService;
+import org.microserviceapipatterns.domaindrivendesign.ApplicationService;
 
 /**
  * The CustomerService class is an application service that is

@@ -3,7 +3,7 @@ package com.lakesidemutual.customerselfservice.infrastructure;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.lakesidemutual.customerselfservice.domain.identityaccess.UserLogin;
-import com.lakesidemutual.domaindrivendesign.Repository;
+import org.microserviceapipatterns.domaindrivendesign.Repository;
 
 /**
  * The UserLoginRepository can be used to read and write UserLogin objects from and to the backing database. Spring automatically

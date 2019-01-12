@@ -2,7 +2,7 @@ package com.lakesidemutual.policymanagement.domain.policy;
 
 import java.util.Date;
 
-import com.lakesidemutual.domaindrivendesign.DomainEvent;
+import org.microserviceapipatterns.domaindrivendesign.DomainEvent;
 import com.lakesidemutual.policymanagement.interfaces.dtos.customer.CustomerDto;
 import com.lakesidemutual.policymanagement.interfaces.dtos.policy.PolicyDto;
 

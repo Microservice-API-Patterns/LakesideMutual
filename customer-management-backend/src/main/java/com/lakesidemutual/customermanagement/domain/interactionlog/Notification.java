@@ -1,6 +1,6 @@
 package com.lakesidemutual.customermanagement.domain.interactionlog;
 
-import com.lakesidemutual.domaindrivendesign.ValueObject;
+import org.microserviceapipatterns.domaindrivendesign.ValueObject;
 
 /**
  * A Notification is a value object that is used to represent
