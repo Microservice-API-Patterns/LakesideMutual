@@ -1,6 +1,7 @@
 package com.lakesidemutual.customerselfservice.application;
 
 import java.io.File;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
@@ -58,7 +59,7 @@ public class DataLoader implements ApplicationRunner {
 	 */
 	private List<Map<String, String>> loadUsers() {
 		try {
-			File file = new ClassPathResource("mock_users_small.csv").getFile();
+			InputStream file = new ClassPathResource("mock_users_small.csv").getInputStream();
 			CsvMapper mapper = new CsvMapper();
 			CsvSchema schema = CsvSchema.emptySchema().withHeader();
 			MappingIterator<Map<String, String>> readValues = mapper.readerFor(Map.class).with(schema).readValues(file);
