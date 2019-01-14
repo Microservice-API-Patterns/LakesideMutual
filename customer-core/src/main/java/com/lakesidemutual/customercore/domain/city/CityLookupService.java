@@ -2,6 +2,7 @@ package com.lakesidemutual.customercore.domain.city;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class CityLookupService implements DomainService {
 	private static Multimap<String, String> loadLookupMap() {
 		Multimap<String, String> map = TreeMultimap.create();
 		try {
-			File file = new ClassPathResource(CSV_FILE).getFile();
+			InputStream file = new ClassPathResource(CSV_FILE).getInputStream();
 			CsvMapper mapper = new CsvMapper();
 			CsvSchema schema = CsvSchema.emptySchema().withHeader().withColumnSeparator(CSV_SEPARATOR);
 			MappingIterator<Map<String, String>> readValues = mapper.readerFor(Map.class).with(schema).readValues(file);
