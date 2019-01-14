@@ -64,6 +64,7 @@ public class DataLoader implements ApplicationRunner {
 			MappingIterator<Map<String, String>> readValues = mapper.readerFor(Map.class).with(schema).readValues(file);
 			return readValues.readAll();
 		} catch (Exception e) {
+			logger.error("Could not load mock data", e);
 			return Collections.emptyList();
 		}
 	}
