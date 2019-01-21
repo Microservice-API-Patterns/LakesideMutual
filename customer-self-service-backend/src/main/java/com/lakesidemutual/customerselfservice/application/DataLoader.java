@@ -1,6 +1,5 @@
 package com.lakesidemutual.customerselfservice.application;
 
-import java.io.File;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.util.Collections;
