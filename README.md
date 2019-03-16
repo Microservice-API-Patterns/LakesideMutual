@@ -1,5 +1,5 @@
 # Lakeside Mutual
-Lakeside Mutual is a fictitious insurance company which serves as a sample application to demonstrate microservices and domain-driven design. The company provides several digital services to its customers and its employees. 
+Lakeside Mutual is a fictitious insurance company which serves as a sample application to demonstrate microservices and domain-driven design. The company provides several digital services to its customers and its employees. [Microservice API Patterns](https://microservice-api-patterns.org/) are applied in the application backends.
 
 ## Architecture Overview
 The following diagram shows an overview of the core components that are the building blocks for the services Lakeside Mutual provides to its customers and its employees:
