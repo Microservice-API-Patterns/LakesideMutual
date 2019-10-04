@@ -3,6 +3,8 @@ package com.lakesidemutual.customerselfservice.interfaces.dtos.customer;
 import java.util.Date;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.base.Objects;
@@ -20,6 +22,8 @@ public class CustomerRegistrationRequestDto {
 	@NotEmpty
 	private String lastname;
 
+	@NotNull
+	@Past
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date birthday;
 

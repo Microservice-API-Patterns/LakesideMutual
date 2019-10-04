@@ -83,6 +83,11 @@ public class CustomerDto extends ResourceSupport {
 	public CustomerDto() {
 	}
 
+	public CustomerDto(String customerId, CustomerProfileDto customerProfile) {
+		this.customerId = customerId;
+		this.customerProfile = customerProfile;
+	}
+
 	public String getCustomerId() {
 		return customerId;
 	}

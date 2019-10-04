@@ -1,4 +1,4 @@
-# Lakeside Mutual : Policy Management Frontend
+# ![Lakeside Mutual Logo](../resources/logo-32x32.png) Lakeside Mutual: Policy Management Frontend
 
 The Policy Management frontend allows Lakeside Mutual employees to view and manage the insurance policies
 of individual customers.

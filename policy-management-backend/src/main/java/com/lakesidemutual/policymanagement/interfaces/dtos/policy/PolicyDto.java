@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.hateoas.ResourceSupport;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lakesidemutual.policymanagement.domain.policy.PolicyAggregateRoot;
 
 /**
  * The PolicyDto class is a data transfer object (DTO) that represents a single insurance policy.
@@ -49,6 +50,20 @@ public class PolicyDto extends ResourceSupport {
 		this.insurancePremium = insurancePremium;
 		this.insuringAgreement = insuringAgreement;
 		this.expandable = new String[]{"customer"};
+	}
+
+	public static PolicyDto fromDomainObject(PolicyAggregateRoot policy) {
+		return new PolicyDto(
+				policy.getId().getId(),
+				policy.getCustomerId().getId(),
+				policy.getCreationDate(),
+				PolicyPeriodDto.fromDomainObject(policy.getPolicyPeriod()),
+				policy.getPolicyType().getName(),
+				MoneyAmountDto.fromDomainObject(policy.getDeductible()),
+				MoneyAmountDto.fromDomainObject(policy.getPolicyLimit()),
+				MoneyAmountDto.fromDomainObject(policy.getInsurancePremium()),
+				InsuringAgreementDto.fromDomainObject(policy.getInsuringAgreement())
+				);
 	}
 
 	public Object getCustomer() {

@@ -21,6 +21,16 @@ public class CustomerProfileDto {
 	public CustomerProfileDto() {
 	}
 
+	public CustomerProfileDto(String firstname, String lastname, Date birthday, AddressDto currentAddress, String email, String phoneNumber, List<AddressDto> moveHistory) {
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.birthday = birthday;
+		this.currentAddress = currentAddress;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+		this.moveHistory = moveHistory;
+	}
+
 	public String getFirstname() {
 		return firstname;
 	}

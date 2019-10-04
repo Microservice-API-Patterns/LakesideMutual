@@ -87,6 +87,8 @@ export default class Store extends Container<State> {
       lookupCitiySuggestions: this.lookupCitiySuggestions,
       fetchInteractionLog: this.fetchInteractionLog,
       createInsuranceQuoteRequest: this.createInsuranceQuoteRequest,
+      resetInsuranceQuoteRequestCreationError: this
+        .resetInsuranceQuoteRequestCreationError,
       fetchInsuranceQuoteRequests: this.fetchInsuranceQuoteRequests,
       fetchInsuranceQuoteRequest: this.fetchInsuranceQuoteRequest,
       respondToInsuranceQuote: this.respondToInsuranceQuote,
@@ -268,6 +270,10 @@ export default class Store extends Container<State> {
         insuranceQuoteRequestCreationError: error,
       })
     }
+  }
+
+  resetInsuranceQuoteRequestCreationError = () => {
+    this.setState({ insuranceQuoteRequestCreationError: null })
   }
 
   fetchInsuranceQuoteRequests = async (customerId: CustomerId) => {

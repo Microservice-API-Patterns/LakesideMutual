@@ -1,4 +1,4 @@
-# Lakeside Mutual : Customer Core
+# ![Lakeside Mutual Logo](../resources/logo-32x32.png) Lakeside Mutual: Customer Core
 The Customer Core manages the personal data about the individual customers (e.g., name, email, current address, etc.). It provides this data to the other components
 through an HTTP resource API.
 

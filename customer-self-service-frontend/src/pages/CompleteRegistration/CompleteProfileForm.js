@@ -22,6 +22,7 @@ const streetAddressKey = "streetAddress"
 const postalCodeKey = "postalCode"
 const cityKey = "city"
 const phoneNumberKey = "phoneNumber"
+const birthdayKey = "birthday"
 
 const context = new Map([
   [firstnameKey, "First Name"],
@@ -30,6 +31,7 @@ const context = new Map([
   [postalCodeKey, "Postal Code"],
   [cityKey, "City"],
   [phoneNumberKey, "Phone Number"],
+  [birthdayKey, "Birthday"],
 ])
 
 type State = {
@@ -222,12 +224,13 @@ export default class extends React.Component<Props, State> {
           {this.renderTextField(phoneNumberKey, phoneNumber, errorFields)}
 
           <Form.Input
-            label="Birthday"
-            placeholder="Birthday"
+            label={context.get(birthdayKey)}
+            placeholder={context.get(birthdayKey)}
             type="date"
-            name="birthday"
+            name={birthdayKey}
             value={birthday}
             onChange={this.handleChange}
+            error={errorFields.includes(birthdayKey)}
           />
           <Button
             fluid

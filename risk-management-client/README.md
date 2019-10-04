@@ -1,4 +1,4 @@
-# Lakeside Mutual : Risk-Management client
+# ![Lakeside Mutual Logo](../resources/logo-32x32.png) Lakeside Mutual: Risk-Management client
 
 The Risk-Management service allows the professionals of Lakeside Mutual to periodically download
 a customer data report which helps them during risk assessment.

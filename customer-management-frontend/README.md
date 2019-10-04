@@ -1,4 +1,4 @@
-# Lakeside Mutual : Customer Management Frontend
+# ![Lakeside Mutual Logo](../resources/logo-32x32.png) Lakeside Mutual: Customer Management Frontend
 
 The Customer Management frontend allows Customer-Service operators to interact with customers and help them resolve issues related to
 Lakeside Mutual's insurance products.

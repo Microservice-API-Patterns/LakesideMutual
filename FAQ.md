@@ -1,4 +1,4 @@
-# Frequently Asked Questions and Troubleshooting
+# ![Lakeside Mutual Logo](./resources/logo-32x32.png) Frequently Asked Questions and Troubleshooting
 
 ## Can I use IntelliJ IDEA instead of the Spring Tools Suite?
 

@@ -1,4 +1,4 @@
-# Lakeside Mutual : Customer Management Backend
+# ![Lakeside Mutual Logo](../resources/logo-32x32.png) Lakeside Mutual: Customer Management Backend
 
 The Customer Management backend provides an HTTP resource API for the Customer Self-Service frontend and the Customer Management frontend.
 

@@ -17,6 +17,7 @@ export type Props = {
   insuranceQuoteRequestCreationError: ?Error,
   actions: {
     createInsuranceQuoteRequest: InsuranceQuoteRequest => Promise<void>,
+    resetInsuranceQuoteRequestCreationError: () => void,
   },
 }
 
@@ -94,6 +95,9 @@ export default class extends React.Component<Props, State> {
   }
 
   goToStep(index: number) {
+    if (index === 2) {
+      this.props.actions.resetInsuranceQuoteRequestCreationError()
+    }
     this.setState({ currentStep: index })
   }
 

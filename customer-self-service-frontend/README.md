@@ -1,4 +1,4 @@
-# Lakeside Mutual : Customer Self-Service Frontend
+# ![Lakeside Mutual Logo](../resources/logo-32x32.png) Lakeside Mutual: Customer Self-Service Frontend
 
 The Customer Self-Service frontend allows users to register themselves, view their current insurance policy and change their address.
 

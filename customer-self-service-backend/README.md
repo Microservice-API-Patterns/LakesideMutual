@@ -1,4 +1,4 @@
-# Lakeside Mutual : Customer Self-Service Backend
+# ![Lakeside Mutual Logo](../resources/logo-32x32.png) Lakeside Mutual: Customer Self-Service Backend
 
 The Customer Self-Service backend provides an HTTP resource API for the Customer Self-Service frontend. Additionally, it connects
 to an [ActiveMQ](http://activemq.apache.org/) broker provided by the Policy Management backend in order to process insurance quote

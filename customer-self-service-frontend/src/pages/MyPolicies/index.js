@@ -27,6 +27,7 @@ export type Props = {
     fetchPolicies: (customerId: CustomerId) => Promise<void>,
     fetchInsuranceQuoteRequests: (customerId: CustomerId) => Promise<void>,
     createInsuranceQuoteRequest: InsuranceQuoteRequest => Promise<void>,
+    resetInsuranceQuoteRequestCreationError: () => void,
     fetchInsuranceQuoteRequest: (id: string) => Promise<void>,
     respondToInsuranceQuote: (
       insuranceQuoteRequestId: string,

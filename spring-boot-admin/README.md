@@ -1,4 +1,4 @@
-# Lakeside Mutual : Spring Boot Admin
+# ![Lakeside Mutual Logo](../resources/logo-32x32.png) Lakeside Mutual: Spring Boot Admin
 
 The Spring Boot Admin application monitors the other sample applications and provides various insights. For details, see the [project's GitHub page](https://github.com/codecentric/spring-boot-admin).
 

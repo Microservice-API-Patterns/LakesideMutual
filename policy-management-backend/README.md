@@ -1,4 +1,4 @@
-# Lakeside Mutual : Policy Management Backend
+# ![Lakeside Mutual Logo](../resources/logo-32x32.png) Lakeside Mutual: Policy Management Backend
 
 The Policy Management backend provides an HTTP resource API for the Customer Self-Service frontend and the Policy Management frontend. It also sends change events to
 the Risk-Management server through an [ActiveMQ](http://activemq.apache.org/) message queue. Additionally, there are multiple message queues that are used to communicate

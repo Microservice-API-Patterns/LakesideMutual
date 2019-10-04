@@ -3,6 +3,7 @@ package com.lakesidemutual.policymanagement.interfaces;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.lakesidemutual.policymanagement.domain.customer.CustomerId;
 import com.lakesidemutual.policymanagement.domain.insurancequoterequest.CustomerDecisionEvent;
+import com.lakesidemutual.policymanagement.domain.insurancequoterequest.CustomerInfoEntity;
 import com.lakesidemutual.policymanagement.domain.insurancequoterequest.InsuranceQuoteExpiredEvent;
 import com.lakesidemutual.policymanagement.domain.insurancequoterequest.InsuranceQuoteRequestAggregateRoot;
 import com.lakesidemutual.policymanagement.domain.insurancequoterequest.PolicyCreatedEvent;
@@ -24,9 +26,14 @@ import com.lakesidemutual.policymanagement.domain.policy.PolicyAggregateRoot;
 import com.lakesidemutual.policymanagement.domain.policy.PolicyId;
 import com.lakesidemutual.policymanagement.domain.policy.PolicyPeriod;
 import com.lakesidemutual.policymanagement.domain.policy.PolicyType;
+import com.lakesidemutual.policymanagement.domain.policy.UpdatePolicyEvent;
+import com.lakesidemutual.policymanagement.infrastructure.CustomerCoreRemoteProxy;
 import com.lakesidemutual.policymanagement.infrastructure.CustomerSelfServiceMessageProducer;
 import com.lakesidemutual.policymanagement.infrastructure.InsuranceQuoteRequestRepository;
 import com.lakesidemutual.policymanagement.infrastructure.PolicyRepository;
+import com.lakesidemutual.policymanagement.infrastructure.RiskManagementMessageProducer;
+import com.lakesidemutual.policymanagement.interfaces.dtos.customer.CustomerDto;
+import com.lakesidemutual.policymanagement.interfaces.dtos.policy.PolicyDto;
 
 /**
  * CustomerDecisionMessageConsumer is a Spring component that consumes CustomerDecisionEvents
@@ -45,6 +52,12 @@ public class CustomerDecisionMessageConsumer {
 
 	@Autowired
 	private CustomerSelfServiceMessageProducer customerSelfServiceMessageProducer;
+
+	@Autowired
+	private RiskManagementMessageProducer riskManagementMessageProducer;
+
+	@Autowired
+	private CustomerCoreRemoteProxy customerCoreRemoteProxy;
 
 	@JmsListener(destination = "${customerDecisionEvent.queueName}")
 	public void receiveCustomerDecision(final Message<CustomerDecisionEvent> message) {
@@ -86,9 +99,18 @@ public class CustomerDecisionMessageConsumer {
 				policyRepository.save(policy);
 				Date policyCreationDate = new Date();
 				insuranceQuoteRequest.finalizeQuote(policyId, policyCreationDate);
-				PolicyCreatedEvent event = new PolicyCreatedEvent(policyCreationDate, insuranceQuoteRequest.getId(), policyId);
-				customerSelfServiceMessageProducer.sendPolicyCreatedEvent(event);
-				// TODO: notify the risk management server
+
+				PolicyCreatedEvent policyCreatedEvent = new PolicyCreatedEvent(policyCreationDate, insuranceQuoteRequest.getId(), policyId);
+				customerSelfServiceMessageProducer.sendPolicyCreatedEvent(policyCreatedEvent);
+
+				CustomerInfoEntity customerInfo = insuranceQuoteRequest.getCustomerInfo();
+				List<CustomerDto> customers = customerCoreRemoteProxy.getCustomersById(customerInfo.getCustomerId());
+				if(!customers.isEmpty()) {
+					CustomerDto customer = customers.get(0);
+					final PolicyDto policyDto = PolicyDto.fromDomainObject(policy);
+					final UpdatePolicyEvent event = new UpdatePolicyEvent("<customer-self-service-backend>", decisionDate, customer, policyDto);
+					riskManagementMessageProducer.emitEvent(event);
+				}
 			}
 		} else {
 			/*

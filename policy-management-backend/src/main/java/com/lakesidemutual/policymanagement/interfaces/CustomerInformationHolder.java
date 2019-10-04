@@ -25,10 +25,7 @@ import com.lakesidemutual.policymanagement.interfaces.dtos.customer.CustomerDto;
 import com.lakesidemutual.policymanagement.interfaces.dtos.customer.CustomerIdDto;
 import com.lakesidemutual.policymanagement.interfaces.dtos.customer.CustomerNotFoundException;
 import com.lakesidemutual.policymanagement.interfaces.dtos.customer.PaginatedCustomerResponseDto;
-import com.lakesidemutual.policymanagement.interfaces.dtos.policy.InsuringAgreementDto;
-import com.lakesidemutual.policymanagement.interfaces.dtos.policy.MoneyAmountDto;
 import com.lakesidemutual.policymanagement.interfaces.dtos.policy.PolicyDto;
-import com.lakesidemutual.policymanagement.interfaces.dtos.policy.PolicyPeriodDto;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -173,29 +170,11 @@ public class CustomerInformationHolder {
 	}
 
 	private PolicyDto createPolicyDto(PolicyAggregateRoot policy, String expand) {
-		Object customer;
+		PolicyDto policyDto = PolicyDto.fromDomainObject(policy);
 		if(expand.equals("customer")) {
-			customer = customerCoreRemoteProxy.getCustomer(policy.getCustomerId());
-		} else {
-			customer = policy.getCustomerId().getId();
+			CustomerDto customer = customerCoreRemoteProxy.getCustomer(policy.getCustomerId());
+			policyDto.setCustomer(customer);
 		}
-
-		PolicyPeriodDto policyPeriodDto = PolicyPeriodDto.fromDomainObject(policy.getPolicyPeriod());
-		InsuringAgreementDto insuringAgreementDto = InsuringAgreementDto.fromDomainObject(policy.getInsuringAgreement());
-		MoneyAmountDto deductibleDto = MoneyAmountDto.fromDomainObject(policy.getDeductible());
-		MoneyAmountDto policyLimitDto = MoneyAmountDto.fromDomainObject(policy.getPolicyLimit());
-		MoneyAmountDto insurancePremiumDto = MoneyAmountDto.fromDomainObject(policy.getInsurancePremium());
-
-		PolicyDto policyDto = new PolicyDto(
-				policy.getId().getId(),
-				customer,
-				policy.getCreationDate(),
-				policyPeriodDto,
-				policy.getPolicyType().getName(),
-				deductibleDto,
-				policyLimitDto,
-				insurancePremiumDto,
-				insuringAgreementDto);
 
 		Link selfLink = linkTo(methodOn(PolicyInformationHolder.class).getPolicy(policy.getId(), expand)).withSelfRel();
 		policyDto.add(selfLink);

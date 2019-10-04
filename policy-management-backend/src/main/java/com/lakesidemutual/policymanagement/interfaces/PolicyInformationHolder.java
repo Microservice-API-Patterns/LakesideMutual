@@ -43,12 +43,9 @@ import com.lakesidemutual.policymanagement.infrastructure.RiskManagementMessageP
 import com.lakesidemutual.policymanagement.interfaces.dtos.UnknownCustomerException;
 import com.lakesidemutual.policymanagement.interfaces.dtos.customer.CustomerDto;
 import com.lakesidemutual.policymanagement.interfaces.dtos.policy.CreatePolicyRequestDto;
-import com.lakesidemutual.policymanagement.interfaces.dtos.policy.InsuringAgreementDto;
-import com.lakesidemutual.policymanagement.interfaces.dtos.policy.MoneyAmountDto;
 import com.lakesidemutual.policymanagement.interfaces.dtos.policy.PaginatedPolicyResponseDto;
 import com.lakesidemutual.policymanagement.interfaces.dtos.policy.PolicyDto;
 import com.lakesidemutual.policymanagement.interfaces.dtos.policy.PolicyNotFoundException;
-import com.lakesidemutual.policymanagement.interfaces.dtos.policy.PolicyPeriodDto;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -181,29 +178,11 @@ public class PolicyInformationHolder {
 		List<PolicyDto> policyDtos = new ArrayList<>();
 		for(int i = 0; i < policies.size(); i++) {
 			PolicyAggregateRoot policy = policies.get(i);
-			Object customer;
+			PolicyDto policyDto = PolicyDto.fromDomainObject(policy);
 			if(customers != null) {
-				customer = customers.get(i);
-			} else {
-				customer = policy.getCustomerId().getId();
+				CustomerDto customer = customers.get(i);
+				policyDto.setCustomer(customer);
 			}
-
-			PolicyPeriodDto policyPeriodDto = PolicyPeriodDto.fromDomainObject(policy.getPolicyPeriod());
-			InsuringAgreementDto insuringAgreementDto = InsuringAgreementDto.fromDomainObject(policy.getInsuringAgreement());
-			MoneyAmountDto deductibleDto = MoneyAmountDto.fromDomainObject(policy.getDeductible());
-			MoneyAmountDto policyLimitDto = MoneyAmountDto.fromDomainObject(policy.getPolicyLimit());
-			MoneyAmountDto insurancePremiumDto = MoneyAmountDto.fromDomainObject(policy.getInsurancePremium());
-
-			PolicyDto policyDto = new PolicyDto(
-					policy.getId().getId(),
-					customer,
-					policy.getCreationDate(),
-					policyPeriodDto,
-					policy.getPolicyType().getName(),
-					deductibleDto,
-					policyLimitDto,
-					insurancePremiumDto,
-					insuringAgreementDto);
 			policyDtos.add(policyDto);
 		}
 		return policyDtos;

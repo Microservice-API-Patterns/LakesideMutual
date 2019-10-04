@@ -1,4 +1,4 @@
-# Lakeside Mutual : Eureka Server
+# ![Lakeside Mutual Logo](../resources/logo-32x32.png) Lakeside Mutual: Eureka Server
 
 Eureka Server provides a service registry. For details, see the [project's GitHub page](https://github.com/Netflix/eureka/wiki/Eureka-at-a-glance). By default, the services of this project don't use Eureka to reduce the complexity of the deployment (one less service that needs to be started).
 
