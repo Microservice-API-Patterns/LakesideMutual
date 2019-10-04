@@ -51,7 +51,7 @@ To learn more about individual components, please have a look at the README file
 
 Detailed setup instructions can be found in each application's README file. To conveniently start all applications, the `run_all_applications` scripts can be used:
 
-1. Make sure you have [Java 8 or higher](https://jdk.java.net/) installed.
+1. Make sure you have [Java 8, 11 or 12](https://jdk.java.net/) installed.
 2. Install [Node](https://nodejs.org/en/). Version 8.2 or later is required. You can check the currently installed version by running `node --version`.
 3. Install Maven (see [https://maven.apache.org](https://maven.apache.org) for installation instructions).
 4. Run your the `run_all_applications` script suitable for your platform. Note that the frontend applications might be started before the backends are ready. In that case, just reload the page in the browser.
