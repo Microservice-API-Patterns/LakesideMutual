@@ -19,6 +19,9 @@ public class CreatePolicyRequestDto {
 	private String policyType;
 
 	@Valid
+	private MoneyAmountDto deductible;
+
+	@Valid
 	private MoneyAmountDto policyLimit;
 
 	@Valid
@@ -33,12 +36,14 @@ public class CreatePolicyRequestDto {
 			String customerId,
 			PolicyPeriodDto policyPeriod,
 			String policyType,
+			MoneyAmountDto deductible,
 			MoneyAmountDto policyLimit,
 			MoneyAmountDto insurancePremium,
 			InsuringAgreementDto insuringAgreement) {
 		this.customerId = customerId;
 		this.policyPeriod = policyPeriod;
 		this.policyType = policyType;
+		this.deductible = deductible;
 		this.policyLimit = policyLimit;
 		this.insurancePremium = insurancePremium;
 		this.insuringAgreement = insuringAgreement;
@@ -54,6 +59,10 @@ public class CreatePolicyRequestDto {
 
 	public String getPolicyType() {
 		return policyType;
+	}
+
+	public MoneyAmountDto getDeductible() {
+		return deductible;
 	}
 
 	public MoneyAmountDto getPolicyLimit() {

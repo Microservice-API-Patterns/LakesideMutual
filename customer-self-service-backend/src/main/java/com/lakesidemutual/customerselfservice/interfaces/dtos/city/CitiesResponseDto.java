@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * The CitiesResponseDto represents a list of city names, transferred as simple
  * (atomic) strings. This is an example of the <a href=
- * "http://www.microservice-api-patterns.org/patterns/structure/basicRepresentationElements/WADE-AtomicParameter.html">Atomic
+ * "https://microservice-api-patterns.org/patterns/structure/representationElements/AtomicParameter">Atomic
  * Parameter</a> pattern.
  */
 public class CitiesResponseDto {

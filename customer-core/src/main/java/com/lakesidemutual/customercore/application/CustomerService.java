@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.microserviceapipatterns.domaindrivendesign.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,6 @@ import com.lakesidemutual.customercore.domain.customer.CustomerFactory;
 import com.lakesidemutual.customercore.domain.customer.CustomerId;
 import com.lakesidemutual.customercore.domain.customer.CustomerProfileEntity;
 import com.lakesidemutual.customercore.infrastructure.CustomerRepository;
-import org.microserviceapipatterns.domaindrivendesign.ApplicationService;
 
 /**
  * The CustomerService class is an application service that is
@@ -30,28 +30,28 @@ public class CustomerService implements ApplicationService {
 	@Autowired
 	private CustomerFactory customerFactory;
 
-	public CustomerAggregateRoot updateAddress(CustomerId customerId, Address updatedAddress) {
+	public Optional<CustomerAggregateRoot> updateAddress(CustomerId customerId, Address updatedAddress) {
 		Optional<CustomerAggregateRoot> optCustomer = customerRepository.findById(customerId);
 		if (!optCustomer.isPresent()) {
-			return null;
+			return optCustomer;
 		}
 
 		CustomerAggregateRoot customer = optCustomer.get();
 		customer.moveToAddress(updatedAddress);
 		customerRepository.save(customer);
-		return customer;
+		return optCustomer;
 	}
 
-	public CustomerAggregateRoot updateCustomerProfile(CustomerId customerId, CustomerProfileEntity updatedCustomerProfile) {
+	public Optional<CustomerAggregateRoot> updateCustomerProfile(CustomerId customerId, CustomerProfileEntity updatedCustomerProfile) {
 		Optional<CustomerAggregateRoot> optCustomer = customerRepository.findById(customerId);
 		if (!optCustomer.isPresent()) {
-			return null;
+			return optCustomer;
 		}
 
 		CustomerAggregateRoot customer = optCustomer.get();
 		customer.updateCustomerProfile(updatedCustomerProfile);
 		customerRepository.save(customer);
-		return customer;
+		return optCustomer;
 	}
 
 	public CustomerAggregateRoot createCustomer(CustomerProfileEntity customerProfile) {

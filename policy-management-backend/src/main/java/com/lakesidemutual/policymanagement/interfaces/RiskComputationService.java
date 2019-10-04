@@ -7,6 +7,8 @@ import java.util.Date;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,15 +23,17 @@ import io.swagger.annotations.ApiParam;
 
 /**
  * This REST controller allows clients to compute the risk factor for a given customer. It is an application of
- * the <a href="http://www.microservice-api-patterns.org/patterns/responsibility/processingResponsibilities/WADE-ComputationFunction.html">Computation Function</a> pattern.
+ * the <a href="https://microservice-api-patterns.org/patterns/responsibility/processingResponsibilities/ComputationFunction">Computation Function</a> pattern.
  * A Computation Service performs a function f that only depends on its input parameters and does not alter the state of the server.
  *
  * @see <a href=
- *      "http://www.microservice-api-patterns.org/patterns/responsibility/processingResponsibilities/WADE-ComputationFunction.html">www.microservice-api-patterns.org/patterns/responsibility/processingResponsibilities/WADE-ComputationFunction.html</a>
+ *      "https://microservice-api-patterns.org/patterns/responsibility/processingResponsibilities/ComputationFunction">https://microservice-api-patterns.org/patterns/responsibility/processingResponsibilities/ComputationFunction</a>
  */
 @RestController
 @RequestMapping("/riskfactor")
 public class RiskComputationService {
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 	@ApiOperation(value = "Computes the risk factor for a given customer.")
 	@PostMapping(value = "/compute")
 	public ResponseEntity<RiskFactorResponseDto> computeRiskFactor(
@@ -37,9 +41,9 @@ public class RiskComputationService {
 			@Valid
 			@RequestBody
 			RiskFactorRequestDto riskFactorRequest) {
-
 		int age = getAge(riskFactorRequest.getBirthday());
 		String postalCode = riskFactorRequest.getPostalCode();
+		logger.debug("Computing risk factor (age={}, postal-code={})", age, postalCode);
 		int riskFactor = computeRiskFactor(age, postalCode);
 		return ResponseEntity.ok(new RiskFactorResponseDto(riskFactor));
 	}

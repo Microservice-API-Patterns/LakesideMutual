@@ -7,8 +7,8 @@
 import { checkStatus } from "./helpers"
 import { policyManagementBackend as backend } from "../config"
 
-export async function getActivePolicy(customerId: CustomerId): Promise<Policy> {
-  return getJson(`/customers/${customerId}/active-policy`)
+export async function getPolicies(customerId: CustomerId): Promise<[Policy]> {
+  return getJson(`/customers/${customerId}/policies`)
 }
 
 async function getJson<U>(endpoint: string): Promise<U> {

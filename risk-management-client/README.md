@@ -22,3 +22,6 @@ Now you are ready to launch the Risk-Management client.
 
 The Risk-Management client will connect to the [gRPC](https://grpc.io/) service provided by the Risk-Management server. Therefore,
 you should make sure that the Risk-Management server is running before you start using the Risk-Management client. Then,  in the `risk-management-client` directory, you can download a customer data report by running `./riskmanager run /tmp/report.csv` (on Windows, use the `riskmanager.bat` file instead: `.\riskmanager.bat run \Temp\report.csv`).
+
+**Warning:** Note that the customer data report only includes data about customers that have at least one insurance policy. Also, when the address of a customer changes,
+this update is only reflected in the customer data report once one of the customer's policies has changed or a new policy has been added.

@@ -4,7 +4,6 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -19,21 +18,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lakesidemutual.policymanagement.domain.customer.CustomerId;
-import com.lakesidemutual.policymanagement.domain.policy.InsuringAgreementEntity;
-import com.lakesidemutual.policymanagement.domain.policy.MoneyAmount;
 import com.lakesidemutual.policymanagement.domain.policy.PolicyAggregateRoot;
-import com.lakesidemutual.policymanagement.domain.policy.PolicyPeriod;
-import com.lakesidemutual.policymanagement.infrastructure.CustomerCoreService;
+import com.lakesidemutual.policymanagement.infrastructure.CustomerCoreRemoteProxy;
 import com.lakesidemutual.policymanagement.infrastructure.PolicyRepository;
 import com.lakesidemutual.policymanagement.interfaces.dtos.customer.CustomerDto;
 import com.lakesidemutual.policymanagement.interfaces.dtos.customer.CustomerIdDto;
 import com.lakesidemutual.policymanagement.interfaces.dtos.customer.CustomerNotFoundException;
 import com.lakesidemutual.policymanagement.interfaces.dtos.customer.PaginatedCustomerResponseDto;
 import com.lakesidemutual.policymanagement.interfaces.dtos.policy.InsuringAgreementDto;
-import com.lakesidemutual.policymanagement.interfaces.dtos.policy.InsuringAgreementItemDto;
 import com.lakesidemutual.policymanagement.interfaces.dtos.policy.MoneyAmountDto;
 import com.lakesidemutual.policymanagement.interfaces.dtos.policy.PolicyDto;
-import com.lakesidemutual.policymanagement.interfaces.dtos.policy.PolicyNotFoundException;
 import com.lakesidemutual.policymanagement.interfaces.dtos.policy.PolicyPeriodDto;
 
 import io.swagger.annotations.ApiOperation;
@@ -43,8 +37,8 @@ import io.swagger.annotations.ApiParam;
  * This REST controller gives clients access to the customer data. It is an example of the
  * <i>Information Holder Resource</i> pattern. This particular one is a special type of information holder called <i>Master Data Holder</i>.
  *
- * @see <a href="http://www.microservice-api-patterns.org/patterns/responsibility/endpointRoles/WADE-InformationHolderResource.html">Information Holder Resource</a>
- * @see <a href="http://www.microservice-api-patterns.org/patterns/responsibility/informationHolderEndpoints/WADE-MasterDataHolder.html">Master Data Holder</a>
+ * @see <a href="https://microservice-api-patterns.org/patterns/responsibility/endpointRoles/InformationHolderResource">Information Holder Resource</a>
+ * @see <a href="https://microservice-api-patterns.org/patterns/responsibility/informationHolderEndpoints/MasterDataHolder">Master Data Holder</a>
  */
 @RestController
 @RequestMapping("/customers")
@@ -55,7 +49,7 @@ public class CustomerInformationHolder {
 	private PolicyRepository policyRepository;
 
 	@Autowired
-	private CustomerCoreService customerCoreService;
+	private CustomerCoreRemoteProxy customerCoreRemoteProxy;
 
 	@ApiOperation(value = "Get all customers.")
 	@GetMapping
@@ -63,7 +57,8 @@ public class CustomerInformationHolder {
 			@ApiParam(value = "search terms to filter the customers by name", required = false) @RequestParam(value = "filter", required = false, defaultValue = "") String filter,
 			@ApiParam(value = "the maximum number of customers per page", required = false) @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit,
 			@ApiParam(value = "the offset of the page's first customer", required = false) @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset) {
-		PaginatedCustomerResponseDto paginatedResponseIn = customerCoreService.getCustomers(filter, limit, offset);
+		logger.debug("Fetching a page of customers (offset={},limit={},filter='{}')", offset, limit, filter);
+		PaginatedCustomerResponseDto paginatedResponseIn = customerCoreRemoteProxy.getCustomers(filter, limit, offset);
 		PaginatedCustomerResponseDto paginatedResponseOut = createPaginatedCustomerResponseDto(
 				paginatedResponseIn.getFilter(),
 				paginatedResponseIn.getLimit(),
@@ -74,6 +69,7 @@ public class CustomerInformationHolder {
 	}
 
 	private PaginatedCustomerResponseDto createPaginatedCustomerResponseDto(String filter, Integer limit, Integer offset, int size, List<CustomerDto> customerDtos) {
+		customerDtos.forEach(this::addCustomerLinks);
 		PaginatedCustomerResponseDto paginatedCustomerResponseDto = new PaginatedCustomerResponseDto(filter, limit, offset, size, customerDtos);
 		paginatedCustomerResponseDto.add(linkTo(methodOn(CustomerInformationHolder.class).getCustomers(filter, limit, offset)).withSelfRel());
 
@@ -89,6 +85,22 @@ public class CustomerInformationHolder {
 		}
 
 		return paginatedCustomerResponseDto;
+	}
+
+	/**
+	 * The CustomerDto could contain a nested list containing the customer's policies. However, many clients may not be
+	 * interested in the policies when they access the customer resource. To avoid sending large messages containing lots
+	 * of data that is not or seldom needed we instead add a link to a separate endpoint which returns the customer's policies.
+	 * This is an example of the <i>Linked Information Holder</i> pattern.
+	 *
+	 * @see <a href="https://microservice-api-patterns.org/patterns/structure/referenceManagement/LinkedInformationHolder">Linked Information Holder</a>
+	 */
+	private void addCustomerLinks(CustomerDto customerDto) {
+		CustomerIdDto customerId = new CustomerIdDto(customerDto.getCustomerId());
+		Link selfLink = linkTo(methodOn(CustomerInformationHolder.class).getCustomer(customerId)).withSelfRel();
+		Link policiesLink = linkTo(methodOn(CustomerInformationHolder.class).getPolicies(customerId, "")).withRel("policies");
+		customerDto.add(selfLink);
+		customerDto.add(policiesLink);
 	}
 
 	/**
@@ -113,7 +125,7 @@ public class CustomerInformationHolder {
 	 * </code>
 	 * </pre>
 	 * If the given customer id is not valid, an error response with HTTP Status Code 404 is returned. The response body contains additional
-	 * information about the error in JSON form. This is an example of the <a href="http://www.microservice-api-patterns.org/patterns/quality/qualityManagementAndGovernance/WADE-ErrorReporting.html">Error Reporting</a>
+	 * information about the error in JSON form. This is an example of the <a href="https://microservice-api-patterns.org/patterns/quality/qualityManagementAndGovernance/ErrorReport">Error Report</a>
 	 * pattern:
 	 * <pre>
 	 * <code>
@@ -129,73 +141,50 @@ public class CustomerInformationHolder {
 	 * </code>
 	 * </pre>
 	 *
-	 * @see <a href="http://www.microservice-api-patterns.org/patterns/quality/qualityManagementAndGovernance/WADE-ErrorReporting.html">www.microservice-api-patterns.org/patterns/quality/qualityManagementAndGovernance/WADE-ErrorReporting.html</a>
+	 * @see <a href="https://microservice-api-patterns.org/patterns/quality/qualityManagementAndGovernance/ErrorReport">https://microservice-api-patterns.org/patterns/quality/qualityManagementAndGovernance/ErrorReport</a>
 	 */
 	@ApiOperation(value = "Get customer with a given customer id.")
 	@GetMapping(value = "/{customerIdDto}")
 	public ResponseEntity<CustomerDto> getCustomer(
 			@ApiParam(value = "the customer's unique id", required = true) @PathVariable CustomerIdDto customerIdDto) {
 		CustomerId customerId = new CustomerId(customerIdDto.getId());
-		CustomerDto customer = customerCoreService.getCustomer(customerId);
+		logger.debug("Fetching a customer with id '{}'", customerId.getId());
+		CustomerDto customer = customerCoreRemoteProxy.getCustomer(customerId);
 		if(customer == null) {
-			final String errorMessage = "Failed to find a customer with id '" + customerId.getId() + "'.";
-			logger.info(errorMessage);
+			final String errorMessage = "Failed to find a customer with id '{}'";
+			logger.warn(errorMessage, customerId.getId());
 			throw new CustomerNotFoundException(errorMessage);
 		}
+
+		addCustomerLinks(customer);
 		return ResponseEntity.ok(customer);
 	}
 
-	@ApiOperation(value = "Get a customer's policy history.")
-	@GetMapping(value = "/{customerIdDto}/policy-history")
-	public ResponseEntity<List<PolicyDto>> getPolicyHistory(
+	@ApiOperation(value = "Get a customer's policies.")
+	@GetMapping(value = "/{customerIdDto}/policies")
+	public ResponseEntity<List<PolicyDto>> getPolicies(
 			@ApiParam(value = "the customer's unique id", required = true) @PathVariable CustomerIdDto customerIdDto,
 			@ApiParam(value = "a comma-separated list of the fields that should be expanded in the response", required = false) @RequestParam(value = "expand", required = false, defaultValue = "") String expand) {
-
 		CustomerId customerId = new CustomerId(customerIdDto.getId());
+		logger.debug("Fetching policies for customer with id '{}' (fields='{}')", customerId.getId(), expand);
 		List<PolicyAggregateRoot> policies = policyRepository.findAllByCustomerIdOrderByCreationDateDesc(customerId);
-		if(policies.size() > 0) {
-			policies.remove(0);
-		}
 		List<PolicyDto> policyDtos = policies.stream().map(p -> createPolicyDto(p, expand)).collect(Collectors.toList());
 		return ResponseEntity.ok(policyDtos);
-	}
-
-	@ApiOperation(value = "Get a customer's active policy.")
-	@GetMapping(value = "/{customerIdDto}/active-policy")
-	public ResponseEntity<PolicyDto> getActivePolicy(
-			@ApiParam(value = "the customer's unique id", required = true) @PathVariable CustomerIdDto customerIdDto,
-			@ApiParam(value = "a comma-separated list of the fields that should be expanded in the response", required = false) @RequestParam(value = "expand", required = false, defaultValue = "") String expand) {
-
-		CustomerId customerId = new CustomerId(customerIdDto.getId());
-		Optional<PolicyAggregateRoot> optPolicy = policyRepository.findFirstByCustomerIdOrderByCreationDateDesc(customerId);
-		if(!optPolicy.isPresent()) {
-			final String errorMessage = "Failed to find a policy for a customer with id '" + customerIdDto.getId() + "'.";
-			logger.info(errorMessage);
-			throw new PolicyNotFoundException(errorMessage);
-		}
-
-		PolicyAggregateRoot policy = optPolicy.get();
-		PolicyDto policyDto = createPolicyDto(policy, expand);
-		return ResponseEntity.ok(policyDto);
 	}
 
 	private PolicyDto createPolicyDto(PolicyAggregateRoot policy, String expand) {
 		Object customer;
 		if(expand.equals("customer")) {
-			customer = customerCoreService.getCustomer(policy.getCustomerId());
+			customer = customerCoreRemoteProxy.getCustomer(policy.getCustomerId());
 		} else {
 			customer = policy.getCustomerId().getId();
 		}
 
-		PolicyPeriod policyPeriod = policy.getPolicyPeriod();
-		PolicyPeriodDto policyPeriodDto = new PolicyPeriodDto(policyPeriod.getStartDate(), policyPeriod.getEndDate());
-		InsuringAgreementEntity insuringAgreement = policy.getInsuringAgreement();
-		List<InsuringAgreementItemDto> insuringAgreementItemDtos = insuringAgreement.getAgreementItems().stream().map(item -> new InsuringAgreementItemDto(item.getTitle(), item.getDescription())).collect(Collectors.toList());
-		InsuringAgreementDto insuringAgreementDto = new InsuringAgreementDto(insuringAgreementItemDtos);
-		MoneyAmount policyLimit = policy.getPolicyLimit();
-		MoneyAmountDto policyLimitDto = new MoneyAmountDto(policyLimit.getAmount(), policyLimit.getCurrency().toString());
-		MoneyAmount insurancePremium = policy.getInsurancePremium();
-		MoneyAmountDto insurancePremiumDto = new MoneyAmountDto(insurancePremium.getAmount(), insurancePremium.getCurrency().toString());
+		PolicyPeriodDto policyPeriodDto = PolicyPeriodDto.fromDomainObject(policy.getPolicyPeriod());
+		InsuringAgreementDto insuringAgreementDto = InsuringAgreementDto.fromDomainObject(policy.getInsuringAgreement());
+		MoneyAmountDto deductibleDto = MoneyAmountDto.fromDomainObject(policy.getDeductible());
+		MoneyAmountDto policyLimitDto = MoneyAmountDto.fromDomainObject(policy.getPolicyLimit());
+		MoneyAmountDto insurancePremiumDto = MoneyAmountDto.fromDomainObject(policy.getInsurancePremium());
 
 		PolicyDto policyDto = new PolicyDto(
 				policy.getId().getId(),
@@ -203,6 +192,7 @@ public class CustomerInformationHolder {
 				policy.getCreationDate(),
 				policyPeriodDto,
 				policy.getPolicyType().getName(),
+				deductibleDto,
 				policyLimitDto,
 				insurancePremiumDto,
 				insuringAgreementDto);

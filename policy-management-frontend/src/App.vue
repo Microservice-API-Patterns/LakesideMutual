@@ -1,13 +1,18 @@
 <template>
   <div id="app">
     <router-link to="/">
-      <h1 is="sui-header" id="header">Policy Management</h1>
-      <p id="subheader">Lakeside Mutual</p>
+      <div id="siteheader">
+        <img :src="`${publicPath}favicon.png`" id="logo" />
+        <div>
+          <div id="header">Policy Management</div>
+          <div id="subheader">Lakeside Mutual</div>
+        </div>
+      </div>
     </router-link>
-    <Menu/>
+    <Menu />
     <sui-segment>
-      <router-view/>
-  </sui-segment>
+      <router-view />
+    </sui-segment>
   </div>
 </template>
 
@@ -16,24 +21,43 @@ import Menu from '@/components/Menu'
 
 export default {
   name: 'App',
-  components: { Menu }
+  components: { Menu },
+  data() {
+    return {
+      publicPath: process.env.BASE_URL
+    }
+  }
 }
 </script>
 
 <style>
 #app {
   max-width: 800px;
-  margin: 0px auto;
+  margin: 0px auto 100px;
+}
+
+#siteheader {
+  display: inline-flex;
+  margin-top: 20px;
+  align-items: center;
+}
+
+#logo {
+  height: 65px;
+  margin-right: 10px;
 }
 
 #header {
+  font-size: 28px;
+  line-height: 28px;
+  font-weight: bold;
   color: #192a56;
-  padding-top: 20px;
-  margin-bottom: 0px;
+  margin-bottom: 5px;
 }
 
 #subheader {
   font-size: 22px;
+  line-height: 22px;
   font-weight: lighter;
   color: #273c75;
   margin: 0px;

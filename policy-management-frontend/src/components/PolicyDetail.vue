@@ -1,17 +1,22 @@
 <template>
   <div>
     <sui-breadcrumb>
-      <sui-breadcrumb-section><router-link to="/">Policies</router-link></sui-breadcrumb-section>
-      <sui-breadcrumb-divider icon="right angle" />
-      <sui-breadcrumb-section v-if="isLoadingPolicy">Loading...</sui-breadcrumb-section>
-      <sui-breadcrumb-section v-if="!isLoadingPolicy">{{policy.policyType}} Policy ({{policy.customer.firstname}} {{policy.customer.lastname}})</sui-breadcrumb-section>
+      <sui-breadcrumb-section>
+        <router-link to="/">Policies</router-link>
+      </sui-breadcrumb-section>
+      <sui-breadcrumb-divider icon="right angle"/>
+      <sui-breadcrumb-section v-if="isLoadingPolicy && error == null">Loading...</sui-breadcrumb-section>
+      <sui-breadcrumb-section v-if="!isLoadingPolicy && error != null">Error!</sui-breadcrumb-section>
+      <sui-breadcrumb-section
+        v-if="!isLoadingPolicy && policy != null"
+      >{{policy.policyType}} Policy ({{policy.customer.firstname}} {{policy.customer.lastname}})</sui-breadcrumb-section>
     </sui-breadcrumb>
     <sui-segment basic v-if="isLoadingPolicy" class="loaderSegment">
       <sui-loader active>Loading...</sui-loader>
     </sui-segment>
-    <div v-if="!isLoadingPolicy && error == null">
-      <br/>
-      <policy :policy="policy" :customer="policy.customer"/>
+    <div v-if="!isLoadingPolicy && error == null && policy != null">
+      <br>
+      <policy :policy="policy" :customer="policy.customer" :onDelete="onDeletePolicy"/>
     </div>
     <error-message :error="error" resource="Policy" v-if="error != null"/>
   </div>
@@ -30,6 +35,11 @@ export default {
       policy: null,
       isLoadingPolicy: false,
       error: null
+    }
+  },
+  methods: {
+    onDeletePolicy() {
+      this.$router.push('/')
     }
   },
   async created() {

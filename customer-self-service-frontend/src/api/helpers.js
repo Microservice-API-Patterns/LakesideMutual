@@ -66,6 +66,29 @@ export async function postAuthenticatedJson<T, U>(
 }
 
 /**
+ * Sends an authentiacted JSON-PATCH request
+ * @param {string} url of the API
+ * @param {string} token
+ * @param {T} params to be sent in the request body.
+ */
+export async function patchAuthenticatedJson<T, U>(
+  url: string,
+  token: string,
+  params: T
+): Promise<U> {
+  const response = await fetch(url, {
+    method: "PATCH",
+    headers: {
+      "X-Auth-Token": token,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(params),
+  })
+  return checkStatus(response)
+}
+
+/**
  * Sends an authentiacted JSON-PUT request
  * @param {string} url of the API
  * @param {string} token

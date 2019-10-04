@@ -4,30 +4,37 @@
   "private": true,
   "devDependencies": {
     "flow-bin": "^0.75.0",
-    "react-scripts": "1.1.4"
+    "react-scripts": "2.1.5"
   },
   "dependencies": {
-    "documentation": "^8.0.0",
-    "moment": "^2.22.2",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
+    "documentation": "^8.1.2",
+    "moment": "^2.24.0",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "react-stomp": "^3.3.0",
+    "react-stomp": "^4.1.0",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.81.2",
+    "semantic-ui-react": "^0.85.0",
     "unstated": "^2.1.1",
-    "whatwg-fetch": "^2.0.4"
+    "whatwg-fetch": "^3.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "doc": "documentation build src/** -f html -o docs"
+    "doc": "documentation build src/** -f html -o docs",
+    "flow": "flow"
   },
   "prettier": {
     "trailingComma": "es5",
     "semi": false
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

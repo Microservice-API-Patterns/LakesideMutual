@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lakesidemutual.customermanagement.domain.customer.CustomerId;
-import com.lakesidemutual.customermanagement.infrastructure.CustomerCoreService;
+import com.lakesidemutual.customermanagement.infrastructure.CustomerCoreRemoteProxy;
 import com.lakesidemutual.customermanagement.interfaces.dtos.CustomerDto;
 import com.lakesidemutual.customermanagement.interfaces.dtos.CustomerNotFoundException;
 import com.lakesidemutual.customermanagement.interfaces.dtos.CustomerProfileDto;
@@ -28,8 +28,8 @@ import io.swagger.annotations.ApiParam;
  * This REST controller gives clients access to the customer data. It is an example of the
  * <i>Information Holder Resource</i> pattern. This particular one is a special type of information holder called <i>Master Data Holder</i>.
  *
- * @see <a href="http://www.microservice-api-patterns.org/patterns/responsibility/endpointRoles/WADE-InformationHolderResource.html">Information Holder Resource</a>
- * @see <a href="http://www.microservice-api-patterns.org/patterns/responsibility/informationHolderEndpoints/WADE-MasterDataHolder.html">Master Data Holder</a>
+ * @see <a href="https://microservice-api-patterns.org/patterns/responsibility/endpointRoles/InformationHolderResource">Information Holder Resource</a>
+ * @see <a href="https://microservice-api-patterns.org/patterns/responsibility/informationHolderEndpoints/MasterDataHolder">Master Data Holder</a>
  */
 @RestController
 @RequestMapping("/customers")
@@ -37,7 +37,7 @@ public class CustomerInformationHolder {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private CustomerCoreService customerCoreService;
+	private CustomerCoreRemoteProxy customerCoreRemoteProxy;
 
 	@ApiOperation(value = "Get all customers.")
 	@GetMapping
@@ -45,7 +45,7 @@ public class CustomerInformationHolder {
 			@ApiParam(value = "search terms to filter the customers by name", required = false) @RequestParam(value = "filter", required = false, defaultValue = "") String filter,
 			@ApiParam(value = "the maximum number of customers per page", required = false) @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit,
 			@ApiParam(value = "the offset of the page's first customer", required = false) @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset) {
-		return ResponseEntity.ok(customerCoreService.getCustomers(filter, limit, offset));
+		return ResponseEntity.ok(customerCoreRemoteProxy.getCustomers(filter, limit, offset));
 	}
 
 	@ApiOperation(value = "Get customer with a given customer id.")
@@ -53,7 +53,7 @@ public class CustomerInformationHolder {
 	public ResponseEntity<CustomerDto> getCustomer(
 			@ApiParam(value = "the customer's unique id", required = true) @PathVariable CustomerId customerId) {
 
-		CustomerDto customer = customerCoreService.getCustomer(customerId);
+		CustomerDto customer = customerCoreRemoteProxy.getCustomer(customerId);
 		if(customer == null) {
 			final String errorMessage = "Failed to find a customer with id '" + customerId.getId() + "'.";
 			logger.info(errorMessage);
@@ -67,6 +67,6 @@ public class CustomerInformationHolder {
 	public ResponseEntity<CustomerDto> updateCustomer(
 			@ApiParam(value = "the customer's unique id", required = true) @PathVariable CustomerId customerId,
 			@ApiParam(value = "the customer's updated profile", required = true) @Valid @RequestBody CustomerProfileDto customerProfile) {
-		return customerCoreService.updateCustomer(customerId, customerProfile);
+		return customerCoreRemoteProxy.updateCustomer(customerId, customerProfile);
 	}
 }

@@ -26,8 +26,12 @@ public class AddressDto {
 		this.city = city;
 	}
 
-	public static AddressDto create(Address address) {
+	public static AddressDto fromDomainObject(Address address) {
 		return new AddressDto(address.getStreetAddress(), address.getPostalCode(), address.getCity());
+	}
+
+	public Address toDomainObject() {
+		return new Address(streetAddress, postalCode, city);
 	}
 
 	public String getStreetAddress() {

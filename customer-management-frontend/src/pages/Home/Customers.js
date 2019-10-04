@@ -107,11 +107,13 @@ class Customers extends React.Component<Props, State> {
     }
 
     const endIndex = startIndex + this.state.activeFilter.length
-    return [
-      customerName.substring(0, startIndex),
-      <b>{customerName.substring(startIndex, endIndex)}</b>,
-      customerName.substring(endIndex),
-    ]
+    return (
+      <span>
+        {customerName.substring(0, startIndex)}
+        <b>{customerName.substring(startIndex, endIndex)}</b>
+        {customerName.substring(endIndex)}
+      </span>
+    )
   }
 
   renderCustomers() {

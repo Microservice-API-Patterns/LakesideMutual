@@ -37,6 +37,7 @@ Spring Boot applications include an `spring-boot-admin-starter-client` that conn
 ```
 
 Spring Boot Admin will then call the `/actuator` endpoints of the applications to monitor the application health. For example, the `/actuator/health` endpoints reports whether the service is up:
+
 ```
 curl http://localhost:8100/actuator/health
 
@@ -44,5 +45,9 @@ curl http://localhost:8100/actuator/health
   "status" : "UP"
 }
 ```
+
+## How it works when using Eureka
+
+When Eureka is used, Spring Boot applications register themselves at the Eureka Server. The Spring Boot Admin uses Eureka to discover all other Spring Boot applications. The `spring-boot-admin-starter-client` mentioned above is not needed anymore.
 
 See the [Spring Boot Admin documentation](http://codecentric.github.io/spring-boot-admin/2.1.0) to learn more about the different capabilities and configuration options.

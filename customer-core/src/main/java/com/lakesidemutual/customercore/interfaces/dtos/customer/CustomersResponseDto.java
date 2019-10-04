@@ -7,7 +7,7 @@ import org.springframework.hateoas.ResourceSupport;
 /**
  * The CustomersResponseDto holds a collection of @CustomerResponseDto
  * Parameter Trees. This class is an example of the <a href=
- * "https://www.microservice-api-patterns.org/patterns/structure/basicRepresentationElements/WADE-ParameterForest.html">Parameter
+ * "https://microservice-api-patterns.org/patterns/structure/representationElements/ParameterForest">Parameter
  * Forest</a> pattern.
  */
 public class CustomersResponseDto extends ResourceSupport {

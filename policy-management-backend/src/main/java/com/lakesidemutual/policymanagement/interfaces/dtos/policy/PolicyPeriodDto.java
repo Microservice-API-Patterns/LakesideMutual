@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
+import com.lakesidemutual.policymanagement.domain.policy.PolicyPeriod;
+
 /**
  * PolicyPeriodDto is a data transfer object (DTO) that represents the period during which a policy is valid.
  * */
@@ -20,6 +22,14 @@ public class PolicyPeriodDto {
 	public PolicyPeriodDto(Date startDate, Date endDate) {
 		this.startDate = startDate;
 		this.endDate = endDate;
+	}
+
+	public static PolicyPeriodDto fromDomainObject(PolicyPeriod policyPeriod) {
+		return new PolicyPeriodDto(policyPeriod.getStartDate(), policyPeriod.getEndDate());
+	}
+
+	public PolicyPeriod toDomainObject() {
+		return new PolicyPeriod(startDate, endDate);
 	}
 
 	public Date getStartDate() {

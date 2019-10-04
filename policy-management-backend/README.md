@@ -1,7 +1,8 @@
 # Lakeside Mutual : Policy Management Backend
 
 The Policy Management backend provides an HTTP resource API for the Customer Self-Service frontend and the Policy Management frontend. It also sends change events to
-the Risk-Management server through an [ActiveMQ](http://activemq.apache.org/) message queue.
+the Risk-Management server through an [ActiveMQ](http://activemq.apache.org/) message queue. Additionally, there are multiple message queues that are used to communicate
+with the Customer Self-Service backend in order to handle insurance quote requests.
 
 ## IDE
 
@@ -46,6 +47,25 @@ documentation for the Policy Management backend, go to [http://localhost:8090/sw
 ## Testing
 To run the automated tests for the Policy Management backend, right-click on the project in the Spring Tool 
 Suite and then click on `Run As -> JUnit Test`. The test classes are located in the `src/test/java` folder.
+
+## Logging
+The Policy Management Backend uses [SLF4J (Simple Logging Facade for Java)](https://www.slf4j.org) to write logs to the console. SLF4J loggers have various log levels to denote
+the importance of a log entry. For example, `ERROR` log entries are considered more important than `WARN` log entries which in turn are more important than `INFO` log entries.
+You can configure the granularity of the log output by setting the root level in the `src/main/resources/logback.xml` file. By default it is set to `INFO` which means
+that `DEBUG` log entries are not shown. Alternatively, you could change it to `DEBUG` to see all log output or you could change it to `WARN` to hide the `INFO` log entries
+and only show warnings and errors.
+
+The Policy Management Backend includes a `RequestTracingFilter` class which generates a random request ID for each HTTP request. This request ID is shown in the log output and it
+can be used to correlate different log entries with each other. For example, when you delete a policy you get log output that looks like this:
+
+```
+2019-10-04 09:04:49.695 [http-nio-8090-exec-8] INFO 3208 c.l.p.i.PolicyInformationHolder - Creating a new policy for customer with id 'bunlo9vk5f' 
+2019-10-04 09:04:49.746 [http-nio-8090-exec-8] INFO 3208 c.l.p.i.RiskManagementMessageProducer - Successfully sent a policy event to the risk management message queue. 
+```
+
+In this example, the number `3208` is the random request ID which means that both log entries were caused by the same HTTP request. From the log output we can see that
+a new policy is created in the `PolicyInformationHolder` and then the `RiskManagementMessageProducer` sends a message to the Risk Management server via a message queue
+in order to notify it about that new policy.
 
 ## Enabling Persistence
 By default, the database will be re-created when the application is started and any changes that were made are lost. This is configured in `src/main/resources/application.properties` by the following setting:

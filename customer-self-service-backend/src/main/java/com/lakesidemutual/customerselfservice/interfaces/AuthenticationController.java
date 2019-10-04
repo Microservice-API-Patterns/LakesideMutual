@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lakesidemutual.customerselfservice.domain.identityaccess.UserLogin;
+import com.lakesidemutual.customerselfservice.domain.identityaccess.UserLoginEntity;
 import com.lakesidemutual.customerselfservice.infrastructure.UserLoginRepository;
 import com.lakesidemutual.customerselfservice.interfaces.configuration.JwtUtils;
 import com.lakesidemutual.customerselfservice.interfaces.dtos.identityaccess.AuthenticationRequestDto;
@@ -93,7 +93,7 @@ public class AuthenticationController {
 
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String hashedPassword = passwordEncoder.encode(registration.getPassword());
-		UserLogin newUser = new UserLogin(registration.getEmail(), hashedPassword, "ADMIN", null);
+		UserLoginEntity newUser = new UserLoginEntity(registration.getEmail(), hashedPassword, "ADMIN", null);
 		userRepository.save(newUser);
 		return ResponseEntity.ok(new UserResponseDto(registration.getEmail(), null));
 	}

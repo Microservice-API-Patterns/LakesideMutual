@@ -10,6 +10,7 @@ import {
   getAuthenticatedJson,
   postAuthenticatedJson,
   putAuthenticatedJson,
+  patchAuthenticatedJson,
 } from "./helpers"
 
 /** Builds the URL to the backend API */
@@ -103,4 +104,42 @@ export function lookupCitiySuggestions(
 ): Promise<CitySuggestions> {
   const url = urlForEndpoint(`/cities/${postalCode}`)
   return getAuthenticatedJson(url, token)
+}
+
+export function createInsuranceQuoteRequest(
+  token: string,
+  data: InsuranceQuoteRequest
+): Promise<InsuranceQuoteRequest> {
+  const url = urlForEndpoint("/insurance-quote-requests")
+  return postAuthenticatedJson(url, token, data)
+}
+
+export function getInsuranceQuoteRequests(
+  token: string,
+  customerId: CustomerId
+): Promise<[InsuranceQuoteRequest]> {
+  const url = urlForEndpoint(
+    `/customers/${customerId}/insurance-quote-requests`
+  )
+  return getAuthenticatedJson(url, token)
+}
+
+export function getInsuranceQuoteRequest(
+  token: string,
+  id: string
+): Promise<InsuranceQuoteRequest> {
+  const url = urlForEndpoint(`/insurance-quote-requests/${id}`)
+  return getAuthenticatedJson(url, token)
+}
+
+export function respondToInsuranceQuote(
+  token: string,
+  insuranceQuoteRequestId: string,
+  accepted: boolean
+): Promise<InsuranceQuoteRequest> {
+  const url = urlForEndpoint(
+    `/insurance-quote-requests/${insuranceQuoteRequestId}`
+  )
+  const data = { status: accepted ? "QUOTE_ACCEPTED" : "QUOTE_REJECTED" }
+  return patchAuthenticatedJson(url, token, data)
 }

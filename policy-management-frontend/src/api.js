@@ -15,6 +15,46 @@ export async function getCustomer(customerId) {
   return getJson(`${policyManagementBackend}/customers/${customerId}`)
 }
 
+export async function getInsuranceQuoteRequests() {
+  return getJson(`${policyManagementBackend}/insurance-quote-requests`)
+}
+
+export async function getInsuranceQuoteRequest(insuranceQuoteRequestId) {
+  return getJson(
+    `${policyManagementBackend}/insurance-quote-requests/${insuranceQuoteRequestId}`
+  )
+}
+
+export async function respondToInsuranceQuoteRequest(
+  insuranceQuoteRequestId,
+  accept,
+  expirationDate,
+  insurancePremium,
+  policyLimit
+) {
+  let body
+  if (accept) {
+    body = {
+      status: 'QUOTE_RECEIVED',
+      expirationDate,
+      insurancePremium: {
+        amount: insurancePremium,
+        currency: 'CHF'
+      },
+      policyLimit: {
+        amount: policyLimit,
+        currency: 'CHF'
+      }
+    }
+  } else {
+    body = { status: 'REQUEST_REJECTED' }
+  }
+  return patchJson(
+    `${policyManagementBackend}/insurance-quote-requests/${insuranceQuoteRequestId}`,
+    body
+  )
+}
+
 export async function getPolicies(link) {
   if (link) {
     return getJson(link)
@@ -32,16 +72,8 @@ export async function getPolicy(policyId, expandCustomer = false) {
   return policy
 }
 
-export function getPolicyHistory(customerId) {
-  return getJson(
-    `${policyManagementBackend}/customers/${customerId}/policy-history`
-  )
-}
-
-export function getActivePolicy(customerId) {
-  return getJson(
-    `${policyManagementBackend}/customers/${customerId}/active-policy`
-  )
+export function getCustomerPolicies(customerId) {
+  return getJson(`${policyManagementBackend}/customers/${customerId}/policies`)
 }
 
 export async function createPolicy(
@@ -49,6 +81,7 @@ export async function createPolicy(
   startDate,
   endDate,
   policyType,
+  deductible,
   insurancePremium,
   policyLimit,
   agreementItems
@@ -64,6 +97,10 @@ export async function createPolicy(
       amount: policyLimit,
       currency: 'CHF'
     },
+    deductible: {
+      amount: deductible,
+      currency: 'CHF'
+    },
     insurancePremium: {
       amount: insurancePremium,
       currency: 'CHF'
@@ -74,6 +111,51 @@ export async function createPolicy(
   }
 
   return postJson(`${policyManagementBackend}/policies`, policy)
+}
+
+export async function updatePolicy(
+  policyId,
+  customerId,
+  startDate,
+  endDate,
+  policyType,
+  deductible,
+  insurancePremium,
+  policyLimit,
+  agreementItems
+) {
+  const policy = {
+    customerId,
+    policyPeriod: {
+      startDate,
+      endDate
+    },
+    policyType,
+    deductible: {
+      amount: deductible,
+      currency: 'CHF'
+    },
+    policyLimit: {
+      amount: policyLimit,
+      currency: 'CHF'
+    },
+    insurancePremium: {
+      amount: insurancePremium,
+      currency: 'CHF'
+    },
+    insuringAgreement: {
+      agreementItems
+    }
+  }
+
+  return putJson(`${policyManagementBackend}/policies/${policyId}`, policy)
+}
+
+export async function deletePolicy(policyId) {
+  const url = `${policyManagementBackend}/policies/${policyId}`
+  await fetch(url, {
+    method: 'DELETE'
+  })
 }
 
 export async function computeRiskFactor(customer) {
@@ -95,8 +177,20 @@ async function getJson(url) {
 }
 
 async function postJson(url, body) {
+  return submitJson(url, 'POST', body)
+}
+
+async function putJson(url, body) {
+  return submitJson(url, 'PUT', body)
+}
+
+async function patchJson(url, body) {
+  return submitJson(url, 'PATCH', body)
+}
+
+async function submitJson(url, method, body) {
   const response = await fetch(url, {
-    method: 'POST',
+    method,
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json'

@@ -1,6 +1,5 @@
 package com.lakesidemutual.customercore.application;
 
-import java.io.File;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -71,8 +70,7 @@ public class DataLoader implements ApplicationRunner {
 	 * This dummy data was generated using https://mockaroo.com/
 	 */
 	private List<Map<String, String>> loadCustomers() {
-		try {
-			InputStream file = new ClassPathResource("mock_customers_small.csv").getInputStream();
+		try(InputStream file = new ClassPathResource("mock_customers_small.csv").getInputStream()) {
 			CsvMapper mapper = new CsvMapper();
 			CsvSchema schema = CsvSchema.emptySchema().withHeader();
 			MappingIterator<Map<String, String>> readValues = mapper.readerFor(Map.class).with(schema).readValues(file);
@@ -84,6 +82,10 @@ public class DataLoader implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws ParseException {
+		if(customerRepository.count() > 0) {
+			logger.info("Skipping import of application dummy data, because the database already contains existing entities.");
+			return;
+		}
 
 		List<Map<String, String>> customerData = loadCustomers();
 

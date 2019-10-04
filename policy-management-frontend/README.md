@@ -20,6 +20,6 @@ Now you are ready to launch the Policy Management frontend.
 
 First you need to start the Customer Self-Service backend and the Policy Management backend, because the Policy Management frontend depends on these two services. For instructions on how to start these two services, consult their respective README files.
 
-Run the command `npm start` in order to launch the Policy Management frontend. This will start a development server on port 3010. Open http://localhost:3010/ in the browser to load the application's home page. If port 3010 is already used by a different application, you can change it in the file `config/index.js`.
+Run the command `npm start` in order to launch the Policy Management frontend. This will start a development server on port 3010. Open http://localhost:3010/ in the browser to load the application's home page. If port 3010 is already used by a different application, you can change it in the file `vue.config.js`.
 
 To stop the application press `Ctrl+C` in the shell that was used to start the application and close the corresponding browser tab. Note that this only stops the Policy Management frontend but not the Customer Self-Service backend or the Policy Management backend.

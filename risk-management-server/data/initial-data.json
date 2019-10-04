@@ -13,17 +13,23 @@
       "moveHistory": [],
       "links": []
     },
-    "activePolicy": {
-      "policyId": "fvo5pkqerr",
-      "customer": "rgpp0wkpec",
-      "creationDate": 1543500712195,
-      "policyPeriod": { "startDate": 1517785200000, "endDate": 1518217200000 },
-      "policyType": "Health Insurance",
-      "policyLimit": { "amount": 1000000, "currency": "CHF" },
-      "insurancePremium": { "amount": 250, "currency": "CHF" },
-      "insuringAgreement": { "agreementItems": [] },
-      "links": [],
-      "_expandable": ["customer"]
+    "policies": {
+      "fvo5pkqerr": {
+        "policyId": "fvo5pkqerr",
+        "customer": "rgpp0wkpec",
+        "creationDate": 1543500712195,
+        "policyPeriod": {
+          "startDate": 1517785200000,
+          "endDate": 1518217200000
+        },
+        "policyType": "Health Insurance",
+        "deductible": { "amount": 1500, "currency": "CHF" },
+        "policyLimit": { "amount": 1000000, "currency": "CHF" },
+        "insurancePremium": { "amount": 250, "currency": "CHF" },
+        "insuringAgreement": { "agreementItems": [] },
+        "links": [],
+        "_expandable": ["customer"]
+      }
     }
   }
 }

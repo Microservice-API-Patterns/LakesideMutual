@@ -2,9 +2,11 @@ package com.lakesidemutual.customercore.interfaces.dtos.customer;
 
 import javax.validation.constraints.NotEmpty;
 
+import com.lakesidemutual.customercore.domain.customer.Address;
+
 /**
  * The AddressDto represents the message payload to change a customer's address. This is an example of the <a href=
- * "http://www.microservice-api-patterns.org/patterns/structure/basicRepresentationElements/WADE-AtomicParameterList.html">Atomic Parameter List</a> pattern.
+ * "https://microservice-api-patterns.org/patterns/structure/representationElements/AtomicParameterList">Atomic Parameter List</a> pattern.
  */
 public class AddressDto {
 	@NotEmpty
@@ -23,6 +25,14 @@ public class AddressDto {
 		this.streetAddress = streetAddress;
 		this.postalCode = postalCode;
 		this.city = city;
+	}
+
+	public static AddressDto fromDomainObject(Address address) {
+		return new AddressDto(address.getStreetAddress(), address.getPostalCode(), address.getCity());
+	}
+
+	public Address toDomainObject() {
+		return new Address(streetAddress, postalCode, city);
 	}
 
 	public String getStreetAddress() {

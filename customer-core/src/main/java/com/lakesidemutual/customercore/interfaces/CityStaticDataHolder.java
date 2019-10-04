@@ -17,11 +17,11 @@ import io.swagger.annotations.ApiParam;
 
 /**
  * This REST controller allows clients to retrieve a list of cities that match a given postal code. It is an application of
- * the <a href="http://www.microservice-api-patterns.org/patterns/responsibility/informationHolderEndpoints/WADE-StaticDataHolder.html">Static Data Holder</a> pattern.
+ * the <a href="https://microservice-api-patterns.org/patterns/responsibility/informationHolderEndpoints/StaticDataHolder">Static Data Holder</a> pattern.
  * A Static Data Holder is a dedicated endpoint that serves as single point of reference for static data (i.e., data that almost never changes).
  *
  * @see <a href=
- *      "http://www.microservice-api-patterns.org/patterns/responsibility/informationHolderEndpoints/WADE-StaticDataHolder.html">www.microservice-api-patterns.org/patterns/responsibility/informationHolderEndpoints/WADE-StaticDataHolder.html</a>
+ *      "https://microservice-api-patterns.org/patterns/responsibility/informationHolderEndpoints/StaticDataHolder">https://microservice-api-patterns.org/patterns/responsibility/informationHolderEndpoints/StaticDataHolder</a>
  */
 @RestController
 @RequestMapping("/cities")

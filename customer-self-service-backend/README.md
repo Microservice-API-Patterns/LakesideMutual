@@ -1,6 +1,8 @@
 # Lakeside Mutual : Customer Self-Service Backend
 
-The Customer Self-Service backend provides an HTTP resource API for the Customer Self-Service frontend and the Policy Management frontend.
+The Customer Self-Service backend provides an HTTP resource API for the Customer Self-Service frontend. Additionally, it connects
+to an [ActiveMQ](http://activemq.apache.org/) broker provided by the Policy Management backend in order to process insurance quote
+requests.
 
 ## IDE 
 
@@ -56,5 +58,17 @@ If you want to persist your changes across restarts, change the setting to:
 spring.jpa.hibernate.ddl-auto=update
 ```
 
+<!-- ZIO 4 STX: pls review this text and the implementation. Feel free to revise. Thanks! -->
+
+## Circuit Breaker and JMX MBean (Demo/Proof-of-Concept)
+The Customer Self-Service backend retrieves customer master data from the Customer Core service. The outgoing HTTP connection is protected by a simple Hystrix circuit breaker; dummy data is returned during connection problems.
+
+The behavior of the connection and the `@HystrixCommand` can be observed via a simple JMX MBean; to simplify matterm, the remote service class serves as the implementation of the MBean interface. To access the MBean, any JMX client can be used, for instance the command-line tool `JConsole` or the Spring Boot Admin appliation (see below).
+
 ## Spring Boot Admin
-The application is configured to connect to the Spring Boot Admin on startup. See the [README](../spring-boot-admin/README.md#how-it-works) to learn more.
+The application is configured to connect to the Spring Boot Admin on startup. See the [README](../spring-boot-admin/README.md#how-it-works) to learn more. 
+
+Custom MBeans are accessible via the "Wallboard": 
+
+* Click on the hexagon for Customer Self-Service. 
+* Next,  select `JVM -> JMX` on the left side of the screen. The known MBeans are then displayed on the right. Look for the entry `com.lakesidemutual.customerselfservice.infrastructure` and click on it to display the `customerCoreService` MBean.

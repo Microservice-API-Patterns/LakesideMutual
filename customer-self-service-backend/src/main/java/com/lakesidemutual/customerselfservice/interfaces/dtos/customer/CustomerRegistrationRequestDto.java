@@ -38,16 +38,6 @@ public class CustomerRegistrationRequestDto {
 	public CustomerRegistrationRequestDto() {
 	}
 
-	public CustomerRegistrationRequestDto(String firstname, String lastname, Date birthday, String city, String streetAddress, String postalCode, String phoneNumber) {
-		this.firstname = firstname;
-		this.lastname = lastname;
-		this.birthday = birthday;
-		this.city = city;
-		this.streetAddress = streetAddress;
-		this.postalCode = postalCode;
-		this.phoneNumber = phoneNumber;
-	}
-
 	public Date getBirthday() {
 		return birthday;
 	}

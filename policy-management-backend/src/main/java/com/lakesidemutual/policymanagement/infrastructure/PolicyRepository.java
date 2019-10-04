@@ -1,11 +1,10 @@
 package com.lakesidemutual.policymanagement.infrastructure;
 
 import java.util.List;
-import java.util.Optional;
-
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import org.microserviceapipatterns.domaindrivendesign.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import com.lakesidemutual.policymanagement.domain.customer.CustomerId;
 import com.lakesidemutual.policymanagement.domain.policy.PolicyAggregateRoot;
 import com.lakesidemutual.policymanagement.domain.policy.PolicyId;
@@ -21,6 +20,4 @@ public interface PolicyRepository extends JpaRepository<PolicyAggregateRoot, Pol
 	}
 
 	public List<PolicyAggregateRoot> findAllByCustomerIdOrderByCreationDateDesc(CustomerId customerId);
-
-	public Optional<PolicyAggregateRoot> findFirstByCustomerIdOrderByCreationDateDesc(CustomerId customerId);
 }

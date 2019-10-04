@@ -20,6 +20,7 @@ public class PolicyDto extends ResourceSupport {
 	private Date creationDate;
 	private PolicyPeriodDto policyPeriod;
 	private String policyType;
+	private MoneyAmountDto deductible;
 	private MoneyAmountDto policyLimit;
 	private MoneyAmountDto insurancePremium;
 	private InsuringAgreementDto insuringAgreement;
@@ -34,6 +35,7 @@ public class PolicyDto extends ResourceSupport {
 			Date creationDate,
 			PolicyPeriodDto policyPeriod,
 			String policyType,
+			MoneyAmountDto deductible,
 			MoneyAmountDto policyLimit,
 			MoneyAmountDto insurancePremium,
 			InsuringAgreementDto insuringAgreement) {
@@ -42,6 +44,7 @@ public class PolicyDto extends ResourceSupport {
 		this.creationDate = creationDate;
 		this.policyPeriod = policyPeriod;
 		this.policyType = policyType;
+		this.deductible = deductible;
 		this.policyLimit = policyLimit;
 		this.insurancePremium = insurancePremium;
 		this.insuringAgreement = insuringAgreement;
@@ -86,6 +89,14 @@ public class PolicyDto extends ResourceSupport {
 
 	public void setPolicyType(String policyType) {
 		this.policyType = policyType;
+	}
+
+	public MoneyAmountDto getDeductible() {
+		return deductible;
+	}
+
+	public void setDeductible(MoneyAmountDto deductible) {
+		this.deductible = deductible;
 	}
 
 	public MoneyAmountDto getPolicyLimit() {

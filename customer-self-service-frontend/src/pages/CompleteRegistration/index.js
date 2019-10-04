@@ -13,7 +13,6 @@ export type Props = {
   actions: {
     clearErrors: () => void,
     completeRegistration: (data: CompleteProfileFormData) => Promise<void>,
-    fetchActivePolicy: (customerId: CustomerId) => Promise<void>,
     lookupCitiySuggestions: (postalCode: string) => Promise<CitySuggestions>,
   },
 }

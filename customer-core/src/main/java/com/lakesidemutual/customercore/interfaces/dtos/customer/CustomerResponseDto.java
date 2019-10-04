@@ -12,7 +12,7 @@ import com.lakesidemutual.customercore.domain.customer.CustomerProfileEntity;
 
 /**
  * The CustomerResponseDto represents a customer, including their complete move history. This is an example of the <a href=
- * "https://www.microservice-api-patterns.org/patterns/structure/basicRepresentationElements/WADE-ParameterTree.html">Parameter
+ * "https://microservice-api-patterns.org/patterns/structure/representationElements/ParameterTree">Parameter
  * Tree</a> pattern.
  */
 public class CustomerResponseDto extends ResourceSupport {

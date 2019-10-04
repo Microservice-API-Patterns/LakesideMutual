@@ -1,18 +1,24 @@
 <template>
   <div>
     <sui-breadcrumb>
-      <sui-breadcrumb-section><router-link to="/customers">Customers</router-link></sui-breadcrumb-section>
-      <sui-breadcrumb-divider icon="right angle" />
-      <sui-breadcrumb-section v-if="customer != null && !isLoadingCustomer && error == null">{{customer.firstname}} {{customer.lastname}}</sui-breadcrumb-section>
+      <sui-breadcrumb-section>
+        <router-link to="/customers">Customers</router-link>
+      </sui-breadcrumb-section>
+      <sui-breadcrumb-divider icon="right angle"/>
+      <sui-breadcrumb-section
+        v-if="customer != null && !isLoadingCustomer && error == null"
+      >{{customer.firstname}} {{customer.lastname}}</sui-breadcrumb-section>
       <sui-breadcrumb-section v-if="isLoadingCustomer">Loading...</sui-breadcrumb-section>
       <sui-breadcrumb-section v-if="!isLoadingCustomer && error != null">Error</sui-breadcrumb-section>
     </sui-breadcrumb>
-    <sui-button compact size="mini" floated="right" v-on:click="openCustomerManagement" ><sui-icon name="external"/> Open in Customer Management</sui-button>
+    <sui-button compact size="mini" floated="right" v-on:click="openCustomerManagement">
+      <sui-icon name="external"/>Open in Customer Management
+    </sui-button>
     <sui-segment basic v-if="isLoadingCustomer" class="loaderSegment">
-        <sui-loader active>Loading...</sui-loader>
+      <sui-loader active>Loading...</sui-loader>
     </sui-segment>
 
-     <error-message :error="error" resource="Customer" v-if="error != null"/>
+    <error-message :error="error" resource="Customer" v-if="error != null"/>
 
     <div v-if="!isLoadingCustomer && error == null" style="margin-top: 20px">
       <sui-modal v-model="open">
@@ -26,10 +32,13 @@
           </sui-modal-description>
         </sui-modal-content>
         <sui-modal-actions>
-          <sui-button floated="right" positive v-on:click="hideRiskFactorInfo" class="modalButton">
-            OK
-          </sui-button>
-          <br/>
+          <sui-button
+            floated="right"
+            positive
+            v-on:click="hideRiskFactorInfo"
+            class="modalButton"
+          >OK</sui-button>
+          <br>
         </sui-modal-actions>
       </sui-modal>
 
@@ -43,69 +52,57 @@
             <sui-statistic-label>Risk Factor</sui-statistic-label>
             <sui-statistic-value>{{riskFactor}}</sui-statistic-value>
           </sui-statistic>
-          <br/>
+          <br>
           <sui-button circular icon="info" size="tiny" compact v-on:click="showRiskFactorInfo"/>
         </sui-grid-column>
       </sui-grid>
 
       <sui-divider/>
-      <h4 is="sui-header">
-        Insurance Policy
-        <router-link is="sui-button" :to="`/customers/${customer.customerId}/edit-policy`" floated="right" compact size="tiny" color="blue" v-if="!isLoadingPolicy && policy != null">Edit Policy</router-link>
+      <h4 is="sui-header">Insurance Policies
+        <router-link
+          is="sui-button"
+          :to="`/customers/${customer.customerId}/policies/new`"
+          floated="right"
+          compact
+          size="tiny"
+          color="green"
+          icon="plus"
+        >New Policy</router-link>
       </h4>
-      <sui-segment basic v-if="isLoadingPolicy" class="loaderSegment">
+      <sui-segment basic v-if="isLoadingPolicies || isLoadingCustomer" class="loaderSegment">
         <sui-loader active>Loading...</sui-loader>
       </sui-segment>
-      <div v-if="!isLoadingPolicy && policy != null">
-        <br/>
-        <policy :policy="policy"/>
+      <div v-if="!isLoadingPolicies && !isLoadingCustomer && policies.length > 0">
+        <br>
+        <div v-for="policy in policies" :key="policy.policyId">
+          <policy :policy="policy" :customer="customer" :onDelete="onDeletePolicy"/>
+          <br>
+        </div>
       </div>
-      <div v-if="!isLoadingPolicy && policy == null">
-        <router-link is="sui-button" :to="`/customers/${customer.customerId}/edit-policy`" compact size="tiny" color="green">Create Policy</router-link>
-      </div>
-
-      <sui-divider/>
-      <h4 is="sui-header">
-        Policy History
-      </h4>
-      <sui-segment basic v-if="isLoadingPolicyHistory" class="loaderSegment">
-        <sui-loader active>Loading...</sui-loader>
-      </sui-segment>
-      <div v-if="!isLoadingPolicyHistory && policyHistory.length > 0">
-        <policies-table :policies="policyHistory" :create-detail-link="(policyId) => `/customers/${this.$route.params.customerid}/${policyId}`"/>
-      </div>
-      <div v-if="!isLoadingPolicyHistory && policyHistory.length == 0">
-        No older policies available.
-      </div>
+      <p
+        v-if="!isLoadingPolicies && !isLoadingCustomer && policies.length === 0"
+      >This customer doesn't have any insurance policies yet.</p>
     </div>
   </div>
 </template>
 
 <script>
-import {
-  getCustomer,
-  computeRiskFactor,
-  getActivePolicy,
-  getPolicyHistory
-} from '../api'
+import { getCustomer, computeRiskFactor, getCustomerPolicies } from '../api'
 import CustomerProfile from '@/components/CustomerProfile'
 import Policy from '@/components/Policy'
-import PoliciesTable from '@/components/PoliciesTable'
 import ErrorMessage from '@/components/ErrorMessage'
 
 export default {
   name: 'CustomerDetail',
-  components: { CustomerProfile, Policy, PoliciesTable, ErrorMessage },
+  components: { CustomerProfile, Policy, ErrorMessage },
   data() {
     return {
       customer: null,
       riskFactor: null,
       isLoadingCustomer: false,
       error: null,
-      policy: null,
-      isLoadingPolicy: false,
-      policyHistory: [],
-      isLoadingPolicyHistory: false,
+      policies: [],
+      isLoadingPolicies: false,
       open: false
     }
   },
@@ -121,7 +118,7 @@ export default {
         return 'yellow'
       } else if (this.riskFactor <= 80) {
         return 'orange'
-      } else if (this.riskFactor <= 100) {
+      } else {
         return 'red'
       }
     }
@@ -137,44 +134,41 @@ export default {
       window.location = `http://localhost:3020/customers/${
         this.customer.customerId
       }`
+    },
+    async loadCustomer(customerId) {
+      this.isLoadingCustomer = true
+      try {
+        const customer = await getCustomer(customerId)
+        this.customer = customer
+        const response = await computeRiskFactor(customer)
+        this.riskFactor = response.riskFactor
+      } catch (error) {
+        this.error = error
+      }
+      this.isLoadingCustomer = false
+    },
+    async loadPolicies(customerId) {
+      this.isLoadingPolicies = true
+      try {
+        const policies = await getCustomerPolicies(customerId)
+        this.policies = policies
+      } catch (error) {
+        this.error = error
+      }
+      this.isLoadingPolicies = false
+    },
+    async onDeletePolicy() {
+      const customerId = this.$route.params.customerid
+      await this.loadPolicies(customerId)
     }
   },
   async created() {
-    this.error = null
-    this.isLoadingCustomer = true
     const customerId = this.$route.params.customerid
-    try {
-      const customer = await getCustomer(customerId)
-      this.customer = customer
-      const response = await computeRiskFactor(customer)
-      this.riskFactor = response.riskFactor
-    } catch (error) {
-      this.error = error
-    }
-    this.isLoadingCustomer = false
-
+    await this.loadCustomer(customerId)
     if (this.error != null) {
       return
     }
-
-    try {
-      this.isLoadingPolicy = true
-      this.isLoadingPolicyHistory = true
-
-      const [policy, policyHistory] = await Promise.all([
-        getActivePolicy(customerId),
-        getPolicyHistory(customerId)
-      ])
-
-      this.policy = policy
-      this.policyHistory = policyHistory
-
-      this.isLoadingPolicy = false
-      this.isLoadingPolicyHistory = false
-    } catch (error) {
-      this.isLoadingPolicy = false
-      this.isLoadingPolicyHistory = false
-    }
+    await this.loadPolicies(customerId)
   }
 }
 </script>

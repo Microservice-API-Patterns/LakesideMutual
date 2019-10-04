@@ -3,16 +3,35 @@
 import React, { Fragment } from "react"
 import { Route, Redirect } from "react-router-dom"
 import { Loader, Segment } from "semantic-ui-react"
-import ActivePolicyOverview from "./ActivePolicyOverview"
+import PoliciesOverview from "./PoliciesOverview"
+import RequestInsuranceQuote from "./RequestInsuranceQuote"
+import InsuranceQuoteRequestsOverview from "./InsuranceQuoteRequestsOverview"
+import InsuranceQuoteRequestDetail from "./InsuranceQuoteRequestDetail"
 
 export type Props = {
   user: ?User,
   customer: ?Customer,
-  policy: ?Policy,
-  isFetchingActivePolicy: boolean,
-  policyFetchError: ?Error,
+  policies: ?[Policy],
+  isFetchingPolicies: boolean,
+  policiesFetchError: ?Error,
+  isCreatingInsuranceQuoteRequest: boolean,
+  insuranceQuoteRequestCreationError: ?Error,
+  insuranceQuoteRequest: ?InsuranceQuoteRequest,
+  isFetchingInsuranceQuoteRequest: boolean,
+  insuranceQuoteRequests: ?[InsuranceQuoteRequest],
+  isFetchingInsuranceQuoteRequests: boolean,
+  insuranceQuoteRequestFetchError: ?Error,
+  isRespondingToInsuranceQuote: boolean,
+  insuranceQuoteResponseError: ?Error,
   actions: {
-    fetchActivePolicy: (customerId: CustomerId) => Promise<void>,
+    fetchPolicies: (customerId: CustomerId) => Promise<void>,
+    fetchInsuranceQuoteRequests: (customerId: CustomerId) => Promise<void>,
+    createInsuranceQuoteRequest: InsuranceQuoteRequest => Promise<void>,
+    fetchInsuranceQuoteRequest: (id: string) => Promise<void>,
+    respondToInsuranceQuote: (
+      insuranceQuoteRequestId: string,
+      accepted: boolean
+    ) => Promise<void>,
   },
 }
 
@@ -21,9 +40,18 @@ export default class extends React.Component<Props> {
     const {
       user,
       customer,
-      policy,
-      isFetchingActivePolicy,
-      policyFetchError,
+      policies,
+      isFetchingPolicies,
+      policiesFetchError,
+      isCreatingInsuranceQuoteRequest,
+      insuranceQuoteRequestCreationError,
+      insuranceQuoteRequest,
+      isFetchingInsuranceQuoteRequest,
+      insuranceQuoteRequests,
+      isFetchingInsuranceQuoteRequests,
+      insuranceQuoteRequestFetchError,
+      isRespondingToInsuranceQuote,
+      insuranceQuoteResponseError,
     } = this.props
 
     const isLoadingUser = user == null
@@ -33,7 +61,7 @@ export default class extends React.Component<Props> {
       customer == null
     )
 
-    if (isLoadingUser || isLoadingCustomer || isFetchingActivePolicy) {
+    if (isLoadingUser || isLoadingCustomer) {
       return <Loader active />
     } else if (user != null && user.customerId == null && customer == null) {
       return <Redirect to={"/complete-registration"} />
@@ -45,14 +73,59 @@ export default class extends React.Component<Props> {
             path="/policies"
             render={props => (
               <Segment>
-                <ActivePolicyOverview
+                <InsuranceQuoteRequestsOverview
                   customer={customer}
-                  policy={policy}
-                  isFetchingActivePolicy={isFetchingActivePolicy}
-                  policyFetchError={policyFetchError}
+                  insuranceQuoteRequests={insuranceQuoteRequests}
+                  isFetchingInsuranceQuoteRequests={
+                    isFetchingInsuranceQuoteRequests
+                  }
+                  insuranceQuoteRequestFetchError={
+                    insuranceQuoteRequestFetchError
+                  }
+                  actions={this.props.actions}
+                />
+                <PoliciesOverview
+                  customer={customer}
+                  policies={policies}
+                  isFetchingPolicies={isFetchingPolicies}
+                  policiesFetchError={policiesFetchError}
                   actions={this.props.actions}
                 />
               </Segment>
+            )}
+          />
+          <Route
+            exact
+            path="/policies/new-insurance-quote-request"
+            render={props => (
+              <RequestInsuranceQuote
+                customer={customer}
+                isCreatingInsuranceQuoteRequest={
+                  isCreatingInsuranceQuoteRequest
+                }
+                insuranceQuoteRequestCreationError={
+                  insuranceQuoteRequestCreationError
+                }
+                actions={this.props.actions}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/policies/insurance-quote-requests/:id"
+            render={props => (
+              <InsuranceQuoteRequestDetail
+                insuranceQuoteRequest={insuranceQuoteRequest}
+                isFetchingInsuranceQuoteRequest={
+                  isFetchingInsuranceQuoteRequest
+                }
+                insuranceQuoteRequestFetchError={
+                  insuranceQuoteRequestFetchError
+                }
+                isRespondingToInsuranceQuote={isRespondingToInsuranceQuote}
+                insuranceQuoteResponseError={insuranceQuoteResponseError}
+                actions={this.props.actions}
+              />
             )}
           />
         </Fragment>

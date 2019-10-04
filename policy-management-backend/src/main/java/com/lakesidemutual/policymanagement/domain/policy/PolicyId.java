@@ -23,7 +23,7 @@ public class PolicyId implements Serializable, ValueObject, EntityIdentifier<Str
 		this.setId(null);
 	}
 
-	/*
+	/**
 	 * This constructor is needed by ControllerLinkBuilder, see the following
 	 * spring-hateoas issue for details:
 	 * https://github.com/spring-projects/spring-hateoas/issues/352

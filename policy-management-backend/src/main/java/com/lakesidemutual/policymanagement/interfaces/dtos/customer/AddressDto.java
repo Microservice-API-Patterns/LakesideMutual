@@ -1,5 +1,7 @@
 package com.lakesidemutual.policymanagement.interfaces.dtos.customer;
 
+import com.lakesidemutual.policymanagement.domain.insurancequoterequest.Address;
+
 /**
  * AddressDto is a data transfer object (DTO) that represents the postal address of a customer.
  * */
@@ -9,6 +11,20 @@ public class AddressDto {
 	private String city;
 
 	public AddressDto() {
+	}
+
+	private AddressDto(String streetAddress, String postalCode, String city) {
+		this.streetAddress = streetAddress;
+		this.postalCode = postalCode;
+		this.city = city;
+	}
+
+	public static AddressDto fromDomainObject(Address address) {
+		return new AddressDto(address.getStreetAddress(), address.getPostalCode(), address.getCity());
+	}
+
+	public Address toDomainObject() {
+		return new Address(streetAddress, postalCode, city);
 	}
 
 	public String getStreetAddress() {

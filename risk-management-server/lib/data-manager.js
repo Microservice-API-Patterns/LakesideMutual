@@ -13,9 +13,28 @@ module.exports = class DataManager {
   }
 
   addEvent(event) {
-    this.data[event.customer.customerId] = {
+    if (event.kind === 'UpdatePolicyEvent') {
+      this.handleUpdatePolicyEvent(event)
+    } else if (event.kind === 'DeletePolicyEvent') {
+      this.handleDeletePolicyEvent(event)
+    }
+  }
+
+  handleUpdatePolicyEvent(event) {
+    const customerId = event.customer.customerId
+    const customerData = {
       customerProfile: event.customer,
-      activePolicy: event.policy,
+      policies: (this.data[customerId] && this.data[customerId].policies) || {},
+    }
+    customerData.policies[event.policy.policyId] = event.policy
+    this.data[customerId] = customerData
+  }
+
+  handleDeletePolicyEvent(event) {
+    const policyId = event.policyId
+    const customers = Object.values(this.data)
+    for (const customer of customers) {
+      delete customer.policies[policyId]
     }
   }
 

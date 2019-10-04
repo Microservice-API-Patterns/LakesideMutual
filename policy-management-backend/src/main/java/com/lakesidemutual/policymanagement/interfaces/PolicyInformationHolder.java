@@ -3,10 +3,8 @@ package com.lakesidemutual.policymanagement.interfaces;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -20,30 +18,32 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lakesidemutual.policymanagement.domain.customer.CustomerId;
+import com.lakesidemutual.policymanagement.domain.policy.DeletePolicyEvent;
 import com.lakesidemutual.policymanagement.domain.policy.InsuringAgreementEntity;
-import com.lakesidemutual.policymanagement.domain.policy.InsuringAgreementItem;
 import com.lakesidemutual.policymanagement.domain.policy.MoneyAmount;
 import com.lakesidemutual.policymanagement.domain.policy.PolicyAggregateRoot;
 import com.lakesidemutual.policymanagement.domain.policy.PolicyId;
 import com.lakesidemutual.policymanagement.domain.policy.PolicyPeriod;
 import com.lakesidemutual.policymanagement.domain.policy.PolicyType;
-import com.lakesidemutual.policymanagement.infrastructure.CustomerCoreService;
+import com.lakesidemutual.policymanagement.domain.policy.UpdatePolicyEvent;
+import com.lakesidemutual.policymanagement.infrastructure.CustomerCoreRemoteProxy;
 import com.lakesidemutual.policymanagement.infrastructure.PolicyRepository;
-import com.lakesidemutual.policymanagement.infrastructure.RiskManagementService;
+import com.lakesidemutual.policymanagement.infrastructure.RiskManagementMessageProducer;
 import com.lakesidemutual.policymanagement.interfaces.dtos.UnknownCustomerException;
 import com.lakesidemutual.policymanagement.interfaces.dtos.customer.CustomerDto;
 import com.lakesidemutual.policymanagement.interfaces.dtos.policy.CreatePolicyRequestDto;
 import com.lakesidemutual.policymanagement.interfaces.dtos.policy.InsuringAgreementDto;
-import com.lakesidemutual.policymanagement.interfaces.dtos.policy.InsuringAgreementItemDto;
 import com.lakesidemutual.policymanagement.interfaces.dtos.policy.MoneyAmountDto;
 import com.lakesidemutual.policymanagement.interfaces.dtos.policy.PaginatedPolicyResponseDto;
 import com.lakesidemutual.policymanagement.interfaces.dtos.policy.PolicyDto;
@@ -57,8 +57,8 @@ import io.swagger.annotations.ApiParam;
  * This REST controller gives clients access to the insurance policies. It is an example of the
  * <i>Information Holder Resource</i> pattern. This particular one is a special type of information holder called <i>Master Data Holder</i>.
  *
- * @see <a href="http://www.microservice-api-patterns.org/patterns/responsibility/endpointRoles/WADE-InformationHolderResource.html">Information Holder Resource</a>
- * @see <a href="http://www.microservice-api-patterns.org/patterns/responsibility/informationHolderEndpoints/WADE-MasterDataHolder.html">Master Data Holder</a>
+ * @see <a href="https://microservice-api-patterns.org/patterns/responsibility/endpointRoles/InformationHolderResource">Information Holder Resource</a>
+ * @see <a href="https://microservice-api-patterns.org/patterns/responsibility/informationHolderEndpoints/MasterDataHolder">Master Data Holder</a>
  */
 @RestController
 @RequestMapping("/policies")
@@ -69,10 +69,10 @@ public class PolicyInformationHolder {
 	private PolicyRepository policyRepository;
 
 	@Autowired
-	private RiskManagementService riskManagementService;
+	private RiskManagementMessageProducer riskManagementMessageProducer;
 
 	@Autowired
-	private CustomerCoreService customerCoreService;
+	private CustomerCoreRemoteProxy customerCoreRemoteProxy;
 
 	@ApiOperation(value = "Create a new policy.")
 	@PostMapping
@@ -82,42 +82,100 @@ public class PolicyInformationHolder {
 			@RequestBody
 			CreatePolicyRequestDto createPolicyDto,
 			HttpServletRequest request) {
-
 		String customerIdString = createPolicyDto.getCustomerId();
+		logger.info("Creating a new policy for customer with id '{}'", customerIdString);
 		CustomerId customerId = new CustomerId(customerIdString);
-		List<CustomerDto> customers = customerCoreService.getCustomersById(customerId);
+		List<CustomerDto> customers = customerCoreRemoteProxy.getCustomersById(customerId);
 		if(customers.isEmpty()) {
-			final String errorMessage = "Failed to find a customer with id '" + customerId.getId() + "'.";
-			logger.info(errorMessage);
+			final String errorMessage = "Failed to find a customer with id '{}'";
+			logger.warn(errorMessage, customerId.getId());
 			throw new UnknownCustomerException(errorMessage);
 		}
 
 		PolicyId id = PolicyId.random();
-		PolicyPeriodDto policyPeriodDto = createPolicyDto.getPolicyPeriod();
 		PolicyType policyType = new PolicyType(createPolicyDto.getPolicyType());
-		PolicyPeriod policyPeriod = new PolicyPeriod(policyPeriodDto.getStartDate(), policyPeriodDto.getEndDate());
-		BigDecimal policyLimitAmount = createPolicyDto.getPolicyLimit().getAmount();
-		Currency policyLimitCurrency = Currency.getInstance(createPolicyDto.getPolicyLimit().getCurrency());
-		MoneyAmount policyLimit = new MoneyAmount(policyLimitAmount, policyLimitCurrency);
-		BigDecimal insurancePremiumAmount = createPolicyDto.getInsurancePremium().getAmount();
-		Currency insurancePremiumCurrency = Currency.getInstance(createPolicyDto.getInsurancePremium().getCurrency());
-		MoneyAmount insurancePremium = new MoneyAmount(insurancePremiumAmount, insurancePremiumCurrency);
-		List<InsuringAgreementItem> insuringAgreementItems = createPolicyDto.getInsuringAgreement().getAgreementItems().stream().map(item -> new InsuringAgreementItem(item.getTitle(), item.getDescription())).collect(Collectors.toList());
-		InsuringAgreementEntity insuringAgreement = new InsuringAgreementEntity(insuringAgreementItems);
-		PolicyAggregateRoot policy = new PolicyAggregateRoot(id, customerId, new Date(), policyPeriod, policyType, policyLimit, insurancePremium, insuringAgreement);
+		PolicyPeriod policyPeriod = createPolicyDto.getPolicyPeriod().toDomainObject();
+		MoneyAmount deductible = createPolicyDto.getDeductible().toDomainObject();
+		MoneyAmount policyLimit = createPolicyDto.getPolicyLimit().toDomainObject();
+		MoneyAmount insurancePremium = createPolicyDto.getInsurancePremium().toDomainObject();
+		InsuringAgreementEntity insuringAgreement = createPolicyDto.getInsuringAgreement().toDomainObject();
+		PolicyAggregateRoot policy = new PolicyAggregateRoot(id, customerId, new Date(), policyPeriod, policyType, deductible, policyLimit, insurancePremium, insuringAgreement);
 		policyRepository.save(policy);
 
 		CustomerDto customer = customers.get(0);
 		PolicyDto policyDto = createPolicyDtos(Arrays.asList(policy), "").get(0);
-		riskManagementService.notifyRiskManagement(request.getRemoteAddr(), new Date(), customer, policyDto);
+		final UpdatePolicyEvent event = new UpdatePolicyEvent(request.getRemoteAddr(), new Date(), customer, policyDto);
+		riskManagementMessageProducer.emitEvent(event);
 		return ResponseEntity.ok(policyDto);
+	}
+
+	@ApiOperation(value = "Update an existing policy.")
+	@PutMapping(value = "/{policyId}")
+	public ResponseEntity<PolicyDto> updatePolicy(
+			@ApiParam(value = "the policy's unique id", required = true) @PathVariable PolicyId policyId,
+			@ApiParam(value = "the updated policy", required = true) @Valid @RequestBody CreatePolicyRequestDto createPolicyDto,
+			HttpServletRequest request) {
+		logger.info("Updating policy with id '{}'", policyId.getId());
+
+		Optional<PolicyAggregateRoot> optPolicy = policyRepository.findById(policyId);
+		if(!optPolicy.isPresent()) {
+			final String errorMessage = "Failed to find a policy with id '{}'";
+			logger.warn(errorMessage, policyId.getId());
+			throw new PolicyNotFoundException(errorMessage);
+		}
+
+		CustomerId customerId = new CustomerId(createPolicyDto.getCustomerId());
+		List<CustomerDto> customers = customerCoreRemoteProxy.getCustomersById(customerId);
+		if(customers.isEmpty()) {
+			final String errorMessage = "Failed to find a customer with id '{}'";
+			logger.warn(errorMessage, customerId.getId());
+			throw new UnknownCustomerException(errorMessage);
+		}
+
+		PolicyType policyType = new PolicyType(createPolicyDto.getPolicyType());
+		PolicyPeriod policyPeriod = createPolicyDto.getPolicyPeriod().toDomainObject();
+		MoneyAmount deductible = createPolicyDto.getDeductible().toDomainObject();
+		MoneyAmount policyLimit = createPolicyDto.getPolicyLimit().toDomainObject();
+		MoneyAmount insurancePremium = createPolicyDto.getInsurancePremium().toDomainObject();
+		InsuringAgreementEntity insuringAgreement = createPolicyDto.getInsuringAgreement().toDomainObject();
+
+		PolicyAggregateRoot policy = optPolicy.get();
+		policy.setPolicyPeriod(policyPeriod);
+		policy.setPolicyType(policyType);
+		policy.setDeductible(deductible);
+		policy.setPolicyLimit(policyLimit);
+		policy.setInsurancePremium(insurancePremium);
+		policy.setInsuringAgreement(insuringAgreement);
+		policyRepository.save(policy);
+
+		CustomerDto customer = customers.get(0);
+		PolicyDto policyDto = createPolicyDtos(Arrays.asList(policy), "").get(0);
+		final UpdatePolicyEvent event = new UpdatePolicyEvent(request.getRemoteAddr(), new Date(), customer, policyDto);
+		riskManagementMessageProducer.emitEvent(event);
+
+		PolicyDto response = createPolicyDtos(Arrays.asList(policy), "").get(0);
+		return ResponseEntity.ok(response);
+	}
+
+	@ApiOperation(value = "Delete an existing policy.")
+	@DeleteMapping(value = "/{policyId}")
+	public ResponseEntity<Void> deletePolicy(
+			@ApiParam(value = "the policy's unique id", required = true) @PathVariable PolicyId policyId,
+			HttpServletRequest request) {
+		logger.info("Deleting policy with id '{}'", policyId.getId());
+		policyRepository.deleteById(policyId);
+
+		final DeletePolicyEvent event = new DeletePolicyEvent(request.getRemoteAddr(), new Date(), policyId.getId());
+		riskManagementMessageProducer.emitEvent(event);
+
+		return ResponseEntity.noContent().build();
 	}
 
 	private List<PolicyDto> createPolicyDtos(List<PolicyAggregateRoot> policies, String expand) {
 		List<CustomerDto> customers = null;
 		if(expand.equals("customer")) {
 			List<CustomerId> customerIds = policies.stream().map(p -> p.getCustomerId()).collect(Collectors.toList());
-			customers = customerCoreService.getCustomersById(customerIds.toArray(new CustomerId[customerIds.size()]));
+			customers = customerCoreRemoteProxy.getCustomersById(customerIds.toArray(new CustomerId[customerIds.size()]));
 		}
 
 		List<PolicyDto> policyDtos = new ArrayList<>();
@@ -130,15 +188,11 @@ public class PolicyInformationHolder {
 				customer = policy.getCustomerId().getId();
 			}
 
-			PolicyPeriod policyPeriod = policy.getPolicyPeriod();
-			PolicyPeriodDto policyPeriodDto = new PolicyPeriodDto(policyPeriod.getStartDate(), policyPeriod.getEndDate());
-			InsuringAgreementEntity insuringAgreement = policy.getInsuringAgreement();
-			List<InsuringAgreementItemDto> insuringAgreementItemDtos = insuringAgreement.getAgreementItems().stream().map(item -> new InsuringAgreementItemDto(item.getTitle(), item.getDescription())).collect(Collectors.toList());
-			InsuringAgreementDto insuringAgreementDto = new InsuringAgreementDto(insuringAgreementItemDtos);
-			MoneyAmount policyLimit = policy.getPolicyLimit();
-			MoneyAmountDto policyLimitDto = new MoneyAmountDto(policyLimit.getAmount(), policyLimit.getCurrency().toString());
-			MoneyAmount insurancePremium = policy.getInsurancePremium();
-			MoneyAmountDto insurancePremiumDto = new MoneyAmountDto(insurancePremium.getAmount(), insurancePremium.getCurrency().toString());
+			PolicyPeriodDto policyPeriodDto = PolicyPeriodDto.fromDomainObject(policy.getPolicyPeriod());
+			InsuringAgreementDto insuringAgreementDto = InsuringAgreementDto.fromDomainObject(policy.getInsuringAgreement());
+			MoneyAmountDto deductibleDto = MoneyAmountDto.fromDomainObject(policy.getDeductible());
+			MoneyAmountDto policyLimitDto = MoneyAmountDto.fromDomainObject(policy.getPolicyLimit());
+			MoneyAmountDto insurancePremiumDto = MoneyAmountDto.fromDomainObject(policy.getInsurancePremium());
 
 			PolicyDto policyDto = new PolicyDto(
 					policy.getId().getId(),
@@ -146,6 +200,7 @@ public class PolicyInformationHolder {
 					policy.getCreationDate(),
 					policyPeriodDto,
 					policy.getPolicyType().getName(),
+					deductibleDto,
 					policyLimitDto,
 					insurancePremiumDto,
 					insuringAgreementDto);
@@ -182,6 +237,7 @@ public class PolicyInformationHolder {
 			@ApiParam(value = "the maximum number of policies per page", required = false) @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit,
 			@ApiParam(value = "the offset of the page's first policy", required = false) @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset,
 			@ApiParam(value = "a comma-separated list of the fields that should be expanded in the response", required = false) @RequestParam(value = "expand", required = false, defaultValue = "") String expand) {
+		logger.debug("Fetching a page of policies (offset={},limit={},fields='{}')", offset, limit, expand);
 		List<PolicyAggregateRoot> allPolicies = policyRepository.findAll(Sort.by(Sort.Direction.DESC, PolicyAggregateRoot.FIELD_CREATION_DATE));
 		List<PolicyAggregateRoot> policies = allPolicies.stream().skip(offset).limit(limit).collect(Collectors.toList());
 		List<PolicyDto> policyDtos = createPolicyDtos(policies, expand);
@@ -192,7 +248,7 @@ public class PolicyInformationHolder {
 	/**
 	 * Returns the policy for the given policy id.
 	 * <br><br>
-	 * The query parameter {@code expand } allows clients to provide a so-called <a href="http://www.microservice-api-patterns.org/patterns/quality/WADE-WishList.html">Wish List</a>.
+	 * The query parameter {@code expand } allows clients to provide a so-called <a href="https://microservice-api-patterns.org/patterns/quality/dataTransferParsimony/WishList">Wish List</a>.
 	 * By default, getPolicy() returns the following response:
 	 * <pre>
 	 *   <code>
@@ -233,18 +289,18 @@ public class PolicyInformationHolder {
 	 * </pre>
 	 *
 	 * @see <a href=
-	 *      "http://www.microservice-api-patterns.org/patterns/quality/WADE-WishList.html">www.microservice-api-patterns.org/patterns/quality/WADE-WishList.html</a>
+	 *      "https://microservice-api-patterns.org/patterns/quality/dataTransferParsimony/WishList">https://microservice-api-patterns.org/patterns/quality/dataTransferParsimony/WishList</a>
 	 */
 	@ApiOperation(value = "Get a single policy.")
 	@GetMapping(value = "/{policyId}")
 	public ResponseEntity<PolicyDto> getPolicy(
 			@ApiParam(value = "the policy's unique id", required = true) @PathVariable PolicyId policyId,
 			@ApiParam(value = "a comma-separated list of the fields that should be expanded in the response", required = false) @RequestParam(value = "expand", required = false, defaultValue = "") String expand) {
-
+		logger.debug("Fetching policy with id '{}'", policyId.getId());
 		Optional<PolicyAggregateRoot> optPolicy = policyRepository.findById(policyId);
 		if(!optPolicy.isPresent()) {
-			final String errorMessage = "Failed to find a policy with id '" + policyId.getId() + "'.";
-			logger.info(errorMessage);
+			final String errorMessage = "Failed to find a policy with id '{}'";
+			logger.warn(errorMessage, policyId.getId());
 			throw new PolicyNotFoundException(errorMessage);
 		}
 

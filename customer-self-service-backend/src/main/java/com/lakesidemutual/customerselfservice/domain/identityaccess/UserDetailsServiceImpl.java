@@ -19,7 +19,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, DomainService
 
 	@Override
 	public UserDetails loadUserByUsername(String email) {
-		UserLogin user = this.userRepository.findByEmail(email);
+		UserLoginEntity user = this.userRepository.findByEmail(email);
 
 		if (user == null) {
 			return null;

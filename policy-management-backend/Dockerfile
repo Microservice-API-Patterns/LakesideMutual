@@ -10,4 +10,6 @@ COPY --from=build /usr/src/app/target/dependency/META-INF /app/META-INF
 COPY --from=build /usr/src/app/target/dependency/BOOT-INF/classes /app
 
 EXPOSE 8090
+EXPOSE 61613
+EXPOSE 61616
 ENTRYPOINT ["java","-cp","app:app/lib/*","com.lakesidemutual.policymanagement.PolicyManagementApplication"]

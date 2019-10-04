@@ -1,5 +1,5 @@
 # Lakeside Mutual
-Lakeside Mutual is a fictitious insurance company which serves as a sample application to demonstrate microservices and domain-driven design. The company provides several digital services to its customers and its employees. [Microservice API Patterns](https://microservice-api-patterns.org/) are applied in the application backends.
+Lakeside Mutual is a fictitious insurance company which serves as a sample application to demonstrate microservices and domain-driven design. The company provides several digital services to its customers and its employees. [Microservice API Patterns (MAP)](https://microservice-api-patterns.org/) are applied in the application backends.
 
 ## Architecture Overview
 The following diagram shows an overview of the core components that are the building blocks for the services Lakeside Mutual provides to its customers and its employees:
@@ -14,7 +14,7 @@ The following sections contain a short description of each service:
 
 - **[Customer Self-Service Backend](customer-self-service-backend)**  
   The Customer Self-Service backend is a [Spring Boot](https://projects.spring.io/spring-boot/) application that
-  provides an HTTP resource API for the Customer Self-Service frontend.
+  provides an HTTP resource API for the Customer Self-Service frontend. 
 
 - **[Customer Self-Service Frontend](customer-self-service-frontend)**  
   The Customer Self-Service frontend is a [React](https://reactjs.org/) application that allows users to register themselves, view their current insurance policy and change their address.
@@ -39,8 +39,11 @@ The following sections contain a short description of each service:
   The Risk-Management client is a command-line tool built with [Node.js](https://nodejs.org). It allows the
   professionals of Lakeside Mutual to periodically download a customer data report which helps them during risk assessment.
 
+- **[Eureka Server](eureka-server)**  
+  [Eureka Server](https://spring.io/guides/gs/service-registration-and-discovery/#initial) provides a service registry. It is a regular Spring Boot application to which all other Spring services can connect to access other services. For example, the Customer Self-Service Backend uses Eureka to connect to the Customer Core. Usage of Eureka is optional.
+
 - **[Spring Boot Admin](spring-boot-admin)**  
-  [Spring Boot Admin](https://github.com/codecentric/spring-boot-admin) is an open source software for managing and monitoring Spring Boot applications. It *is* a Spring Boot Application too. Usage within the Lakeside Mutual services is optional and only included for convenience with all security disabled.
+  [Spring Boot Admin](https://github.com/codecentric/spring-boot-admin) is an open source software for managing and monitoring Spring Boot applications. It *is* a Spring Boot application too. Usage within the Lakeside Mutual services is optional and only included for convenience with all security disabled.
 
 To learn more about individual components, please have a look at the README file in the corresponding subfolder.
 
@@ -69,6 +72,7 @@ consult the README of the corresponding component:
 | [Customer Management Frontend](customer-management-frontend) | 3020 (Web server) |
 | [Risk Management Server](risk-management-server) | 50051 (gRPC server) |
 | [Risk Management Client](risk-management-client) | - (CLI Client) |
+| [Eureka Server](eureka-server) | 8761 (Admin web frontend) |
 | [Spring Boot Admin](spring-boot-admin) | 9000 (Web server) |
 
 ## Docker
@@ -82,7 +86,7 @@ Each backend service has its own data store. The Spring-JPA based applications a
 
 ## Frequently Asked Questions and Troubleshooting
 
-See our [FAQ](./FAQ.md).
+See our [FAQ](./FAQ.md) for more information on running the applications and IDE setup.
 
 ## License
 

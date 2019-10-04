@@ -30,6 +30,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			"/actuator",
 			// H2 Console
 			"/console/**",
+			// Spring Web Services
+			"/ws/**",
+			"/ws",
+			// Thymeleaf demo FE
+			"/customercorefe",
 	};
 
 	@Value("${apikey.header}")

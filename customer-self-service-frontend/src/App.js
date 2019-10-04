@@ -33,16 +33,25 @@ export default class App extends React.Component<{}> {
               loginError,
               isSigningUp,
               signupError,
-              policy,
+              policies,
               interactionLog,
               isCompletingRegistration,
               registrationError,
-              isFetchingActivePolicy,
-              policyFetchError,
+              isFetchingPolicies,
+              policiesFetchError,
               isUpdatingAddress,
               addressUpdateError,
               isFetchingInteractionLog,
               interactionLogFetchError,
+              isCreatingInsuranceQuoteRequest,
+              insuranceQuoteRequestCreationError,
+              insuranceQuoteRequest,
+              isFetchingInsuranceQuoteRequest,
+              insuranceQuoteRequests,
+              isFetchingInsuranceQuoteRequests,
+              insuranceQuoteRequestFetchError,
+              isRespondingToInsuranceQuote,
+              insuranceQuoteResponseError,
             } = store.state
             return (
               <BrowserRouter>
@@ -114,9 +123,32 @@ export default class App extends React.Component<{}> {
                         actions={store.getActions()}
                         user={user}
                         customer={customer}
-                        policy={policy}
-                        isFetchingActivePolicy={isFetchingActivePolicy}
-                        policyFetchError={policyFetchError}
+                        policies={policies}
+                        isFetchingPolicies={isFetchingPolicies}
+                        policiesFetchError={policiesFetchError}
+                        isCreatingInsuranceQuoteRequest={
+                          isCreatingInsuranceQuoteRequest
+                        }
+                        insuranceQuoteRequestCreationError={
+                          insuranceQuoteRequestCreationError
+                        }
+                        insuranceQuoteRequest={insuranceQuoteRequest}
+                        isFetchingInsuranceQuoteRequest={
+                          isFetchingInsuranceQuoteRequest
+                        }
+                        insuranceQuoteRequests={insuranceQuoteRequests}
+                        isFetchingInsuranceQuoteRequests={
+                          isFetchingInsuranceQuoteRequests
+                        }
+                        insuranceQuoteRequestFetchError={
+                          insuranceQuoteRequestFetchError
+                        }
+                        isRespondingToInsuranceQuote={
+                          isRespondingToInsuranceQuote
+                        }
+                        insuranceQuoteResponseError={
+                          insuranceQuoteResponseError
+                        }
                       />
                     )}
                   />

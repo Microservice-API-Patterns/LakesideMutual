@@ -1,7 +1,7 @@
 # Lakeside Mutual : Risk-Management server
 
 The Risk-Management service allows the professionals of Lakeside Mutual to periodically download
-a customer data report which helps them during risk assessment.
+a customer data report which helps them with risk assessments.
 
 ## IDE
 
@@ -20,9 +20,8 @@ Now you are ready to launch the Risk-Management server.
 
 ## Launch Application
 
-The Risk-Management server will connect to the [Policy Management backend](../policy-management-backend) through an [ActiveMQ](http://activemq.apache.org/) message queue. Therefore,
-you should make sure that the Policy Management backend is running while you are using the Risk-Management service. Then, in the `risk-management-server` directory, run `npm start`
-to start the Risk-Management server.
+The Risk-Management server consumes [document messages](https://www.enterpriseintegrationpatterns.com/patterns/messaging/DocumentMessage.html) from the [Policy Management backend](../policy-management-backend) through an [ActiveMQ](http://activemq.apache.org/) message queue. Therefore, you should make sure that the Policy Management backend is running while you are using the Risk-Management service. Then, in the `risk-management-server` directory, run `npm start`
+to start the Risk-Management server. <!-- using MOM/EIP terminology -->
 
-The Policy Management backend sends a message to the Risk-Management server every time a new insurance policy is created. These messages are persisted in the file `data/data.json`.
-If this file doesn't exists yet, the Risk-Management server will load the default data from the `data/initial-data.json` file.
+The Policy Management backend puts a message on the ActiveMQ queue every time an insurance policy is created, updated or deleted. These messages are persisted in the file `data/data.json`.
+If this file does not exist yet, the Risk-Management server will load the default data from the file `data/initial-data.json`.

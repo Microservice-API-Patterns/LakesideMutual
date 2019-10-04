@@ -5,6 +5,7 @@ npx recursive-install
 npx concurrently \
   --kill-others \
   --names "\
+eureka-server,\
 customer-core,\
 customer-self-service-backend,\
 customer-self-service-frontend,\
@@ -15,6 +16,7 @@ policy-management-frontend,\
 risk-management-server,\
 spring-boot-admin" \
   --prefix-colors "\
+bgRed.bold \
 bgYellow.bold,\
 bgBlue.bold,\
 bgBlue.bold,\
@@ -25,6 +27,7 @@ bgGreen.bold,\
 bgWhite.bold,\
 bgRed.bold" \
   \
+  "cd eureka-server && mvn spring-boot:run" \
   "cd customer-core && mvn spring-boot:run" \
   "cd customer-self-service-backend && mvn spring-boot:run" \
   "cd customer-self-service-frontend && npm start"\

@@ -55,7 +55,7 @@ import es.moki.ratelimitj.inmemory.request.InMemorySlidingWindowRequestRateLimit
  * requests to this application.
  *
  * @see <a href=
- *      "http://www.microservice-api-patterns.org/patterns/quality/WADE-RateLimit.html">www.microservice-api-patterns.org/patterns/quality/WADE-RateLimit.html</a>
+ *      "https://microservice-api-patterns.org/patterns/quality/qualityManagementAndGovernance/RateLimit">https://microservice-api-patterns.org/patterns/quality/qualityManagementAndGovernance/RateLimit</a>
  */
 @Component
 public class RateLimitInterceptor implements HandlerInterceptor {

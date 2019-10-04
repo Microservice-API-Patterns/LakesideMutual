@@ -12,6 +12,14 @@ module.exports = class ReportGenerator {
         value: 'customerCount',
       },
       {
+        label: 'Policy Count',
+        value: 'policyCount',
+      },
+      {
+        label: 'Avg. Deductible',
+        value: 'avgDeductible',
+      },
+      {
         label: 'Avg. Insurance Premium',
         value: 'avgInsurancePremium',
       },
@@ -22,27 +30,39 @@ module.exports = class ReportGenerator {
     ]
 
     let customerCount = 0
+    let policyCount = 0
+    let deductibleTotal = 0
     let insurancePremiumTotal = 0
     let policyLimitTotal = 0
 
     const customers = Object.values(this.data)
     for (const customer of customers) {
       customerCount += 1
-      insurancePremiumTotal += customer.activePolicy.insurancePremium.amount
-      policyLimitTotal += customer.activePolicy.policyLimit.amount
+
+      const policies = Object.values(customer.policies)
+      for (const policy of policies) {
+        policyCount += 1
+        deductibleTotal += policy.deductible.amount
+        insurancePremiumTotal += policy.insurancePremium.amount
+        policyLimitTotal += policy.policyLimit.amount
+      }
     }
 
+    const avgDeductible =
+      policyCount > 0 ? (deductibleTotal / policyCount).toFixed() + ' CHF' : '-'
     const avgInsurancePremium =
-      customerCount > 0
-        ? (insurancePremiumTotal / customerCount).toFixed() + ' CHF'
+      policyCount > 0
+        ? (insurancePremiumTotal / policyCount).toFixed() + ' CHF'
         : '-'
     const avgPolicyLimit =
-      customerCount > 0
-        ? (policyLimitTotal / customerCount).toFixed() + ' CHF'
+      policyCount > 0
+        ? (policyLimitTotal / policyCount).toFixed() + ' CHF'
         : '-'
 
     const data = {
       customerCount,
+      policyCount,
+      avgDeductible,
       avgInsurancePremium,
       avgPolicyLimit,
     }
@@ -189,9 +209,7 @@ module.exports = class ReportGenerator {
     for (const customer of customers) {
       total += 1
 
-      const postalCode = parseInt(
-        customer.customerProfile.postalCode
-      )
+      const postalCode = parseInt(customer.customerProfile.postalCode)
       if (isNaN(postalCode)) {
         continue
       }

@@ -22,37 +22,42 @@
       <sui-table-body>
         <sui-table-row v-for="policy in policies" :key="policy.policyId">
           <sui-table-cell>
-            {{policy.creationDate | formatDateTime}}
+            <formatted-date :date="policy.creationDate" full/>
           </sui-table-cell>
+          <sui-table-cell>{{policy.customer.firstname}} {{policy.customer.lastname}}</sui-table-cell>
+          <sui-table-cell>{{policy.insurancePremium.amount}} {{policy.insurancePremium.currency}}</sui-table-cell>
+          <sui-table-cell>{{policy.policyLimit.amount}} {{policy.policyLimit.currency}}</sui-table-cell>
           <sui-table-cell>
-            {{policy.customer.firstname}} {{policy.customer.lastname}}
-          </sui-table-cell>
-          <sui-table-cell>
-            {{policy.insurancePremium.amount}} {{policy.insurancePremium.currency}}
-          </sui-table-cell>
-          <sui-table-cell>
-            {{policy.policyLimit.amount}} {{policy.policyLimit.currency}}
-          </sui-table-cell>
-          <sui-table-cell>
-            <router-link is="sui-button" :to="`/policies/${policy.policyId}`" compact size="small">Show Details</router-link>
+            <router-link
+              is="sui-button"
+              :to="`/policies/${policy.policyId}`"
+              compact
+              size="small"
+            >Show Details</router-link>
           </sui-table-cell>
         </sui-table-row>
       </sui-table-body>
 
       <sui-table-footer>
         <sui-table-header-cell colspan="3">
-          <span v-if="offset != null && size != null">
-            {{offset+1}}-{{offset+policies.length}} of {{size}}
-          </span>
+          <span
+            v-if="offset != null && size != null"
+          >{{offset+1}}-{{offset+policies.length}} of {{size}}</span>
         </sui-table-header-cell>
         <sui-table-header-cell colspan="3">
           <sui-menu v-sui-floated:right pagination>
-            <a is="sui-menu-item" icon v-on:click="previousPage" :disabled="prev == null">
-              <sui-icon name="left chevron" />
-            </a>
-            <a is="sui-menu-item" icon v-on:click="nextPage" :disabled="next == null">
-              <sui-icon name="right chevron" />
-            </a>
+            <a
+              is="sui-menu-item"
+              icon="left chevron"
+              v-on:click="previousPage"
+              :disabled="prev == null"
+            ></a>
+            <a
+              is="sui-menu-item"
+              icon="right chevron"
+              v-on:click="nextPage"
+              :disabled="next == null"
+            ></a>
           </sui-menu>
         </sui-table-header-cell>
       </sui-table-footer>
@@ -61,14 +66,13 @@
 </template>
 
 <script>
-import moment from 'moment'
 import { getPolicies } from '../api'
-import PoliciesTable from '@/components/PoliciesTable'
 import ErrorMessage from '@/components/ErrorMessage'
+import FormattedDate from '@/components/FormattedDate'
 
 export default {
   name: 'Policies',
-  components: { PoliciesTable, ErrorMessage },
+  components: { ErrorMessage, FormattedDate },
   data() {
     return {
       policies: [],
@@ -82,11 +86,6 @@ export default {
   },
   async created() {
     await this.loadPolicies()
-  },
-  filters: {
-    formatDateTime(date) {
-      return moment(date).format('DD. MMM YYYY HH:mm')
-    }
   },
   methods: {
     async loadPolicies(link) {

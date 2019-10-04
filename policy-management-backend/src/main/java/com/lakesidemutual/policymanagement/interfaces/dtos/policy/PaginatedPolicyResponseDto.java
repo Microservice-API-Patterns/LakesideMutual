@@ -8,7 +8,7 @@ import org.springframework.hateoas.ResourceSupport;
  * The PaginatedPolicyResponseDto holds a collection of PolicyDto
  * with additional metadata parameters such as the limit, offset and size that
  * are used in the <a href=
- * "https://www.microservice-api-patterns.org/patterns/structure/compositeRepresentations/WADE-Pagination.html">Pagination</a>
+ * "https://microservice-api-patterns.org/patterns/structure/compositeRepresentations/Pagination">Pagination</a>
  * pattern, specifically the <em>Offset-Based</em> Pagination variant.
  */
 public class PaginatedPolicyResponseDto extends ResourceSupport {

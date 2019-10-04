@@ -7,6 +7,8 @@ import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.base.Objects;
+import com.lakesidemutual.customercore.domain.customer.Address;
+import com.lakesidemutual.customercore.domain.customer.CustomerProfileEntity;
 import com.lakesidemutual.customercore.interfaces.validation.PhoneNumber;
 
 /**
@@ -51,6 +53,11 @@ public class CustomerProfileUpdateRequestDto {
 		this.city = city;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
+	}
+
+	public CustomerProfileEntity toDomainObject() {
+		Address address = new Address(getStreetAddress(), getPostalCode(), getCity());
+		return new CustomerProfileEntity(getFirstname(), getLastname(), getBirthday(), address, getEmail(), getPhoneNumber());
 	}
 
 	public String getFirstname() {

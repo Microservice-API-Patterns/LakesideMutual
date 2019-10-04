@@ -5,16 +5,10 @@ package com.lakesidemutual.customerselfservice.interfaces.dtos.identityaccess;
  * It is sent to the AuthenticationController when a user tries to log into the Customer Self-Service frontend.
  */
 public class AuthenticationRequestDto {
-
 	private String email;
 	private String password;
 
 	public AuthenticationRequestDto() {
-	}
-
-	public AuthenticationRequestDto(String email, String password) {
-		this.setEmail(email);
-		this.setPassword(password);
 	}
 
 	public String getEmail() {

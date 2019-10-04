@@ -42,6 +42,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			"/customers/**",
 			"/cities",
 			"/cities/**",
+			"/insurance-quote-requests",
+			"/insurance-quote-requests/**",
 	};
 
 	@Autowired

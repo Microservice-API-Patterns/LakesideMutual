@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.lakesidemutual.customerselfservice.domain.customer.CustomerId;
-import com.lakesidemutual.customerselfservice.domain.identityaccess.UserLogin;
+import com.lakesidemutual.customerselfservice.domain.identityaccess.UserLoginEntity;
 import com.lakesidemutual.customerselfservice.infrastructure.UserLoginRepository;
 
 /**
@@ -37,13 +37,13 @@ public class DataLoader implements ApplicationRunner {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	private List<UserLogin> createUserLoginsFromDummyData(List<Map<String, String>> userData) {
+	private List<UserLoginEntity> createUserLoginsFromDummyData(List<Map<String, String>> userData) {
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		return userData.stream().map(data -> {
 			final String email = data.get("email");
 			final String hashedPassword = passwordEncoder.encode(data.get("password"));
 			final CustomerId customerId = new CustomerId(data.get("id"));
-			return new UserLogin(email, hashedPassword, "USER", customerId);
+			return new UserLoginEntity(email, hashedPassword, "USER", customerId);
 		}).collect(Collectors.toList());
 	}
 
@@ -57,26 +57,28 @@ public class DataLoader implements ApplicationRunner {
 	 * This dummy data was generated using https://mockaroo.com/
 	 */
 	private List<Map<String, String>> loadUsers() {
-		try {
-			InputStream file = new ClassPathResource("mock_users_small.csv").getInputStream();
+		try(InputStream file = new ClassPathResource("mock_users_small.csv").getInputStream()) {
 			CsvMapper mapper = new CsvMapper();
 			CsvSchema schema = CsvSchema.emptySchema().withHeader();
 			MappingIterator<Map<String, String>> readValues = mapper.readerFor(Map.class).with(schema).readValues(file);
 			return readValues.readAll();
 		} catch (Exception e) {
-			logger.error("Could not load mock data", e);
 			return Collections.emptyList();
 		}
 	}
 
 	@Override
 	public void run(ApplicationArguments args) throws ParseException {
+		if(userRepository.count() > 0) {
+			logger.info("Skipping import of application dummy data, because the database already contains existing entities.");
+			return;
+		}
 
 		List<Map<String, String>> userData = loadUsers();
 
 		logger.info("Loaded " + userData.size() + " users.");
 
-		List<UserLogin> userLogins = createUserLoginsFromDummyData(userData);
+		List<UserLoginEntity> userLogins = createUserLoginsFromDummyData(userData);
 
 		logger.info("Created " + userLogins.size() + " user logins.");
 

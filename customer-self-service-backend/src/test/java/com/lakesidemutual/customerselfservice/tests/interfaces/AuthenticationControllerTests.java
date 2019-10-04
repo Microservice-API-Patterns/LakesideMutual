@@ -24,7 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import com.lakesidemutual.customerselfservice.domain.identityaccess.UserLogin;
+import com.lakesidemutual.customerselfservice.domain.identityaccess.UserLoginEntity;
 import com.lakesidemutual.customerselfservice.infrastructure.UserLoginRepository;
 import com.lakesidemutual.customerselfservice.interfaces.AuthenticationController;
 import com.lakesidemutual.customerselfservice.interfaces.configuration.JwtUtils;
@@ -37,7 +37,7 @@ import com.lakesidemutual.customerselfservice.tests.TestUtils;
 public class AuthenticationControllerTests {
 	private String email;
 	private String cleartextPassword;
-	private UserLogin userLogin;
+	private UserLoginEntity userLogin;
 
 	// This makes sure that the rate limiter is not active during unit-testing.
 	@TestConfiguration
@@ -69,7 +69,7 @@ public class AuthenticationControllerTests {
 		cleartextPassword = "123456";
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String hashedPassword = passwordEncoder.encode(cleartextPassword);
-		userLogin = new UserLogin(email, hashedPassword, "ADMIN", null);
+		userLogin = new UserLoginEntity(email, hashedPassword, "ADMIN", null);
 	}
 
 	@Test

@@ -50,26 +50,28 @@ public final class TestUtils {
 		return customer;
 	}
 
-	public static PolicyAggregateRoot createTestPolicy(String policyIdStr, String customerIdStr, Date creationDate, Date startDate, Date endDate, BigDecimal policyLimitAmount, BigDecimal insurancePremiumAmount) {
+	public static PolicyAggregateRoot createTestPolicy(String policyIdStr, String customerIdStr, Date creationDate, Date startDate, Date endDate, BigDecimal deductibleAmount, BigDecimal policyLimitAmount, BigDecimal insurancePremiumAmount) {
 		final PolicyId policyId = new PolicyId(policyIdStr);
 		final CustomerId customerId = new CustomerId(customerIdStr);
 		final PolicyPeriod policyPeriod = new PolicyPeriod(startDate, endDate);
 		final PolicyType policyType = new PolicyType("Health Insurance");
 		final Currency currency = Currency.getInstance("CHF");
+		final MoneyAmount deductible = new MoneyAmount(deductibleAmount, currency);
 		final MoneyAmount policyLimit = new MoneyAmount(policyLimitAmount, currency);
 		final MoneyAmount insurancePremium = new MoneyAmount(insurancePremiumAmount, currency);
 		final InsuringAgreementEntity insuringAgreement = new InsuringAgreementEntity(Collections.emptyList());
-		return new PolicyAggregateRoot(policyId, customerId, creationDate, policyPeriod, policyType, policyLimit, insurancePremium, insuringAgreement);
+		return new PolicyAggregateRoot(policyId, customerId, creationDate, policyPeriod, policyType, deductible, policyLimit, insurancePremium, insuringAgreement);
 	}
 
-	public static PolicyDto createTestPolicyDto(String policyId, String customerId, Date creationDate, Date startDate, Date endDate, BigDecimal policyLimitAmount, BigDecimal insurancePremiumAmount) {
+	public static PolicyDto createTestPolicyDto(String policyId, String customerId, Date creationDate, Date startDate, Date endDate, BigDecimal deductibleAmount, BigDecimal policyLimitAmount, BigDecimal insurancePremiumAmount) {
 		final PolicyPeriodDto policyPeriod = new PolicyPeriodDto(startDate, endDate);
 		final String policyType = "Health Insurance";
 		final String currency = "CHF";
+		final MoneyAmountDto deductible = new MoneyAmountDto(deductibleAmount, currency);
 		final MoneyAmountDto policyLimit = new MoneyAmountDto(policyLimitAmount, currency);
 		final MoneyAmountDto insurancePremium = new MoneyAmountDto(insurancePremiumAmount, currency);
 		final InsuringAgreementDto insuringAgreement = new InsuringAgreementDto(Collections.emptyList());
-		return new PolicyDto(policyId, customerId, creationDate, policyPeriod, policyType, policyLimit, insurancePremium, insuringAgreement);
+		return new PolicyDto(policyId, customerId, creationDate, policyPeriod, policyType, deductible, policyLimit, insurancePremium, insuringAgreement);
 	}
 
 	public static String createISO8601Timestamp(Date date) {

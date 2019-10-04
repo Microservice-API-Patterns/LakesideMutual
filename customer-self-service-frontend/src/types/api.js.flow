@@ -35,6 +35,7 @@ declare type Policy = {
   creationDate: string,
   policyPeriod: PolicyPeriod,
   policyType: string,
+  deductible: MoneyAmount,
   policyLimit: MoneyAmount,
   insurancePremium: MoneyAmount,
   insuringAgreement: InsuringAgreement,
@@ -73,4 +74,47 @@ declare type InteractionLog = {
   customerId: CustomerId,
   username: string,
   interactions: Array<Interaction>,
+}
+
+declare type RequestStatusChange = {
+  date: string,
+  status: RequestStatus,
+}
+
+declare type RequestStatus =
+  | "REQUEST_SUBMITTED"
+  | "REQUEST_REJECTED"
+  | "QUOTE_RECEIVED"
+  | "QUOTE_ACCEPTED"
+  | "POLICY_CREATED"
+  | "QUOTE_REJECTED"
+  | "QUOTE_EXPIRED"
+
+declare type CustomerInfo = {
+  customerId: CustomerId,
+  firstname: string,
+  lastname: string,
+  contactAddress: Address,
+  billingAddress: Address,
+}
+
+declare type InsuranceOptions = {
+  startDate: ?string,
+  insuranceType: string,
+  deductible: MoneyAmount,
+}
+
+declare type InsuranceQuote = {
+  expirationDate: string,
+  insurancePremium: MoneyAmount,
+  policyLimit: MoneyAmount,
+}
+
+declare type InsuranceQuoteRequest = {
+  id?: string,
+  date?: string,
+  statusHistory: Array<RequestStatusChange>,
+  customerInfo: CustomerInfo,
+  insuranceOptions: InsuranceOptions,
+  insuranceQuote?: InsuranceQuote,
 }

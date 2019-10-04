@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriUtils;
 
 import com.lakesidemutual.customercore.application.CustomerService;
 import com.lakesidemutual.customercore.application.Page;
@@ -46,12 +48,17 @@ import io.swagger.annotations.ApiParam;
  * This REST controller gives clients access to the customer data. It is an example of the
  * <i>Information Holder Resource</i> pattern. This particular one is a special type of information holder called <i>Master Data Holder</i>.
  *
- * @see <a href="http://www.microservice-api-patterns.org/patterns/responsibility/endpointRoles/WADE-InformationHolderResource.html">Information Holder Resource</a>
- * @see <a href="http://www.microservice-api-patterns.org/patterns/responsibility/informationHolderEndpoints/WADE-MasterDataHolder.html">Master Data Holder</a>
+ * @see <a href="https://microservice-api-patterns.org/patterns/responsibility/endpointRoles/InformationHolderResource">Information Holder Resource</a>
+ * @see <a href="https://microservice-api-patterns.org/patterns/responsibility/informationHolderEndpoints/MasterDataHolder">Master Data Holder</a>
+ *
+ * Note: Tried to support JAX-WS and JAX-RS (or Spring Web Services and REST annotations) in same controller/port class (in port-and-adapter or hexagon style terms, by A. Cockburn). But such hybrid approach gets messy soon (due to "annotation jungle").
+ *
  */
+
 @RestController
 @RequestMapping("/customers")
 public class CustomerInformationHolder {
+
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	/**
@@ -67,15 +74,15 @@ public class CustomerInformationHolder {
 			@ApiParam(value = "the customer's unique id", required = true) @PathVariable CustomerId customerId,
 			@ApiParam(value = "the customer's new address", required = true) @Valid @RequestBody AddressDto requestDto) {
 
-		Address updatedAddress = new Address(requestDto.getStreetAddress(), requestDto.getPostalCode(), requestDto.getCity());
-		CustomerAggregateRoot customer = customerService.updateAddress(customerId, updatedAddress);
-		if (customer == null) {
+		Address updatedAddress = requestDto.toDomainObject();
+		Optional<CustomerAggregateRoot> optCustomer = customerService.updateAddress(customerId, updatedAddress);
+		if (!optCustomer.isPresent()) {
 			final String errorMessage = "Failed to find a customer with id '" + customerId.toString() + "'.";
 			logger.info(errorMessage);
 			throw new CustomerNotFoundException(errorMessage);
 		}
 
-		AddressDto responseDto = new AddressDto(updatedAddress.getStreetAddress(), updatedAddress.getPostalCode(), updatedAddress.getCity());
+		AddressDto responseDto = AddressDto.fromDomainObject(updatedAddress);
 		return ResponseEntity.ok(responseDto);
 	}
 
@@ -131,12 +138,12 @@ public class CustomerInformationHolder {
 	 * <br>
 	 * The client can provide a comma-separated list of customer ids to fetch a
 	 * particular set of customers. This is a variant of the <a href=
-	 * "http://www.microservice-api-patterns.org/patterns/quality/dataTransferParsimony/WADE-RequestBundle.html">Request
+	 * "https://microservice-api-patterns.org/patterns/quality/dataTransferParsimony/RequestBundle">Request
 	 * Bundle</a> pattern:
 	 *
 	 * <pre>
 	 *   <code>
-	 * GET http://localhost:8080/customers/ce4btlyluu,rgpp0wkpec
+	 * GET http://localhost:8110/customers/ce4btlyluu,rgpp0wkpec
 	 *
 	 * {
 	 *   "customers" : [
@@ -159,7 +166,7 @@ public class CustomerInformationHolder {
 	 *   ],
 	 *   "_links" : {
 	 *     "self" : {
-	 *       "href" : "http://localhost:8080/customers/ce4btlyluu,rgpp0wkpec?fields="
+	 *       "href" : "http://localhost:8110/customers/ce4btlyluu,rgpp0wkpec?fields="
 	 *     }
 	 *   }
 	 * }
@@ -169,12 +176,12 @@ public class CustomerInformationHolder {
 	 * By default getCustomer() returns a response that includes all fields. The
 	 * client can also reduce the size of the response by providing a so-called
 	 * <a href=
-	 * "http://www.microservice-api-patterns.org/patterns/quality/WADE-WishList.html">Wish
+	 * "https://microservice-api-patterns.org/patterns/quality/dataTransferParsimony/WishList">Wish
 	 * List</a> with the query parameter {@code fields}:
 	 *
 	 * <pre>
 	 *   <code>
-	 * GET http://localhost:8080/customers/ce4btlyluu,rgpp0wkpec?fields=firstname,lastname
+	 * GET http://localhost:8110/customers/ce4btlyluu,rgpp0wkpec?fields=firstname,lastname
 	 *
 	 * {
 	 *   "customers" : [
@@ -191,7 +198,7 @@ public class CustomerInformationHolder {
 	 *   ],
 	 *   "_links" : {
 	 *     "self" : {
-	 *       "href" : "http://localhost:8080/customers/ce4btlyluu,rgpp0wkpec?fields="
+	 *       "href" : "http://localhost:8110/customers/ce4btlyluu,rgpp0wkpec?fields="
 	 *     }
 	 *   }
 	 * }
@@ -199,9 +206,9 @@ public class CustomerInformationHolder {
 	 * </pre>
 	 *
 	 * @see <a href=
-	 *      "http://www.microservice-api-patterns.org/patterns/quality/dataTransferParsimony/WADE-RequestBundle.html">www.microservice-api-patterns.org/patterns/quality/dataTransferParsimony/WADE-RequestBundle.html</a>
+	 *      "https://microservice-api-patterns.org/patterns/quality/dataTransferParsimony/RequestBundle">https://microservice-api-patterns.org/patterns/quality/dataTransferParsimony/RequestBundle</a>
 	 * @see <a href=
-	 *      "http://www.microservice-api-patterns.org/patterns/quality/WADE-WishList.html">www.microservice-api-patterns.org/patterns/quality/WADE-WishList.html</a>
+	 *      "https://microservice-api-patterns.org/patterns/quality/dataTransferParsimony/WishList">https://microservice-api-patterns.org/patterns/quality/dataTransferParsimony/WishList</a>
 	 */
 	@ApiOperation(value = "Get a specific set of customers.")
 	@GetMapping(value = "/{ids}")
@@ -223,23 +230,16 @@ public class CustomerInformationHolder {
 	public ResponseEntity<CustomerResponseDto> updateCustomer(
 			@ApiParam(value = "the customer's unique id", required = true) @PathVariable CustomerId customerId,
 			@ApiParam(value = "the customer's updated profile", required = true) @Valid @RequestBody CustomerProfileUpdateRequestDto requestDto) {
-		final Address address = new Address(requestDto.getStreetAddress(), requestDto.getPostalCode(), requestDto.getCity());
-		final CustomerProfileEntity updatedCustomerProfile = new CustomerProfileEntity(
-				requestDto.getFirstname(),
-				requestDto.getLastname(),
-				requestDto.getBirthday(),
-				address,
-				requestDto.getEmail(),
-				requestDto.getPhoneNumber()
-				);
+		final CustomerProfileEntity updatedCustomerProfile = requestDto.toDomainObject();
 
-		CustomerAggregateRoot customer = customerService.updateCustomerProfile(customerId, updatedCustomerProfile);
-		if(customer == null) {
+		Optional<CustomerAggregateRoot> optCustomer = customerService.updateCustomerProfile(customerId, updatedCustomerProfile);
+		if(!optCustomer.isPresent()) {
 			final String errorMessage = "Failed to find a customer with id '" + customerId.toString() + "'.";
 			logger.info(errorMessage);
 			throw new CustomerNotFoundException(errorMessage);
 		}
 
+		CustomerAggregateRoot customer = optCustomer.get();
 		CustomerResponseDto response = new CustomerResponseDto(Collections.emptySet(), customer);
 		return ResponseEntity.ok(response);
 	}
@@ -253,7 +253,7 @@ public class CustomerInformationHolder {
 	 *
 	 * <pre>
 	 * <code>
-	 * GET http://localhost:8080/customers?limit=2&offset=2
+	 * GET http://localhost:8110/customers?limit=2&offset=2
 	 *
 	 * {
 	 *   "limit" : 2,
@@ -272,13 +272,13 @@ public class CustomerInformationHolder {
 	 *  } ],
 	 *   "_links" : {
 	 *     "self" : {
-	 *       "href" : "http://localhost:8080/customers?limit=2&offset=2&fields="
+	 *       "href" : "http://localhost:8110/customers?limit=2&offset=2&fields="
 	 *     },
 	 *     "prev" : {
-	 *       "href" : "http://localhost:8080/customers?limit=2&offset=0&fields="
+	 *       "href" : "http://localhost:8110/customers?limit=2&offset=0&fields="
 	 *     },
 	 *     "next" : {
-	 *       "href" : "http://localhost:8080/customers?limit=2&offset=4&fields="
+	 *       "href" : "http://localhost:8110/customers?limit=2&offset=4&fields="
 	 *     }
 	 *   }
 	 * }
@@ -291,7 +291,7 @@ public class CustomerInformationHolder {
 	 * previous and next page.
 	 *
 	 * @see <a href=
-	 *      "http://www.microservice-api-patterns.org/patterns/structure/compositeRepresentations/WADE-Pagination.html">www.microservice-api-patterns.org/patterns/structure/compositeRepresentations/WADE-Pagination.html</a>
+	 *      "https://microservice-api-patterns.org/patterns/structure/compositeRepresentations/Pagination">https://microservice-api-patterns.org/patterns/structure/compositeRepresentations/Pagination</a>
 	 */
 	@ApiOperation(value = "Get all customers in pages of 10 entries per page.")
 	@GetMapping
@@ -301,7 +301,8 @@ public class CustomerInformationHolder {
 			@ApiParam(value = "the offset of the page's first customer", required = false) @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset,
 			@ApiParam(value = "a comma-separated list of the fields that should be included in the response", required = false) @RequestParam(value = "fields", required = false, defaultValue = "") String fields) {
 
-		final Page<CustomerAggregateRoot> customerPage = customerService.getCustomers(filter, limit, offset);
+		final String decodedFilter = UriUtils.decode(filter, "UTF-8");
+		final Page<CustomerAggregateRoot> customerPage = customerService.getCustomers(decodedFilter, limit, offset);
 		List<CustomerResponseDto> customerDtos = customerPage.getElements().stream().map(c -> createCustomerResponseDto(c, fields)).collect(Collectors.toList());
 
 		PaginatedCustomerResponseDto paginatedCustomerResponseDto = createPaginatedCustomerResponseDto(
@@ -317,12 +318,9 @@ public class CustomerInformationHolder {
 	@ApiOperation(value = "Create a new customer.")
 	@PostMapping
 	public ResponseEntity<CustomerResponseDto> createCustomer(
-			@ApiParam(value = "the customer's profile information", required = true) @Valid @RequestBody CustomerProfileUpdateRequestDto reuestDto) {
+			@ApiParam(value = "the customer's profile information", required = true) @Valid @RequestBody CustomerProfileUpdateRequestDto requestDto) {
 
-		Address address = new Address(reuestDto.getStreetAddress(), reuestDto.getPostalCode(), reuestDto.getCity());
-		CustomerProfileEntity customerProfile = new CustomerProfileEntity(
-				reuestDto.getFirstname(), reuestDto.getLastname(), reuestDto.getBirthday(),
-				address, reuestDto.getEmail(), reuestDto.getPhoneNumber());
+		CustomerProfileEntity customerProfile = requestDto.toDomainObject();
 		CustomerAggregateRoot customer = customerService.createCustomer(customerProfile);
 		return ResponseEntity.ok(createCustomerResponseDto(customer, ""));
 	}

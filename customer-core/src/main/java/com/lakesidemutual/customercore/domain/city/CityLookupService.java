@@ -1,12 +1,12 @@
 package com.lakesidemutual.customercore.domain.city;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.microserviceapipatterns.domaindrivendesign.DomainService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -17,7 +17,6 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.TreeMultimap;
-import org.microserviceapipatterns.domaindrivendesign.DomainService;
 
 /**
  * This is a DDD Domain Service and is automatically injected thanks
@@ -35,8 +34,7 @@ public class CityLookupService implements DomainService {
 
 	private static Multimap<String, String> loadLookupMap() {
 		Multimap<String, String> map = TreeMultimap.create();
-		try {
-			InputStream file = new ClassPathResource(CSV_FILE).getInputStream();
+		try(InputStream file = new ClassPathResource(CSV_FILE).getInputStream()) {
 			CsvMapper mapper = new CsvMapper();
 			CsvSchema schema = CsvSchema.emptySchema().withHeader().withColumnSeparator(CSV_SEPARATOR);
 			MappingIterator<Map<String, String>> readValues = mapper.readerFor(Map.class).with(schema).readValues(file);

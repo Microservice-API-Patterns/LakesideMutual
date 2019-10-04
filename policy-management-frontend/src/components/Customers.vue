@@ -57,12 +57,18 @@
         </sui-table-header-cell>
         <sui-table-header-cell colspan="2">
           <sui-menu v-sui-floated:right pagination>
-            <a is="sui-menu-item" icon v-on:click="previousPage" :disabled="prev == null">
-              <sui-icon name="left chevron"/>
-            </a>
-            <a is="sui-menu-item" icon v-on:click="nextPage" :disabled="next == null">
-              <sui-icon name="right chevron"/>
-            </a>
+            <a
+              is="sui-menu-item"
+              icon="left chevron"
+              v-on:click="previousPage"
+              :disabled="prev == null"
+            ></a>
+            <a
+              is="sui-menu-item"
+              icon="right chevron"
+              v-on:click="nextPage"
+              :disabled="next == null"
+            ></a>
           </sui-menu>
         </sui-table-header-cell>
       </sui-table-footer>

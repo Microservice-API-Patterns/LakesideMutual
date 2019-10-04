@@ -27,9 +27,9 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 import com.lakesidemutual.policymanagement.domain.policy.PolicyAggregateRoot;
-import com.lakesidemutual.policymanagement.infrastructure.CustomerCoreService;
+import com.lakesidemutual.policymanagement.infrastructure.CustomerCoreRemoteProxy;
 import com.lakesidemutual.policymanagement.infrastructure.PolicyRepository;
-import com.lakesidemutual.policymanagement.infrastructure.RiskManagementService;
+import com.lakesidemutual.policymanagement.infrastructure.RiskManagementMessageProducer;
 import com.lakesidemutual.policymanagement.interfaces.PolicyInformationHolder;
 import com.lakesidemutual.policymanagement.tests.TestUtils;
 
@@ -45,10 +45,10 @@ public class PolicyInformationHolderTests {
 	private PolicyRepository policyRepository;
 
 	@MockBean
-	private RiskManagementService riskManagementService;
+	private RiskManagementMessageProducer riskManagementMessageProducer;
 
 	@MockBean
-	private CustomerCoreService customerCoreService;
+	private CustomerCoreRemoteProxy customerCoreRemoteProxy;
 
 	private PolicyAggregateRoot policyA;
 	private PolicyAggregateRoot policyB;
@@ -56,9 +56,9 @@ public class PolicyInformationHolderTests {
 
 	@Before
 	public void setUp() {
-		policyA = TestUtils.createTestPolicy("h3riovf4xq", "rgpp0wkpec", TestUtils.createDate(1, Calendar.JANUARY, 1990), TestUtils.createDate(1, Calendar.JANUARY, 1990), TestUtils.createDate(1, Calendar.JANUARY, 1990), BigDecimal.valueOf(1000000), BigDecimal.valueOf(250));
-		policyB = TestUtils.createTestPolicy("h3riovf5xq", "rgpp1wkpec", TestUtils.createDate(1, Calendar.JANUARY, 1990), TestUtils.createDate(1, Calendar.JANUARY, 1990), TestUtils.createDate(1, Calendar.JANUARY, 1990), BigDecimal.valueOf(100000), BigDecimal.valueOf(190));
-		policyC = TestUtils.createTestPolicy("h3riovf6xq", "rgpp2wkpec", TestUtils.createDate(1, Calendar.JANUARY, 1990), TestUtils.createDate(1, Calendar.JANUARY, 1990), TestUtils.createDate(1, Calendar.JANUARY, 1990), BigDecimal.valueOf(10000), BigDecimal.valueOf(120));
+		policyA = TestUtils.createTestPolicy("h3riovf4xq", "rgpp0wkpec", TestUtils.createDate(1, Calendar.JANUARY, 1990), TestUtils.createDate(1, Calendar.JANUARY, 1990), TestUtils.createDate(1, Calendar.JANUARY, 1990), BigDecimal.valueOf(1500), BigDecimal.valueOf(1000000), BigDecimal.valueOf(250));
+		policyB = TestUtils.createTestPolicy("h3riovf5xq", "rgpp1wkpec", TestUtils.createDate(1, Calendar.JANUARY, 1990), TestUtils.createDate(1, Calendar.JANUARY, 1990), TestUtils.createDate(1, Calendar.JANUARY, 1990), BigDecimal.valueOf(1500), BigDecimal.valueOf(100000), BigDecimal.valueOf(190));
+		policyC = TestUtils.createTestPolicy("h3riovf6xq", "rgpp2wkpec", TestUtils.createDate(1, Calendar.JANUARY, 1990), TestUtils.createDate(1, Calendar.JANUARY, 1990), TestUtils.createDate(1, Calendar.JANUARY, 1990), BigDecimal.valueOf(1500), BigDecimal.valueOf(10000), BigDecimal.valueOf(120));
 	}
 
 	@Test

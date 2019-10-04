@@ -67,6 +67,12 @@ public class PolicyAggregateRoot implements RootEntity {
 	 * */
 	@Embedded
 	@AttributeOverrides({
+		@AttributeOverride(name="amount", column=@Column(name="deductibleAmount")),
+		@AttributeOverride(name="currency", column=@Column(name="deductibleCurrency"))})
+	private MoneyAmount deductible;
+
+	@Embedded
+	@AttributeOverrides({
 		@AttributeOverride(name="amount", column=@Column(name="limitAmount")),
 		@AttributeOverride(name="currency", column=@Column(name="limitCurrency"))})
 	private MoneyAmount policyLimit;
@@ -88,6 +94,7 @@ public class PolicyAggregateRoot implements RootEntity {
 			Date creationDate,
 			PolicyPeriod policyPeriod,
 			PolicyType policyType,
+			MoneyAmount deductible,
 			MoneyAmount policyLimit,
 			MoneyAmount insurancePremium,
 			InsuringAgreementEntity insuringAgreement) {
@@ -96,6 +103,7 @@ public class PolicyAggregateRoot implements RootEntity {
 		this.creationDate = creationDate;
 		this.policyPeriod = policyPeriod;
 		this.policyType = policyType;
+		this.deductible = deductible;
 		this.policyLimit = policyLimit;
 		this.insurancePremium = insurancePremium;
 		this.insuringAgreement = insuringAgreement;
@@ -117,19 +125,47 @@ public class PolicyAggregateRoot implements RootEntity {
 		return policyPeriod;
 	}
 
+	public void setPolicyPeriod(PolicyPeriod policyPeriod) {
+		this.policyPeriod = policyPeriod;
+	}
+
 	public PolicyType getPolicyType() {
 		return policyType;
+	}
+
+	public void setPolicyType(PolicyType policyType) {
+		this.policyType = policyType;
+	}
+
+	public MoneyAmount getDeductible() {
+		return deductible;
+	}
+
+	public void setDeductible(MoneyAmount deductible) {
+		this.deductible = deductible;
 	}
 
 	public MoneyAmount getPolicyLimit() {
 		return policyLimit;
 	}
 
+	public void setPolicyLimit(MoneyAmount policyLimit) {
+		this.policyLimit = policyLimit;
+	}
+
 	public MoneyAmount getInsurancePremium() {
 		return insurancePremium;
 	}
 
+	public void setInsurancePremium(MoneyAmount insurancePremium) {
+		this.insurancePremium = insurancePremium;
+	}
+
 	public InsuringAgreementEntity getInsuringAgreement() {
 		return insuringAgreement;
+	}
+
+	public void setInsuringAgreement(InsuringAgreementEntity insuringAgreement) {
+		this.insuringAgreement = insuringAgreement;
 	}
 }

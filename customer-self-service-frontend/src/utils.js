@@ -15,7 +15,8 @@ export function extractFormError(
 
       if (error) {
         errorFields.push(field)
-        errorMessages.push(`${name} ${error.defaultMessage}`)
+        const message = error.defaultMessage.replace("null", "empty")
+        errorMessages.push(`${name} ${message}`)
       }
     }
 

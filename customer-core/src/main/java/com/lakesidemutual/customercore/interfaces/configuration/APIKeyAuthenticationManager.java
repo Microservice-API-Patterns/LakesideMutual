@@ -9,7 +9,7 @@ import org.springframework.security.core.AuthenticationException;
 
 /**
  * The APIKeyAuthenticationManager ensures that only known clients can access the Customer Core API. It is an example of the <a href=
- * "http://www.microservice-api-patterns.org/patterns/quality/qualityManagementAndGovernance/WADE-APIKey.html">API Key</a> pattern
+ * "https://microservice-api-patterns.org/patterns/quality/qualityManagementAndGovernance/APIKey">API Key</a> pattern
  * where each client identifies itself with an API Key. Example:
  * <br/>
  *
@@ -45,7 +45,7 @@ import org.springframework.security.core.AuthenticationException;
  * </pre>
  *
  * @see <a href=
- *      "http://www.microservice-api-patterns.org/patterns/quality/qualityManagementAndGovernance/WADE-APIKey.html">http://www.microservice-api-patterns.org/patterns/quality/qualityManagementAndGovernance/WADE-APIKey.html</a>
+ *      "https://microservice-api-patterns.org/patterns/quality/qualityManagementAndGovernance/APIKey">https://microservice-api-patterns.org/patterns/quality/qualityManagementAndGovernance/APIKey</a>
  */
 public class APIKeyAuthenticationManager implements AuthenticationManager {
 	private final List<String> validAPIKeys;

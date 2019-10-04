@@ -5,6 +5,10 @@ body {
   background: #f7f7f7;
 }
 
+#root {
+  margin-bottom: 100px;
+}
+
 .HomeScreen > .column,
 .LoginScreen > .column,
 .SignupScreen > .column {

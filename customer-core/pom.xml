@@ -88,7 +88,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
-		<dependency>
+		<dependency>	
 			<groupId>de.codecentric</groupId>
 			<artifactId>spring-boot-admin-starter-client</artifactId>
 			<version>2.1.1</version>
@@ -99,10 +99,6 @@
 			<version>0.4.2</version>
 		</dependency>
 		<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-text</artifactId>
 			<version>1.4</version>
@@ -111,6 +107,45 @@
 			<groupId>io.github.adr</groupId>
 			<artifactId>e-adr</artifactId>
 			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web-services</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>wsdl4j</groupId>
+			<artifactId>wsdl4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.tngtech.archunit</groupId>
+			<artifactId>archunit-junit4</artifactId>
+			<version>0.9.3</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>
+				spring-cloud-starter-netflix-eureka-client
+			</artifactId>
+			<version>2.1.0.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-core</artifactId>
+			<version>2.2.11</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+			<version>2.2.11</version>
 		</dependency>
 	</dependencies>
 
@@ -157,6 +192,34 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<!-- From guide, not working (tmp fix): <plugin> <groupId>org.jvnet.jaxb2.maven2</groupId> 
+				<artifactId>maven-jaxb2-plugin</artifactId> <version>0.13.1</version> <executions> 
+				<execution> <goals> <goal>generate</goal> </goals> </execution> </executions> 
+				<configuration> <schemaLanguage>WSDL</schemaLanguage> <generatePackage>hello.wsdl</generatePackage> 
+				<schemas> <schema> <url>http://localhost:8110/ws/countries.wsdl</url> </schema> 
+				</schemas> </configuration> </plugin> The two Spring WS tutorials seem to 
+				recommend/use different plugins: org.jvnet.jaxb2.maven2 vs. this one -->
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>xjc</id>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<schemaDirectory>${project.basedir}/src/main/resources/</schemaDirectory>
+					<outputDirectory>${project.basedir}/src/main/java</outputDirectory>
+					<clearOutputDir>false</clearOutputDir>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 

@@ -52,8 +52,10 @@ services:
     image: lakesidemutual/customer-self-service-backend
     depends_on:
       - customer-core
+      - policy-management-backend
     environment:
       - "CUSTOMERCORE_BASEURL=http://customer-core:8110"
+      - "POLICYMANAGEMENT_TCPBROKERBINDADDRESS=tcp://policy-management-backend:61616"
       - "SPRING_BOOT_ADMIN_CLIENT_URL=http://spring-boot-admin:9000"
     ports:
       - "8080:8080"
@@ -85,6 +87,7 @@ services:
     ports:
       - "8090:8090"
       - "61613:61613"
+      - "61616:61616"
     volumes:
       - "maven_repo:/root/.m2"
   policy-management-frontend:
