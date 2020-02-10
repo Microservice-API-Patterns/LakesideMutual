@@ -13,6 +13,7 @@ import MenuBar from "./components/MenuBar"
 
 import { Provider } from "react-redux"
 import configureStore from "./redux/configureStore"
+import { customerSelfServiceBackend, customerManagementBackend } from "./config"
 
 const store = configureStore()
 
@@ -44,6 +45,13 @@ export default class App extends React.Component<{}> {
                 render={props => <EditCustomer {...props} />}
               />
             </Switch>
+            <p style={{ color: "#0000" }}>
+              REACT_APP_CUSTOMER_SELF_SERVICE_BACKEND:{" "}
+              {customerSelfServiceBackend}
+            </p>
+            <p style={{ color: "#0000" }}>
+              REACT_APP_CUSTOMER_MANAGEMENT_BACKEND: {customerManagementBackend}
+            </p>
           </Container>
         </BrowserRouter>
       </Provider>

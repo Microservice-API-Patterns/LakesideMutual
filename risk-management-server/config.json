@@ -1,12 +1,12 @@
 {
-  "activeMQ": {
+  "activemq": {
     "host": "localhost",
     "port": 61613,
     "username": "queueuser",
     "password": "secret",
     "queueName": "newpolicies"
   },
-  "gRPC": {
+  "grpc": {
     "host": "0.0.0.0",
     "port": 50051
   }

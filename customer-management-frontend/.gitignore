@@ -13,3 +13,7 @@ build
 .DS_Store
 npm-debug.log
 docs
+
+# Temporary env files
+/public/env.js
+env.js

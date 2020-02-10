@@ -13,7 +13,7 @@ const ReportGenerator = require('./lib/report-generator')
 
 nconf
   .argv()
-  .env()
+  .env({ lowerCase: true, separator: '_' })
   .file({ file: path.join(__dirname, 'config.json') })
 
 /*
@@ -54,8 +54,13 @@ The consumeEvents() function consumes PolicyEvent messages from the message queu
 they become available. Each event is then persisted with the data manager.
 */
 function consumeEvents(dataManager) {
-  console.log('Starting to consume PolicyEvent messages')
-  const mq_config = nconf.get('activeMQ')
+  const mq_config = nconf.get('activemq')
+  console.log(
+    'Starting to consume PolicyEvent messages from: ',
+    mq_config.host,
+    mq_config.port,
+    mq_config.username
+  )
   const connectOptions = {
     host: mq_config.host,
     port: mq_config.port,
@@ -68,9 +73,17 @@ function consumeEvents(dataManager) {
   }
 
   const connectFailover = new stompit.ConnectFailover([connectOptions])
+
+  connectFailover.on('error', error => {
+    const connectArgs = error.connectArgs
+    const address = `${connectArgs.host}:${connectArgs.port}`
+    console.log(`Connection error to ${address}: ${error.message}`)
+  })
+
   const channelFactory = new stompit.ChannelFactory(connectFailover)
   channelFactory.channel((error, channel) => {
     if (error) {
+      console.log('channel factory error: ' + error.message)
       reject(error)
       return
     }
@@ -120,7 +133,7 @@ The startGRPCServer() function starts the gRPC server which listens for
 requests from the Risk Management Client.
  */
 function startGRPCServer(dataManager) {
-  const grpc_config = nconf.get('gRPC')
+  const grpc_config = nconf.get('grpc')
   const PROTO_PATH = path.join(__dirname, '/riskmanagement.proto')
   const proto = grpc.load(PROTO_PATH).riskmanagement
   const server = new grpc.Server()
@@ -134,12 +147,14 @@ function startGRPCServer(dataManager) {
   )
 
   console.log(
-    `Listening for requests from Risk Management Client on ${
-      grpc_config.host
-    }:${grpc_config.port}`
+    `Listening for requests from Risk Management Client on ${grpc_config.host}:${grpc_config.port}`
   )
   server.start()
 }
+
+process.on('unhandledRejection', err => {
+  console.error(err)
+})
 
 const dataManager = new DataManager()
 consumeEvents(dataManager)

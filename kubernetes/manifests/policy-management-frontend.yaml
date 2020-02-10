@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: policy-management-frontend
+  labels:
+    app: policy-management-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: policy-management-frontend
+  template:
+    metadata:
+      labels:
+        app: policy-management-frontend
+    spec:
+      containers:
+        - env:
+            - name: REACT_APP_POLICY_MANAGEMENT_BACKEND
+              value: http://34.65.192.94:8090
+          image: gcr.io/lakeside-mutual-2020/policy-management-frontend
+          imagePullPolicy: Always
+          name: policy-management-frontend
+          ports:
+            - containerPort: 80
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: policy-management-frontend
+spec:
+  selector:
+    app: policy-management-frontend
+  ports:
+    - name: "3010"
+      port: 3010
+      targetPort: 80
+  type: LoadBalancer
+  loadBalancerIP: 34.65.192.94

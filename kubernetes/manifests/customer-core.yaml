@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-core
+  labels:
+    app: customer-core
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer-core
+  template:
+    metadata:
+      labels:
+        app: customer-core
+    spec:
+      containers:
+        - env:
+            - name: SPRING_BOOT_ADMIN_CLIENT_URL
+              value: http://spring-boot-admin:9000
+          image: gcr.io/lakeside-mutual-2020/customer-core
+          imagePullPolicy: Always
+          name: customer-core
+          ports:
+            - containerPort: 8110
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-core
+spec:
+  selector:
+    app: customer-core
+  ports:
+    - name: "8110"
+      port: 8110
+      targetPort: 8110

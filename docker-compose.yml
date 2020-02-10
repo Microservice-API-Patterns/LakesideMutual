@@ -22,8 +22,6 @@ services:
       - "SPRING_BOOT_ADMIN_CLIENT_URL=http://spring-boot-admin:9000"
     ports:
       - "8110:8110"
-    volumes:
-      - "maven_repo:/root/.m2"
   customer-management-backend:
     build: customer-management-backend
     image: lakesidemutual/customer-management-backend
@@ -34,8 +32,6 @@ services:
       - "SPRING_BOOT_ADMIN_CLIENT_URL=http://spring-boot-admin:9000"
     ports:
       - "8100:8100"
-    volumes:
-      - "maven_repo:/root/.m2"
   customer-management-frontend:
     build: customer-management-frontend
     image: lakesidemutual/customer-management-frontend
@@ -45,8 +41,6 @@ services:
       - "REACT_APP_CUSTOMER_MANAGEMENT_BACKEND=http://customer-management-backend:8100"
     ports:
       - "3020:80"
-    volumes:
-      - "node_modules:/usr/src/app/node_modules"
   customer-self-service-backend:
     build: customer-self-service-backend
     image: lakesidemutual/customer-self-service-backend
@@ -59,8 +53,6 @@ services:
       - "SPRING_BOOT_ADMIN_CLIENT_URL=http://spring-boot-admin:9000"
     ports:
       - "8080:8080"
-    volumes:
-      - "maven_repo:/root/.m2"
   customer-self-service-frontend:
     build: customer-self-service-frontend
     image: lakesidemutual/customer-self-service-frontend
@@ -74,8 +66,6 @@ services:
       - "REACT_APP_CUSTOMER_MANAGEMENT_BACKEND=http://customer-management-backend:8100"
     ports:
       - "3000:80"
-    volumes:
-      - "node_modules:/usr/src/app/node_modules"
   policy-management-backend:
     build: policy-management-backend
     image: lakesidemutual/policy-management-backend
@@ -88,8 +78,6 @@ services:
       - "8090:8090"
       - "61613:61613"
       - "61616:61616"
-    volumes:
-      - "maven_repo:/root/.m2"
   policy-management-frontend:
     build: policy-management-frontend
     image: lakesidemutual/policy-management-frontend
@@ -99,27 +87,18 @@ services:
       - "VUE_APP_POLICY_MANAGEMENT_BACKEND=http://policy-management-backend:8090"
     ports:
       - "3010:80"
-    volumes:
-      - "node_modules:/usr/src/app/node_modules"
   spring-boot-admin:
     build: spring-boot-admin
     image: lakesidemutual/spring-boot-admin
     ports:
       - "9000:9000"
-    volumes:
-      - "maven_repo:/root/.m2"
   risk-management-server:
     build: risk-management-server
     image: lakesidemutual/risk-management-server
     depends_on:
       - policy-management-backend
     environment:
-      - "activeMQ.host=policy-management-backend"
-      - "activeMQ.port=61613"
+      - "ACTIVEMQ_HOST=policy-management-backend"
+      - "ACTIVEMQ_PORT=61613"
     ports:
       - "50051:50051"
-    volumes:
-      - "node_modules:/usr/src/app/node_modules"
-volumes:
-  maven_repo:
-  node_modules:

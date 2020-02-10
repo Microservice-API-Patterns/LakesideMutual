@@ -1,0 +1,33 @@
+#
+# To build the Docker images:
+#   COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose build
+#
+version: "3"
+services:
+  customer-core:
+    build: ../customer-core
+    image: gcr.io/lakeside-mutual-2020/customer-core
+  customer-management-backend:
+    build: ../customer-management-backend
+    image: gcr.io/lakeside-mutual-2020/customer-management-backend
+  customer-management-frontend:
+    build: ../customer-management-frontend
+    image: gcr.io/lakeside-mutual-2020/customer-management-frontend
+  customer-self-service-backend:
+    build: ../customer-self-service-backend
+    image: gcr.io/lakeside-mutual-2020/customer-self-service-backend
+  customer-self-service-frontend:
+    build: ../customer-self-service-frontend
+    image: gcr.io/lakeside-mutual-2020/customer-self-service-frontend
+  policy-management-backend:
+    build: ../policy-management-backend
+    image: gcr.io/lakeside-mutual-2020/policy-management-backend
+  policy-management-frontend:
+    build: ../policy-management-frontend
+    image: gcr.io/lakeside-mutual-2020/policy-management-frontend
+  spring-boot-admin:
+    build: ../spring-boot-admin
+    image: gcr.io/lakeside-mutual-2020/spring-boot-admin
+  risk-management-server:
+    build: ../risk-management-server
+    image: gcr.io/lakeside-mutual-2020/risk-management-server

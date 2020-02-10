@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-management-frontend
+  labels:
+    app: customer-management-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer-management-frontend
+  template:
+    metadata:
+      labels:
+        app: customer-management-frontend
+    spec:
+      containers:
+        - env:
+            - name: REACT_APP_CUSTOMER_SELF_SERVICE_BACKEND
+              value: http://34.65.192.94:8080
+            - name: REACT_APP_CUSTOMER_MANAGEMENT_BACKEND
+              value: http://34.65.192.94:8100
+          image: gcr.io/lakeside-mutual-2020/customer-management-frontend
+          imagePullPolicy: Always
+          name: customer-management-frontend
+          ports:
+            - containerPort: 80
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-management-frontend
+spec:
+  selector:
+    app: customer-management-frontend
+  ports:
+    - name: "3020"
+      port: 3020
+      targetPort: 80
+  type: LoadBalancer
+  loadBalancerIP: 34.65.192.94

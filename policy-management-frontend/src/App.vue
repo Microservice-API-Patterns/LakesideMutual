@@ -13,6 +13,9 @@
     <sui-segment>
       <router-view />
     </sui-segment>
+    <p style="color: #0000">
+      VUE_APP_POLICY_MANAGEMENT_BACKEND: {{ policyManagementBackend }}
+    </p>
   </div>
 </template>
 
@@ -24,7 +27,10 @@ export default {
   components: { Menu },
   data() {
     return {
-      publicPath: process.env.BASE_URL
+      publicPath: process.env.BASE_URL,
+      policyManagementBackend:
+        window._env.VUE_APP_POLICY_MANAGEMENT_BACKEND ||
+        process.env.VUE_APP_POLICY_MANAGEMENT_BACKEND
     }
   }
 }

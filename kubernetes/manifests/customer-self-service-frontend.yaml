@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-self-service-frontend
+  labels:
+    app: customer-self-service-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer-self-service-frontend
+  template:
+    metadata:
+      labels:
+        app: customer-self-service-frontend
+    spec:
+      containers:
+        - env:
+            - name: REACT_APP_CUSTOMER_MANAGEMENT_BACKEND
+              value: http://34.65.192.94:8100
+            - name: REACT_APP_CUSTOMER_SELF_SERVICE_BACKEND
+              value: http://34.65.192.94:8080
+            - name: REACT_APP_POLICY_MANAGEMENT_BACKEND
+              value: http://34.65.192.94:8090
+          image: gcr.io/lakeside-mutual-2020/customer-self-service-frontend
+          imagePullPolicy: Always
+          name: customer-self-service-frontend
+          ports:
+            - containerPort: 80
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-self-service-frontend
+spec:
+  selector:
+    app: customer-self-service-frontend
+  ports:
+    - name: "3000"
+      port: 3000
+      targetPort: 80
+  type: LoadBalancer
+  loadBalancerIP: 34.65.192.94

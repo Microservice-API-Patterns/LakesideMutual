@@ -1,5 +1,6 @@
 const policyManagementBackend =
-  process.env.VUE_APP_POLICY_MANAGEMENT_BACKEND || 'http://localhost:8090'
+  window._env.VUE_APP_POLICY_MANAGEMENT_BACKEND ||
+  process.env.VUE_APP_POLICY_MANAGEMENT_BACKEND
 
 export async function getCustomers(link, filter) {
   if (link) {
