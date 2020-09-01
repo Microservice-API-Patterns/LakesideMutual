@@ -81,7 +81,7 @@ consult the README of the corresponding component:
 
 All projects come with Dockerfiles that can be used to run the services as Docker containers. The [docker-compose.yml](./docker-compose.yml) builds and starts all applications in a single command, just like the `run_all_applications` scripts mentioned above. See the [docker-compose.yml](./docker-compose.yml) for more information.
 
-Note that the Dockerfiles make use of [BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/) features. To be able to build the Docker images, you have to set the `DOCKER_BUILDKIT` environment variable accoringly.
+Note that the Dockerfiles make use of [BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/) features. To be able to build the Docker images, you have to set the `DOCKER_BUILDKIT` environment variable accordingly.
 
 The easiest way to build the individual images is by running the following command in the corresponding project directory:
 
