@@ -5,11 +5,14 @@
 # or other development features. For development, we recommend to start
 # the applications invidually or use the run_all_applications scripts.
 #
+# Since the Dockerfiles use BuildKit features, you have to set the
+# DOCKER_BUILDKIT environment variable accordingly.
+#
 # To build the Docker images:
-#   docker-compose build
+#   COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose build
 #
 # To run the applications:
-#   docker-compose up
+#   COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose up
 #
 # To shut down the applications, simply terminate the previous command.
 #

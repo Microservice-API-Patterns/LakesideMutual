@@ -81,6 +81,20 @@ consult the README of the corresponding component:
 
 All projects come with Dockerfiles that can be used to run the services as Docker containers. The [docker-compose.yml](./docker-compose.yml) builds and starts all applications in a single command, just like the `run_all_applications` scripts mentioned above. See the [docker-compose.yml](./docker-compose.yml) for more information.
 
+Note that the Dockerfiles make use of [BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/) features. To be able to build the Docker images, you have to set the `DOCKER_BUILDKIT` environment variable accoringly.
+
+The easiest way to build the individual images is by running the following command in the corresponding project directory:
+
+```bash
+DOCKER_BUILDKIT=1 docker build
+```
+
+To build and run all applications with Docker Compose, use the following command:
+
+```bash
+COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose up
+```
+
 ## Data Stores
 
 Each backend service has its own data store. The Spring-JPA based applications all use the H2 relational database. By default, all data will be lost during restarts, please see the individual README files to enable durable persistency. The backend services also contain the H2 Console to browse the database. It can be found at `/console`. For example, for the Customer Core, the address is [http://localhost:8110/console](http://localhost:8110/console).
