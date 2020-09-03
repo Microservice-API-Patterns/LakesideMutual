@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "commander": "^2.15.1",
-    "grpc": "^1.12.2",
+    "grpc": "^1.24.3",
     "nconf": "^0.10.0",
     "progress": "^2.0.0"
   },
