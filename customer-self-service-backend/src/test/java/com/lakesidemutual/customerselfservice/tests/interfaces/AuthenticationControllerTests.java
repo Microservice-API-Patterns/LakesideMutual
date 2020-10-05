@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.lakesidemutual.customerselfservice.interfaces.configuration.UnauthorizedHandler;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +20,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -33,7 +35,7 @@ import com.lakesidemutual.customerselfservice.tests.TestUtils;
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
-@WebMvcTest(value = AuthenticationController.class, secure = false)
+@WebMvcTest(value = AuthenticationController.class)
 public class AuthenticationControllerTests {
 	private String email;
 	private String cleartextPassword;
@@ -46,6 +48,11 @@ public class AuthenticationControllerTests {
 		public HandlerInterceptor rateLimitInterceptor() {
 			return new HandlerInterceptor() {};
 		}
+
+		@Bean
+		public UnauthorizedHandler unauthorizedHandler() {
+			return new UnauthorizedHandler();
+		};
 	}
 
 	@Autowired

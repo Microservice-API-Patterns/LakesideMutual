@@ -1,12 +1,11 @@
 package com.lakesidemutual.customermanagement.interfaces.configuration;
 
 import java.util.Collections;
+import java.util.function.Predicate;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -32,7 +31,7 @@ public class SwaggerConfiguration {
 	}
 
 	private Predicate<String> paths() {
-		return Predicates.not(PathSelectors.regex("/error|/actuator.*"));
+		return PathSelectors.regex("/error|/actuator.*").negate();
 	}
 
 	private ApiInfo apiInfo() {

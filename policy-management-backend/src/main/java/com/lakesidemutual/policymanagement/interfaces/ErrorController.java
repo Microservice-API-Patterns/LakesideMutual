@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
+import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -30,7 +31,7 @@ public class ErrorController extends AbstractErrorController {
 	@RequestMapping(value = "/error", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public Map<String, Object> handleError(HttpServletRequest request) {
-		Map<String, Object> errorAttributes = super.getErrorAttributes(request, true);
+		Map<String, Object> errorAttributes = super.getErrorAttributes(request, ErrorAttributeOptions.of(ErrorAttributeOptions.Include.STACK_TRACE));
 
 		Object path = errorAttributes.get("path");
 		Object status = errorAttributes.get("status");

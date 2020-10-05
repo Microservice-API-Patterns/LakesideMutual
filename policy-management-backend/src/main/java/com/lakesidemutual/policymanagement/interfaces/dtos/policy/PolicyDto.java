@@ -2,7 +2,7 @@ package com.lakesidemutual.policymanagement.interfaces.dtos.policy;
 
 import java.util.Date;
 
-import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lakesidemutual.policymanagement.domain.policy.PolicyAggregateRoot;
@@ -15,7 +15,7 @@ import com.lakesidemutual.policymanagement.domain.policy.PolicyAggregateRoot;
  *
  * @see <a href="https://docs.spring.io/spring-hateoas/docs/current/reference/html/">Spring HATEOAS - Reference Documentation</a>
  */
-public class PolicyDto extends ResourceSupport {
+public class PolicyDto extends RepresentationModel {
 	private String policyId;
 	private Object customer;
 	private Date creationDate;

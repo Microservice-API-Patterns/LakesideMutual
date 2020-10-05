@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
-import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
 import com.lakesidemutual.customercore.domain.customer.Address;
 import com.lakesidemutual.customercore.domain.customer.CustomerAggregateRoot;
@@ -15,7 +15,7 @@ import com.lakesidemutual.customercore.domain.customer.CustomerProfileEntity;
  * "https://microservice-api-patterns.org/patterns/structure/representationElements/ParameterTree">Parameter
  * Tree</a> pattern.
  */
-public class CustomerResponseDto extends ResourceSupport {
+public class CustomerResponseDto extends RepresentationModel {
 	private final String customerId;
 
 	private final String firstname;

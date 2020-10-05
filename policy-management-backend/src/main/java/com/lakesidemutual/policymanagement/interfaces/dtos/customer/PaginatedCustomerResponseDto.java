@@ -2,7 +2,7 @@ package com.lakesidemutual.policymanagement.interfaces.dtos.customer;
 
 import java.util.List;
 
-import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
 /**
  * The PaginatedCustomerResponseDto holds a collection of CustomerDto
@@ -11,7 +11,7 @@ import org.springframework.hateoas.ResourceSupport;
  * "https://microservice-api-patterns.org/patterns/structure/compositeRepresentations/Pagination">Pagination</a>
  * pattern, specifically the <em>Offset-Based</em> Pagination variant.
  */
-public class PaginatedCustomerResponseDto extends ResourceSupport {
+public class PaginatedCustomerResponseDto extends RepresentationModel {
 	private String filter;
 	private int limit;
 	private int offset;

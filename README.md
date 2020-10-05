@@ -45,18 +45,20 @@ The following sections contain a short description of each service:
 
 - **[Spring Boot Admin](spring-boot-admin)**  
   [Spring Boot Admin](https://github.com/codecentric/spring-boot-admin) is an open source software for managing and monitoring Spring Boot applications. It *is* a Spring Boot application too. Usage within the Lakeside Mutual services is optional and only included for convenience with all security disabled.
+  
+The backends use Domain-Driven Design (DDD) to structure their domain (business) logic and their service-internal logical layers. To do so, they use marker interfaces defined in this [Domain-Driven Design Library](https://github.com/Microservice-API-Patterns/DDD-Library).
 
 To learn more about individual components, please have a look at the README file in the corresponding subfolder.
 
 ## Getting started 
 
-Detailed setup instructions can be found in each application's README file. To conveniently start all applications, the `run_all_applications` scripts can be used:
+Detailed setup instructions can be found in each application's README file. To conveniently start all applications, the `run_all_applications` scripts can be used. Alternatively, to start a minimal subset of applications, i.e., the Customer Management Applications and the Customer Core, use the `run_customer_management_applications` script.
 
-1. Make sure you have [Java 8, 11 or 12](https://jdk.java.net/) installed.
+1. Make sure you have [Java 8, 11 or 15](https://adoptopenjdk.net/) installed.
 1. Install [Node](https://nodejs.org/en/). Version 8.2 or later is required. You can check the currently installed version by running `node --version`.
 1. Install Python. We don't use Python ourselves, but some Node.js packages require native addons that are built using node-gyp, which requires Python. See the [node-gyp README for details on which Python version to install](https://github.com/nodejs/node-gyp#on-unix).
 1. Install Maven (see [https://maven.apache.org](https://maven.apache.org) for installation instructions).
-1. Run your the `run_all_applications` script suitable for your platform. Note that the frontend applications might be started before the backends are ready. In that case, just reload the page in the browser.
+1. Run the `run_all_applications` script suitable for your platform. Note that the frontend applications might be running before the backends are ready. In that case, just reload the page in the browser.
 
 If the script exits, one of the applications could not be started. For troubleshooting, we recommend to start the applications individually. Note that you don't need to start all applications. The overview diagram above can be used to figure out the dependencies of each service. 
 
@@ -102,7 +104,7 @@ Each backend service has its own data store. The Spring-JPA based applications a
 
 ## Frequently Asked Questions and Troubleshooting
 
-See our [FAQ](./FAQ.md) for more information on running the applications and IDE setup.
+See our [FAQ](./FAQ.md) for more information on running the applications and the [IDE instructions](./IDE_INSTRUCTIONS) page to get started with IntelliJ IDEA, Eclipse and Visual Studio Code.
 
 ## License
 

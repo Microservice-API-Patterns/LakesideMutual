@@ -2,7 +2,7 @@ package com.lakesidemutual.customerselfservice.interfaces.dtos.customer;
 
 import java.util.List;
 
-import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
 /**
  * The CustomersDto class is a data transfer object (DTO) that contains a list of customers.
@@ -12,7 +12,7 @@ import org.springframework.hateoas.ResourceSupport;
  *
  * @see <a href="https://docs.spring.io/spring-hateoas/docs/current/reference/html/">Spring HATEOAS - Reference Documentation</a>
  */
-public class CustomersDto extends ResourceSupport {
+public class CustomersDto extends RepresentationModel {
 	private List<CustomerDto> customers;
 
 	public CustomersDto() {}

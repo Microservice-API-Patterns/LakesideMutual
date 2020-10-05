@@ -2,7 +2,7 @@ package com.lakesidemutual.customercore.interfaces.dtos.customer;
 
 import java.util.List;
 
-import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
 /**
  * The CustomersResponseDto holds a collection of @CustomerResponseDto
@@ -10,7 +10,7 @@ import org.springframework.hateoas.ResourceSupport;
  * "https://microservice-api-patterns.org/patterns/structure/representationElements/ParameterForest">Parameter
  * Forest</a> pattern.
  */
-public class CustomersResponseDto extends ResourceSupport {
+public class CustomersResponseDto extends RepresentationModel {
 	private final List<CustomerResponseDto> customers;
 
 	public CustomersResponseDto(List<CustomerResponseDto> customers) {

@@ -39,6 +39,13 @@ By default, the Spring Boot application starts on port 8080. If this port is alr
 
 Warnings about a `java.net.ConnectException: Connection refused` can safely be ignored. See the [FAQ](../FAQ.md#im-getting-a-connection-refused-connect-exception-on-startup) for details.
 
+## Logical Layers
+The packages follow the conventions/recommendations of the original DDD book regarding technical layering:
+
+* The presentation logic/layer can be found under `interfaces`. 
+* There are `application` and `domain` packages that contain business logic (the actual domain model and its usage).
+* Data access and technical utilities can be found in `infrastructure`.
+
 ## Springfox
 [Springfox](https://github.com/springfox/springfox) is an automated JSON API documentation tool for APIs built with Spring. To access the Springfox
 documentation for the Customer Self-Service backend, go to the Swagger Web UI available at [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html). The native Swagger file is available at [http://localhost:8080/v2/api-docs](http://localhost:8080/v2/api-docs).

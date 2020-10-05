@@ -2,7 +2,7 @@ package com.lakesidemutual.policymanagement.interfaces.dtos.policy;
 
 import java.util.List;
 
-import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
 /**
  * The PaginatedPolicyResponseDto holds a collection of PolicyDto
@@ -11,7 +11,7 @@ import org.springframework.hateoas.ResourceSupport;
  * "https://microservice-api-patterns.org/patterns/structure/compositeRepresentations/Pagination">Pagination</a>
  * pattern, specifically the <em>Offset-Based</em> Pagination variant.
  */
-public class PaginatedPolicyResponseDto extends ResourceSupport {
+public class PaginatedPolicyResponseDto extends RepresentationModel {
 	private final int limit;
 	private final int offset;
 	private final int size;

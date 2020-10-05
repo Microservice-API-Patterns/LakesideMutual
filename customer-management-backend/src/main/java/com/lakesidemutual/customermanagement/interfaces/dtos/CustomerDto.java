@@ -1,6 +1,6 @@
 package com.lakesidemutual.customermanagement.interfaces.dtos;
 
-import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
  *
  * @see <a href="https://docs.spring.io/spring-hateoas/docs/current/reference/html/">Spring HATEOAS - Reference Documentation</a>
  */
-public class CustomerDto extends ResourceSupport {
+public class CustomerDto extends RepresentationModel {
 	private String customerId;
 
 	/**

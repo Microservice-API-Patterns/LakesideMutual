@@ -75,7 +75,7 @@ public class CustomerService implements ApplicationService {
 
 	public Page<CustomerAggregateRoot> getCustomers(String filter, int limit, int offset) {
 		final List<CustomerAggregateRoot> filteredCustomers = customerRepository
-				.findAll(new Sort(Sort.Direction.ASC, "customerProfile.firstname", "customerProfile.lastname")).stream()
+				.findAll(Sort.by(Sort.Direction.ASC, "customerProfile.firstname", "customerProfile.lastname")).stream()
 				.filter(customer -> matchesFilter(customer, filter))
 				.collect(Collectors.toList());
 		final int size = filteredCustomers.size();
