@@ -122,6 +122,10 @@ public class CustomerInformationHolder {
 				.withSelfRel();
 		Link updateAddressLink = linkTo(methodOn(CustomerInformationHolder.class).changeAddress(customerId, null))
 				.withRel("address.change");
+		// When getting the DTO from the proxy, it already contains links
+		// pointing to the customer-core, so we first remove them ...
+		customerDto.removeLinks();
+		// and add our own:
 		customerDto.add(selfLink);
 		customerDto.add(updateAddressLink);
 	}
