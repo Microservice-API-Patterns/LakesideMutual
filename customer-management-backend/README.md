@@ -39,7 +39,7 @@ Warnings about a `java.net.ConnectException: Connection refused` can safely be i
 
 ## Springfox
 [Springfox](https://github.com/springfox/springfox) is an automated JSON API documentation tool for APIs built with Spring. To access the Springfox
-documentation for the Customer Management backend, go to [http://localhost:8100/swagger-ui.html](http://localhost:8100/swagger-ui.html). The native Swagger file is available at [http://localhost:8100/v2/api-docs](http://localhost:8100/v2/api-docs).
+documentation for the Customer Management backend, go to [http://localhost:8100/swagger-ui/](http://localhost:8100/swagger-ui/). The native Swagger file is available at [http://localhost:8100/v2/api-docs](http://localhost:8100/v2/api-docs).
 
 <!-- There are currently no tests in this project. Once we have some, uncomment the following lines: -->
 <!--## Testing

@@ -22,7 +22,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private static final String[] AUTH_WHITELIST = {
 			// -- swagger ui
 			"/swagger-resources/**",
-			"/swagger-ui.html",
+			"/swagger-ui/**",
 			"/v2/api-docs",
 			"/webjars/**",
 			// spring-boot-starter-actuator health checks and other info
