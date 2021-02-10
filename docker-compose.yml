@@ -1,77 +1,52 @@
-#
-# This is a docker-compose file to build and start all Lakeside Mutual
-# applications in a single command. Note that the applications will all
-# run in production mode, so there won't be any live-reloading of changes
-# or other development features. For development, we recommend to start
-# the applications invidually or use the run_all_applications scripts.
-#
-# Since the Dockerfiles use BuildKit features, you have to set the
-# DOCKER_BUILDKIT environment variable accordingly.
-#
-# To build the Docker images:
-#   COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose build
-#
-# To run the applications:
-#   COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose up
-#
-# To shut down the applications, simply terminate the previous command.
-#
-version: "3"
+version: '3.7'
+
 services:
+  spring-boot-admin:
+    build: 
+      context: ./spring-boot-admin
+    volumes: 
+      - ./spring-boot-admin/src:/usr/src/app
+    ports:
+      - "9000:9000"
+
   customer-core:
-    build: customer-core
-    image: lakesidemutual/customer-core
+    build: 
+      context: ./customer-core
+    volumes: 
+      - ./customer-core/src:/usr/src/app
     environment:
       - "SPRING_BOOT_ADMIN_CLIENT_URL=http://spring-boot-admin:9000"
     ports:
       - "8110:8110"
+
   customer-management-backend:
-    build: customer-management-backend
-    image: lakesidemutual/customer-management-backend
+    build: 
+      context: ./customer-management-backend
     depends_on:
       - customer-core
+    volumes: 
+      - ./customer-management-backend/src:/usr/src/app
     environment:
       - "CUSTOMERCORE_BASEURL=http://customer-core:8110"
       - "SPRING_BOOT_ADMIN_CLIENT_URL=http://spring-boot-admin:9000"
     ports:
       - "8100:8100"
+
   customer-management-frontend:
-    build: customer-management-frontend
-    image: lakesidemutual/customer-management-frontend
+    build: 
+      context: ./customer-management-frontend
+    volumes: 
+      - ./customer-management-frontend/src:/usr/src/app
     depends_on:
       - customer-management-backend
-    environment:
-      - "REACT_APP_CUSTOMER_MANAGEMENT_BACKEND=http://customer-management-backend:8100"
     ports:
       - "3020:80"
-  customer-self-service-backend:
-    build: customer-self-service-backend
-    image: lakesidemutual/customer-self-service-backend
-    depends_on:
-      - customer-core
-      - policy-management-backend
-    environment:
-      - "CUSTOMERCORE_BASEURL=http://customer-core:8110"
-      - "POLICYMANAGEMENT_TCPBROKERBINDADDRESS=tcp://policy-management-backend:61616"
-      - "SPRING_BOOT_ADMIN_CLIENT_URL=http://spring-boot-admin:9000"
-    ports:
-      - "8080:8080"
-  customer-self-service-frontend:
-    build: customer-self-service-frontend
-    image: lakesidemutual/customer-self-service-frontend
-    depends_on:
-      - customer-self-service-backend
-      - customer-management-backend
-      - policy-management-backend
-    environment:
-      - "REACT_APP_CUSTOMER_SELF_SERVICE_BACKEND=http://customer-self-service-backend:8080"
-      - "REACT_APP_POLICY_MANAGEMENT_BACKEND=http://policy-management-backend:8090"
-      - "REACT_APP_CUSTOMER_MANAGEMENT_BACKEND=http://customer-management-backend:8100"
-    ports:
-      - "3000:80"
+
   policy-management-backend:
-    build: policy-management-backend
-    image: lakesidemutual/policy-management-backend
+    build: 
+      context: ./policy-management-backend
+    volumes: 
+      - ./policy-management-backend/src:/usr/src/app
     depends_on:
       - customer-core
     environment:
@@ -81,23 +56,48 @@ services:
       - "8090:8090"
       - "61613:61613"
       - "61616:61616"
+
   policy-management-frontend:
-    build: policy-management-frontend
-    image: lakesidemutual/policy-management-frontend
+    build: ./policy-management-frontend
+    volumes: 
+      - ./policy-management-frontend/src:/usr/src/app
     depends_on:
       - policy-management-backend
-    environment:
-      - "VUE_APP_POLICY_MANAGEMENT_BACKEND=http://policy-management-backend:8090"
     ports:
       - "3010:80"
-  spring-boot-admin:
-    build: spring-boot-admin
-    image: lakesidemutual/spring-boot-admin
+
+  customer-self-service-backend:
+    build: 
+      context: ./customer-self-service-backend
+    volumes: 
+      - ./customer-self-service-backend/src:/usr/src/app
+    depends_on:
+      - customer-core
+      - policy-management-backend
+    environment:
+      - "CUSTOMERCORE_BASEURL=http://customer-core:8110"
+      - "POLICYMANAGEMENT_TCPBROKERBINDADDRESS=tcp://policy-management-backend:61616"
+      - "SPRING_BOOT_ADMIN_CLIENT_URL=http://spring-boot-admin:9000"
     ports:
-      - "9000:9000"
+      - "8080:8080"
+
+  customer-self-service-frontend:
+    build: 
+      context: ./customer-self-service-frontend
+    volumes: 
+      - ./customer-self-service-frontend/src:/usr/src/app
+    depends_on:
+      - customer-self-service-backend
+      - customer-management-backend
+      - policy-management-backend
+    ports:
+      - "3000:80"
+
   risk-management-server:
-    build: risk-management-server
-    image: lakesidemutual/risk-management-server
+    build: 
+      context: ./risk-management-server
+    volumes: 
+      - ./risk-management-server/src:/usr/src/app
     depends_on:
       - policy-management-backend
     environment:
