@@ -18,7 +18,7 @@ A number of [Microservice API Patterns (MAP)](https://microservice-api-patterns.
 | | [InsuranceQuoteRequestCoordinator.java](./customer-self-service-backend/src/main/java/com/lakesidemutual/customerselfservice/interfaces/InsuranceQuoteRequestCoordinator.java) | Customer Self Service | 
 | [Reference Data Holder](https://www.microservice-api-patterns.org/patterns/responsibility/informationHolderEndpointTypes/ReferenceDataHolder) | [CityReferenceDataHolder.java](./customer-core/src/main/java/com/lakesidemutual/customercore/interfaces/CityReferenceDataHolder.java) | Customer Core |
 | [Data Transfer Resource](https://microservice-api-patterns.org/patterns/responsibility/informationHolderEndpointTypes/DataTransferResource) | [Risk report transfer service](https://github.com/socadk/LakesideMutual/blob/map-revision-21/risk-management-server/riskmanagement.proto) (gRPC protocol buffer) | Risk Management | 
-| [Link Lookup Resource](https://microservice-api-patterns.org/patterns/responsibility/informationHolderEndpointTypes/LinkLookupResource) | tba | <!-- ZIO4STX: Eureka? Spring Boot admin? Spring Fox OAS? --> | 
+| [Link Lookup Resource](https://microservice-api-patterns.org/patterns/responsibility/informationHolderEndpointTypes/LinkLookupResource) | tba |  | 
 | *Operation Responsibilities* | | |
 | [Computation Function](https://www.microservice-api-patterns.org/patterns/responsibility/operationResponsibilities/ComputationFunction) | `computeRiskFactor` in [RiskComputationService.java](./policy-management-backend/src/main/java/com/lakesidemutual/policymanagement/interfaces/RiskComputationService.java) | Policy Management |
 | [Retrieval Operation](https://microservice-api-patterns.org/patterns/responsibility/operationResponsibilities/RetrievalOperation) | `getInsuranceQuoteRequests` in [InsuranceQuoteRequestCoordinator.java](./customer-self-service-backend/src/main/java/com/lakesidemutual/customerselfservice/interfaces/InsuranceQuoteRequestCoordinator.java) | Customer Self Service, Policy Management |
@@ -42,9 +42,9 @@ A number of [Microservice API Patterns (MAP)](https://microservice-api-patterns.
 | *Data Transfer Parsimony* |  | | 
 | [Wish List](https://www.microservice-api-patterns.org/patterns/quality/dataTransferParsimony/WishList) | [CustomerInformationHolder.java](./customer-core/src/main/java/com/lakesidemutual/customercore/interfaces/CustomerInformationHolder.java) | Customer Core |
 | | [PolicyInformationHolder.java](./policy-management-backend/src/main/java/com/lakesidemutual/policymanagement/interfaces/PolicyInformationHolder.java) | Policy Management |
-| [Wish Template](https://www.microservice-api-patterns.org/patterns/quality/dataTransferParsimony/WishTemplate) | tba | Proposal: [Issue 48](https://github.com/socadk/LakesideMutual/issues/48) |
+| [Wish Template](https://www.microservice-api-patterns.org/patterns/quality/dataTransferParsimony/WishTemplate) | tba |  |
 | [Request Bundle](https://www.microservice-api-patterns.org/patterns/quality/dataTransferParsimony/RequestBundle) | [CustomerInformationHolder.java](./customer-core/src/main/java/com/lakesidemutual/customercore/interfaces/CustomerInformationHolder.java) | Customer Core |
-| [Conditional Request](https://microservice-api-patterns.org/patterns/quality/dataTransferParsimony/ConditionalRequest) | tba | <!-- ZIO4STX: already there? idea/proposal? --> | 
+| [Conditional Request](https://microservice-api-patterns.org/patterns/quality/dataTransferParsimony/ConditionalRequest) | tba |  | 
 | *Reference Management* |  | | 
 | [Embedded Entity](https://www.microservice-api-patterns.org/patterns/quality/referenceManagement/EmbeddedEntity) | `customerProfile` in [CustomerDto.java](./customer-management-backend/src/main/java/com/lakesidemutual/customermanagement/interfaces/dtos/CustomerDto.java) | e.g. Customer Management | 
 | [Linked Information Holder](https://www.microservice-api-patterns.org/patterns/quality/referenceManagement/LinkedInformationHolder) | [CustomerInformationHolder.java](./policy-management-backend/src/main/java/com/lakesidemutual/policymanagement/interfaces/CustomerInformationHolder.java) | Policy Management |
