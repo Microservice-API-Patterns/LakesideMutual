@@ -1,0 +1,50 @@
+// @flow
+/* eslint-disable no-undef */
+
+import { ApiError } from "../api/helpers"
+
+declare type FormError = {
+  errorFields: Array<string>,
+  errorMessages: Array<string>,
+}
+
+declare type FormSubmissionError = ApiError<{
+  timestamp: string,
+  status: number,
+  error: string,
+  errors: Array<{
+    codes: Array<string>,
+    arguments: Array<{
+      codes: Array<string>,
+      arguments: Array<string>,
+      defaultMessage: string,
+      code: string,
+    }>,
+    defaultMessage: string,
+    objectName: string,
+    field: string,
+    rejectedValue: string,
+    bindingFailure: boolean,
+    code: string,
+  }>,
+  message: string,
+  path: string,
+}>
+
+declare type CompleteProfileFormData = {
+  firstname: string,
+  lastname: string,
+  streetAddress: string,
+  postalCode: string,
+  city: string,
+  phoneNumber: string,
+  birthday: string,
+}
+
+declare type Message = {
+  username: string,
+  content: string,
+  customerId: CustomerId,
+  date: ?string,
+  sentByOperator: boolean,
+}

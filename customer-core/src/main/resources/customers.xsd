@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns:tns="http://lm.com/ccore" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://lm.com/ccore">
+
+    <xs:element name="getCustomerRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getCustomerResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="customer" type="tns:customer"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="customer">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="birthday" type="xs:date"/>
+            <xs:element name="address" type="xs:string"/>
+            <xs:element name="segment" type="tns:profile"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="profile">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="n/a"/>
+            <xs:enumeration value="normal"/>
+            <xs:enumeration value="VIP"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

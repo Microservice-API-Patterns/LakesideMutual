@@ -1,0 +1,43 @@
+@startuml
+skinparam monochrome true
+skinparam ClassBackgroundColor White
+hide empty members
+hide circle
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+skinparam classfontstyle bold
+
+class "Customer Core" as CC <<Spring Boot>>
+class "Customer Management Backend" as CMB <<Spring Boot>>
+class "Customer Management Frontend" as CMF <<React>>
+class "Customer Self-Service Backend" as CCB <<Spring Boot>>
+class "Customer Self-Service Frontend" as CCF <<React>>
+class "Policy Management Backend" as PMB <<Spring Boot>>
+class "Policy Management Frontend" as PMF <<Vue.js>>
+class "Risk Management Server" as RMS <<Node.js>>
+class "Risk Management Client" as RMC <<Node.js>>
+class "Spring Boot Admin" as SBA <<Spring Boot>>
+class "Eureka Server" as ES <<Spring Boot>>
+
+PMB -down--> CC : HTTP
+CCB -down--> CC : HTTP
+CMB -down--> CC : HTTP
+PMB -down--> ES : HTTP
+CCB -down--> ES : HTTP
+CMB -down--> ES : HTTP
+CC -right--> ES : HTTP
+SBA -left--> ES : HTTP
+CMF -down--> CMB : HTTP + WebSocket
+CMF -[hidden]> CCF
+CMB -[hidden]> CCB
+CCF -down--> CMB : HTTP + WebSocket
+CCF -down--> CCB : HTTP
+CCF -down--> PMB : HTTP
+PMF -down--> PMB : HTTP
+RMC -down--> RMS : gRPC  
+PMB -right--> RMS : ActiveMQ
+CCB <--right--> PMB : ActiveMQ
+SBA -up--> CMB : HTTP
+SBA -up--> CCB : HTTP
+SBA -up--> PMB : HTTP
+@enduml

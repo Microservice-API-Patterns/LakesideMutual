@@ -1,0 +1,36 @@
+// @flow
+/* eslint-disable no-undef */
+
+declare type FormError = {
+  errorFields: Array<string>,
+  errorMessages: Array<string>,
+}
+
+declare type MessageDto = {
+  id: ?string,
+  date: ?string,
+  username: string,
+  content: string,
+  customerId: CustomerId,
+  sentByOperator: boolean,
+}
+
+declare type Interaction = {
+  id: string,
+  date: string,
+  content: string,
+  sentByOperator: boolean,
+}
+
+declare type InteractionLog = {
+  customerId: CustomerId,
+  username: string,
+  interactions: Array<Interaction>,
+  lastAcknowledgedInteractionId: ?string,
+}
+
+declare type Notification = {
+  customerId: CustomerId,
+  username: string,
+  count: number,
+}

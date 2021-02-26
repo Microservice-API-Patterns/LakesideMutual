@@ -1,0 +1,47 @@
+{
+  "name": "customer-management-frontend",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {
+    "@beam-australia/react-env": "^2.1.2",
+    "flow-bin": "^0.135.0",
+    "react-scripts": "3.4.3",
+    "redux-devtools": "^3.7.0"
+  },
+  "dependencies": {
+    "@brigad/redux-rest-easy": "^3.0.3",
+    "documentation": "^9.3.1",
+    "moment": "^2.29.0",
+    "normalizr": "^3.6.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^6.0.1",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "react-stomp": "^4.3.0",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.85.0",
+    "whatwg-fetch": "^3.4.1"
+  },
+  "scripts": {
+    "prestart": "react-env",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "doc": "documentation build src/** -f html -o docs",
+    "flow": "flow"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "semi": false
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: risk-management-server
+  labels:
+    app: risk-management-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: risk-management-server
+  template:
+    metadata:
+      labels:
+        app: risk-management-server
+    spec:
+      containers:
+        - env:
+            - name: ACTIVEMQ_HOST
+              value: policy-management-backend-queue
+            - name: ACTIVEMQ_PORT
+              value: "61613"
+          image: gcr.io/lakeside-mutual-2020/risk-management-server
+          imagePullPolicy: Always
+          name: risk-management-server
+          ports:
+            - containerPort: 50051
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: risk-management-server
+spec:
+  selector:
+    app: risk-management-server
+  ports:
+    - name: "50051"
+      port: 50051
+      targetPort: 50051
+  type: LoadBalancer
+  loadBalancerIP: 34.65.192.94

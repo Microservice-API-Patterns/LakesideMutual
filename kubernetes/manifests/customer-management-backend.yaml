@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-management-backend
+  labels:
+    app: customer-management-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer-management-backend
+  template:
+    metadata:
+      labels:
+        app: customer-management-backend
+    spec:
+      containers:
+        - env:
+            - name: CUSTOMERCORE_BASEURL
+              value: http://customer-core:8110
+            - name: SPRING_BOOT_ADMIN_CLIENT_URL
+              value: http://spring-boot-admin:9000
+          image: gcr.io/lakeside-mutual-2020/customer-management-backend
+          imagePullPolicy: Always
+          name: customer-management-backend
+          ports:
+            - containerPort: 8100
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-management-backend
+spec:
+  selector:
+    app: customer-management-backend
+  ports:
+    - name: "8100"
+      port: 8100
+      targetPort: 8100
+  type: LoadBalancer
+  loadBalancerIP: 34.65.192.94

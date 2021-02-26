@@ -1,0 +1,24 @@
+{
+  "name": "risk-management",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "grpc": "^1.24.3",
+    "json2csv": "^4.1.3",
+    "log-timestamp": "^0.2.1",
+    "nconf": "^0.10.0",
+    "stompit": "^0.25.0"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "semi": false,
+    "singleQuote": true
+  }
+}

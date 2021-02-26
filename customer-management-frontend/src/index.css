@@ -1,0 +1,13 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background: #f7f7f7;
+}
+
+.HomeScreen > .column,
+.LoginScreen > .column,
+.SignupScreen > .column {
+  max-width: 450px;
+  margin-top: 8em;
+}
