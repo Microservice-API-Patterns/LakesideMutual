@@ -13,7 +13,7 @@ EXPOSE 80
 WORKDIR /usr/share/nginx/html
 
 RUN apk add --no-cache nodejs npm
-RUN npm install -g @beam-australia/react-env
+RUN npm install -g @beam-australia/react-env@2.1.2
 ADD entrypoint.sh /var/entrypoint.sh
 ENTRYPOINT ["/var/entrypoint.sh"]
 
