@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-boot-admin
+  labels:
+    app: spring-boot-admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-boot-admin
+  template:
+    metadata:
+      labels:
+        app: spring-boot-admin
+    spec:
+      containers:
+        - image: gcr.io/lakeside-mutual-2020/spring-boot-admin
+          imagePullPolicy: Always
+          name: spring-boot-admin
+          ports:
+            - containerPort: 9000
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-boot-admin
+spec:
+  selector:
+    app: spring-boot-admin
+  ports:
+    - name: "9000"
+      port: 9000
+      targetPort: 9000
+  type: LoadBalancer
+  loadBalancerIP: 34.65.192.94

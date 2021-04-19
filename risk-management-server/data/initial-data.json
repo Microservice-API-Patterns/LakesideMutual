@@ -1,0 +1,35 @@
+{
+  "rgpp0wkpec": {
+    "customerProfile": {
+      "customerId": "rgpp0wkpec",
+      "firstname": "Max",
+      "lastname": "Mustermann",
+      "birthday": 631148400000,
+      "streetAddress": "Oberseestrasse 10",
+      "postalCode": "8640",
+      "city": "Rapperswil",
+      "email": "admin@example.com",
+      "phoneNumber": "055 222 4111",
+      "moveHistory": [],
+      "links": []
+    },
+    "policies": {
+      "fvo5pkqerr": {
+        "policyId": "fvo5pkqerr",
+        "customer": "rgpp0wkpec",
+        "creationDate": 1543500712195,
+        "policyPeriod": {
+          "startDate": 1517785200000,
+          "endDate": 1518217200000
+        },
+        "policyType": "Health Insurance",
+        "deductible": { "amount": 1500, "currency": "CHF" },
+        "policyLimit": { "amount": 1000000, "currency": "CHF" },
+        "insurancePremium": { "amount": 250, "currency": "CHF" },
+        "insuringAgreement": { "agreementItems": [] },
+        "links": [],
+        "_expandable": ["customer"]
+      }
+    }
+  }
+}

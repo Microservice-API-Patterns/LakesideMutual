@@ -1,0 +1,5 @@
+.DS_Store
+.idea
+
+# Ignore the H2 databases
+*.mv.db

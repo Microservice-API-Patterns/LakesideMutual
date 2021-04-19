@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: policy-management-backend
+  labels:
+    app: policy-management-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: policy-management-backend
+  template:
+    metadata:
+      labels:
+        app: policy-management-backend
+    spec:
+      containers:
+        - env:
+            - name: CUSTOMERCORE_BASEURL
+              value: http://customer-core:8110
+            - name: SPRING_BOOT_ADMIN_CLIENT_URL
+              value: http://spring-boot-admin:9000
+          image: gcr.io/lakeside-mutual-2020/policy-management-backend
+          imagePullPolicy: Always
+          name: policy-management-backend
+          ports:
+            - containerPort: 8090
+            - containerPort: 61613
+            - containerPort: 61616
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: policy-management-backend
+spec:
+  selector:
+    app: policy-management-backend
+  ports:
+    - name: "8090"
+      port: 8090
+      targetPort: 8090
+  type: LoadBalancer
+  loadBalancerIP: 34.65.192.94
+---
+# Not sure why, but we need two distinct LoadBalancers for this to work:
+apiVersion: v1
+kind: Service
+metadata:
+  name: policy-management-backend-queue
+spec:
+  selector:
+    app: policy-management-backend
+  ports:
+    - name: "61613"
+      port: 61613
+      targetPort: 61613
+    - name: "61616"
+      port: 61616
+      targetPort: 61616
+  type: LoadBalancer
+  loadBalancerIP: 34.65.192.94

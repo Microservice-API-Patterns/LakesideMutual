@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lakeside Mutual: Customer Core Frontend (Demo)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+ 	<h1>Lakeside Mutual: Customer Core Frontend (Demo)</h1>
+    <p>This is just a simple demo, as the customer core service serves several application backends, but does not have its own frontend.<p>
+    You can get the basic data by custom id in this demo, for instance, try the id 'rgpp0wkpec', so GET <a href="http://localhost:8110/customercorefe?id=rgpp0wkpec">http://localhost:8110/customercorefe?id=rgpp0wkpec</a>
+    <p th:text="'Got a response forom customer core over SOAP/HTTP: id ' + ${id} + ' has name  ' + ${name} + '.'" />
+</body>
+</html>

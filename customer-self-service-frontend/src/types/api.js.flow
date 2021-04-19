@@ -1,0 +1,120 @@
+// @flow
+/* eslint-disable no-undef */
+
+declare type User = {
+  email: string,
+  customerId: ?CustomerId,
+}
+
+declare type Customer = {
+  customerId: CustomerId,
+  firstname: string,
+  lastname: string,
+  city: string,
+  streetAddress: string,
+  postalCode: string,
+  email: string,
+  phoneNumber: string,
+  birthday: string,
+  _links: { [string]: { href: string } },
+}
+
+declare type CustomerId = string
+
+declare type Address = {
+  city: string,
+  streetAddress: string,
+  postalCode: string,
+}
+
+declare type PolicyId = string
+
+declare type Policy = {
+  policyId: PolicyId,
+  customerId: CustomerId,
+  creationDate: string,
+  policyPeriod: PolicyPeriod,
+  policyType: string,
+  deductible: MoneyAmount,
+  policyLimit: MoneyAmount,
+  insurancePremium: MoneyAmount,
+  insuringAgreement: InsuringAgreement,
+}
+
+declare type PolicyPeriod = {
+  startDate: string,
+  endDate: string,
+}
+
+declare type MoneyAmount = {
+  amount: number,
+  currency: string,
+}
+
+declare type InsuringAgreement = {
+  agreementItems: Array<InsuringAgreementItem>,
+}
+
+declare type InsuringAgreementItem = {
+  title: string,
+  description: string,
+}
+
+declare type CitySuggestions = {
+  cities: Array<string>,
+}
+
+declare type Interaction = {
+  date: string,
+  content: string,
+  sentByOperator: boolean,
+}
+
+declare type InteractionLog = {
+  customerId: CustomerId,
+  username: string,
+  interactions: Array<Interaction>,
+}
+
+declare type RequestStatusChange = {
+  date: string,
+  status: RequestStatus,
+}
+
+declare type RequestStatus =
+  | "REQUEST_SUBMITTED"
+  | "REQUEST_REJECTED"
+  | "QUOTE_RECEIVED"
+  | "QUOTE_ACCEPTED"
+  | "POLICY_CREATED"
+  | "QUOTE_REJECTED"
+  | "QUOTE_EXPIRED"
+
+declare type CustomerInfo = {
+  customerId: CustomerId,
+  firstname: string,
+  lastname: string,
+  contactAddress: Address,
+  billingAddress: Address,
+}
+
+declare type InsuranceOptions = {
+  startDate: ?string,
+  insuranceType: string,
+  deductible: MoneyAmount,
+}
+
+declare type InsuranceQuote = {
+  expirationDate: string,
+  insurancePremium: MoneyAmount,
+  policyLimit: MoneyAmount,
+}
+
+declare type InsuranceQuoteRequest = {
+  id?: string,
+  date?: string,
+  statusHistory: Array<RequestStatusChange>,
+  customerInfo: CustomerInfo,
+  insuranceOptions: InsuranceOptions,
+  insuranceQuote?: InsuranceQuote,
+}

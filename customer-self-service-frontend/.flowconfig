@@ -1,0 +1,15 @@
+[ignore]
+.*/node_modules/.*/test/.*
+
+[include]
+
+[libs]
+src/types
+
+[lints]
+all=warn
+
+[options]
+include_warnings=true
+
+[strict]
