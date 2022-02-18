@@ -2,6 +2,8 @@ package com.lakesidemutual.customerselfservice.interfaces;
 
 import javax.validation.Valid;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +32,6 @@ import com.lakesidemutual.customerselfservice.interfaces.dtos.identityaccess.Sig
 import com.lakesidemutual.customerselfservice.interfaces.dtos.identityaccess.UserAlreadyExistsException;
 import com.lakesidemutual.customerselfservice.interfaces.dtos.identityaccess.UserResponseDto;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 
 /**
  * This class is a REST Controller that is used to authenticate existing users and to sign up new users.
@@ -56,10 +56,10 @@ public class AuthenticationController {
 	@Autowired
 	private UserLoginRepository userRepository;
 
-	@ApiOperation(value = "Authenticate a user based on a given email address and password.")
+	@Operation(summary = "Authenticate a user based on a given email address and password.")
 	@PostMapping
 	public ResponseEntity<AuthenticationResponseDto> authenticationRequest(
-			@ApiParam(value = "the email and password used to authenticate the user", required = true) @RequestBody AuthenticationRequestDto authenticationRequest)
+			@Parameter(description = "the email and password used to authenticate the user", required = true) @RequestBody AuthenticationRequestDto authenticationRequest)
 					throws AuthenticationException {
 
 		// Perform the authentication
@@ -80,10 +80,10 @@ public class AuthenticationController {
 		return ResponseEntity.ok(new AuthenticationResponseDto(authenticationRequest.getEmail(), token));
 	}
 
-	@ApiOperation(value = "Create a new user.")
+	@Operation(summary = "Create a new user.")
 	@PostMapping(value = "/signup")
 	public ResponseEntity<UserResponseDto> signupUser(
-			@ApiParam(value = "the email and password used to create a new user", required = true) @Valid @RequestBody SignupRequestDto registration) {
+			@Parameter(description = "the email and password used to create a new user", required = true) @Valid @RequestBody SignupRequestDto registration) {
 
 		if (userRepository.findByEmail(registration.getEmail()) != null) {
 			final String errorMessage = "User with email '" + registration.getEmail() + "' does already exist.";

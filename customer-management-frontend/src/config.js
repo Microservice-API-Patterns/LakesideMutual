@@ -1,8 +1,8 @@
 // @flow
 
 function getEnvironmentVariable(name: string, defaultValue: string): string {
-  return window._env[name] != null
-    ? window._env[name]
+  return window.__ENV[name] != null
+    ? window.__ENV[name]
     : process.env[name] != null
     ? process.env[name]
     : defaultValue

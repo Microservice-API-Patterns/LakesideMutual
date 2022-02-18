@@ -1,7 +1,8 @@
 const nconf = require('nconf')
 const path = require('path')
 const program = require('commander')
-const grpc = require('grpc')
+const protoLoader = require('@grpc/proto-loader')
+const grpc = require('@grpc/grpc-js')
 const ProgressBar = require('progress')
 const fs = require('fs')
 
@@ -13,7 +14,7 @@ nconf
 const grpc_config = nconf.get('gRPC')
 
 function printReport(report, outputPath) {
-  fs.writeFile(outputPath, report.csv, err => {
+  fs.writeFile(outputPath, report.csv, (err) => {
     if (err) {
       return console.log(err)
     }
@@ -22,12 +23,15 @@ function printReport(report, outputPath) {
   })
 }
 
-program.command('run [output-path]').action(outputPath => {
+program.command('run [output-path]').action((outputPath) => {
   const PROTO_PATH = path.join(
     __dirname,
     '../risk-management-server/riskmanagement.proto'
   )
-  const proto = grpc.load(PROTO_PATH).riskmanagement
+
+  const packageDefinition = protoLoader.loadSync(PROTO_PATH)
+  const proto = grpc.loadPackageDefinition(packageDefinition).riskmanagement
+
   const client = new proto.RiskManagement(
     `${grpc_config.host}:${grpc_config.port}`,
     grpc.credentials.createInsecure()
@@ -40,8 +44,8 @@ program.command('run [output-path]').action(outputPath => {
   })
 
   const call = client.trigger({})
-  call.on('data', reply => {
-    if (reply.report_or_progress === 'progress') {
+  call.on('data', (reply) => {
+    if (reply.progress != undefined) {
       bar.tick()
     } else {
       if (outputPath) {
@@ -49,6 +53,7 @@ program.command('run [output-path]').action(outputPath => {
       } else {
         console.log(reply.report.csv)
       }
+      process.exit()
     }
   })
 

@@ -4,6 +4,7 @@ import static com.tngtech.archunit.core.domain.JavaClass.Predicates.implement;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 
+import com.tngtech.archunit.core.importer.ImportOption;
 import org.junit.runner.RunWith;
 import org.microserviceapipatterns.domaindrivendesign.Aggregate;
 import org.microserviceapipatterns.domaindrivendesign.DomainEvent;
@@ -16,7 +17,6 @@ import org.microserviceapipatterns.domaindrivendesign.RootEntity;
 import org.microserviceapipatterns.domaindrivendesign.ValueObject;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tngtech.archunit.core.importer.ImportOption.DontIncludeTests;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.junit.ArchUnitRunner;
@@ -25,7 +25,7 @@ import com.tngtech.archunit.lang.ArchRule;
 @RunWith(ArchUnitRunner.class)
 @AnalyzeClasses(
 		packages = {"com.lakesidemutual.customercore","org.microserviceapipatterns.domaindrivendesign"},
-		importOptions = {DontIncludeTests.class}
+		importOptions = {ImportOption.DoNotIncludeTests.class}
 		)
 public class ArchitectureTests {
 	private final static String ROOT_PKG = "com.lakesidemutual.customercore..";
@@ -79,7 +79,7 @@ public class ArchitectureTests {
 	classes()
 	.that().resideInAPackage(ROOT_PKG)
 	.and().implement(Entity.class)
-	.and().dontImplement(RootEntity.class)
+	.and().doNotImplement(RootEntity.class)
 	.should().haveSimpleNameEndingWith("Entity");
 
 	@ArchTest

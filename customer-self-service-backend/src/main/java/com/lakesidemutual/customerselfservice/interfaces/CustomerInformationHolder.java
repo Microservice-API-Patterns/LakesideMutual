@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +38,6 @@ import com.lakesidemutual.customerselfservice.interfaces.dtos.customer.CustomerP
 import com.lakesidemutual.customerselfservice.interfaces.dtos.customer.CustomerRegistrationRequestDto;
 import com.lakesidemutual.customerselfservice.interfaces.dtos.insurancequoterequest.InsuranceQuoteRequestDto;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-
 /**
  * This REST controller gives clients access to the customer data. It is an example of the
  * <i>Information Holder Resource</i> pattern. This particular one is a special type of information holder called <i>Master Data Holder</i>.
@@ -60,21 +59,21 @@ public class CustomerInformationHolder {
 	@Autowired
 	private CustomerCoreRemoteProxy customerCoreRemoteProxy;
 
-	@ApiOperation(value = "Change a customer's address.")
+	@Operation(summary = "Change a customer's address.")
 	@PreAuthorize("isAuthenticated()")
 	@PutMapping(value = "/{customerId}/address")
 	public ResponseEntity<AddressDto> changeAddress(
-			@ApiParam(value = "the customer's unique id", required = true) @PathVariable CustomerId customerId,
-			@ApiParam(value = "the customer's new address", required = true) @Valid @RequestBody AddressDto requestDto) {
+			@Parameter(description = "the customer's unique id", required = true) @PathVariable CustomerId customerId,
+			@Parameter(description = "the customer's new address", required = true) @Valid @RequestBody AddressDto requestDto) {
 		return customerCoreRemoteProxy.changeAddress(customerId, requestDto);
 	}
 
-	@ApiOperation(value = "Get customer with a given customer id.")
+	@Operation(summary = "Get customer with a given customer id.")
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping(value = "/{customerId}")
 	public ResponseEntity<CustomerDto> getCustomer(
 			Authentication authentication,
-			@ApiParam(value = "the customer's unique id", required = true) @PathVariable CustomerId customerId) {
+			@Parameter(description = "the customer's unique id", required = true) @PathVariable CustomerId customerId) {
 
 		CustomerDto customer = customerCoreRemoteProxy.getCustomer(customerId);
 		if(customer == null) {
@@ -87,12 +86,12 @@ public class CustomerInformationHolder {
 		return ResponseEntity.ok(customer);
 	}
 
-	@ApiOperation(value = "Complete the registration of a new customer.")
+	@Operation(summary = "Complete the registration of a new customer.")
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping
 	public ResponseEntity<CustomerDto> registerCustomer(
 			Authentication authentication,
-			@ApiParam(value = "the customer's profile information", required = true) @Valid @RequestBody CustomerRegistrationRequestDto requestDto) {
+			@Parameter(description = "the customer's profile information", required = true) @Valid @RequestBody CustomerRegistrationRequestDto requestDto) {
 		String loggedInUserEmail = authentication.getName();
 		CustomerProfileUpdateRequestDto dto = new CustomerProfileUpdateRequestDto(
 				requestDto.getFirstname(), requestDto.getLastname(), requestDto.getBirthday(), requestDto.getStreetAddress(),
@@ -106,11 +105,11 @@ public class CustomerInformationHolder {
 		return ResponseEntity.ok(customer);
 	}
 
-	@ApiOperation(value = "Get a customer's insurance quote requests.")
+	@Operation(summary = "Get a customer's insurance quote requests.")
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping(value = "/{customerId}/insurance-quote-requests")
 	public ResponseEntity<List<InsuranceQuoteRequestDto>> getInsuranceQuoteRequests(
-			@ApiParam(value = "the customer's unique id", required = true) @PathVariable CustomerId customerId) {
+			@Parameter(description = "the customer's unique id", required = true) @PathVariable CustomerId customerId) {
 		List<InsuranceQuoteRequestAggregateRoot> insuranceQuoteRequests = insuranceQuoteRequestRepository.findByCustomerInfo_CustomerIdOrderByDateDesc(customerId);
 		List<InsuranceQuoteRequestDto> insuranceQuoteRequestDtos = insuranceQuoteRequests.stream().map(InsuranceQuoteRequestDto::fromDomainObject).collect(Collectors.toList());
 		return ResponseEntity.ok(insuranceQuoteRequestDtos);

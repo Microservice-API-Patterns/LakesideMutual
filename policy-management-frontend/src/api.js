@@ -1,6 +1,6 @@
 const policyManagementBackend =
-  window._env.VUE_APP_POLICY_MANAGEMENT_BACKEND ||
-  process.env.VUE_APP_POLICY_MANAGEMENT_BACKEND
+  window.__ENV ? window.__ENV.VUE_APP_POLICY_MANAGEMENT_BACKEND :
+    process.env.VUE_APP_POLICY_MANAGEMENT_BACKEND
 
 export async function getCustomers(link, filter) {
   if (link) {

@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +42,6 @@ import com.lakesidemutual.customercore.interfaces.dtos.customer.CustomerProfileU
 import com.lakesidemutual.customercore.interfaces.dtos.customer.CustomerResponseDto;
 import com.lakesidemutual.customercore.interfaces.dtos.customer.CustomersResponseDto;
 import com.lakesidemutual.customercore.interfaces.dtos.customer.PaginatedCustomerResponseDto;
-
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 
 /**
  * This REST controller gives clients access to the customer data. It is an example of the
@@ -166,13 +165,13 @@ public class CustomerInformationHolder {
 	 * @see <a href=
 	 *      "https://www.microservice-api-patterns.org/patterns/structure/compositeRepresentations/Pagination">https://www.microservice-api-patterns.org/patterns/structure/compositeRepresentations/Pagination</a>
 	 */
-	@ApiOperation(value = "Get all customers in pages of 10 entries per page.")
+	@Operation(summary = "Get all customers in pages of 10 entries per page.")
 	@GetMapping // MAP operation responsibility: Retrieval Operation
 	public ResponseEntity<PaginatedCustomerResponseDto> getCustomers(
-			@ApiParam(value = "search terms to filter the customers by name", required = false) @RequestParam(value = "filter", required = false, defaultValue = "") String filter,
-			@ApiParam(value = "the maximum number of customers per page", required = false) @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit,
-			@ApiParam(value = "the offset of the page's first customer", required = false) @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset,
-			@ApiParam(value = "a comma-separated list of the fields that should be included in the response", required = false) @RequestParam(value = "fields", required = false, defaultValue = "") String fields) {
+			@Parameter(description = "search terms to filter the customers by name", required = false) @RequestParam(value = "filter", required = false, defaultValue = "") String filter,
+			@Parameter(description = "the maximum number of customers per page", required = false) @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit,
+			@Parameter(description = "the offset of the page's first customer", required = false) @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset,
+			@Parameter(description = "a comma-separated list of the fields that should be included in the response", required = false) @RequestParam(value = "fields", required = false, defaultValue = "") String fields) {
 
 		final String decodedFilter = UriUtils.decode(filter, "UTF-8");
 		final Page<CustomerAggregateRoot> customerPage = customerService.getCustomers(decodedFilter, limit, offset);
@@ -265,11 +264,11 @@ public class CustomerInformationHolder {
 	 * @see <a href=
 	 *      "https://www.microservice-api-patterns.org/patterns/quality/dataTransferParsimony/WishList">https://www.microservice-api-patterns.org/patterns/quality/dataTransferParsimony/WishList</a>
 	 */
-	@ApiOperation(value = "Get a specific set of customers.")
+	@Operation(summary = "Get a specific set of customers.")
 	@GetMapping(value = "/{ids}") // MAP operation responsibility: Retrieval Operation
 	public ResponseEntity<CustomersResponseDto> getCustomer(
-			@ApiParam(value = "a comma-separated list of customer ids", required = true) @PathVariable String ids,
-			@ApiParam(value = "a comma-separated list of the fields that should be included in the response", required = false) @RequestParam(value = "fields", required = false, defaultValue = "") String fields) {
+			@Parameter(description = "a comma-separated list of customer ids", required = true) @PathVariable String ids,
+			@Parameter(description = "a comma-separated list of the fields that should be included in the response", required = false) @RequestParam(value = "fields", required = false, defaultValue = "") String fields) {
 
 		List<CustomerAggregateRoot> customers = customerService.getCustomers(ids);
 		List<CustomerResponseDto> customerResponseDtos = customers.stream()
@@ -280,11 +279,11 @@ public class CustomerInformationHolder {
 		return ResponseEntity.ok(customersResponseDto);
 	}
 
-	@ApiOperation(value = "Update the profile of the customer with the given customer id")
+	@Operation(summary = "Update the profile of the customer with the given customer id")
 	@PutMapping(value = "/{customerId}") // MAP operation responsibility: State Transition Operation (Full Replace)
 	public ResponseEntity<CustomerResponseDto> updateCustomer(
-			@ApiParam(value = "the customer's unique id", required = true) @PathVariable CustomerId customerId,
-			@ApiParam(value = "the customer's updated profile", required = true) @Valid @RequestBody CustomerProfileUpdateRequestDto requestDto) {
+			@Parameter(description = "the customer's unique id", required = true) @PathVariable CustomerId customerId,
+			@Parameter(description = "the customer's updated profile", required = true) @Valid @RequestBody CustomerProfileUpdateRequestDto requestDto) {
 		final CustomerProfileEntity updatedCustomerProfile = requestDto.toDomainObject();
 
 		Optional<CustomerAggregateRoot> optCustomer = customerService.updateCustomerProfile(customerId, updatedCustomerProfile);
@@ -299,11 +298,11 @@ public class CustomerInformationHolder {
 		return ResponseEntity.ok(response);
 	}
 	
-	@ApiOperation(value = "Change a customer's address.")
+	@Operation(summary = "Change a customer's address.")
 	@PutMapping(value = "/{customerId}/address") // MAP operation responsibility: State Transition Operation (Partial Update)
 	public ResponseEntity<AddressDto> changeAddress(
-			@ApiParam(value = "the customer's unique id", required = true) @PathVariable CustomerId customerId,
-			@ApiParam(value = "the customer's new address", required = true) @Valid @RequestBody AddressDto requestDto) {
+			@Parameter(description = "the customer's unique id", required = true) @PathVariable CustomerId customerId,
+			@Parameter(description = "the customer's new address", required = true) @Valid @RequestBody AddressDto requestDto) {
 
 		Address updatedAddress = requestDto.toDomainObject();
 		Optional<CustomerAggregateRoot> optCustomer = customerService.updateAddress(customerId, updatedAddress);
@@ -317,10 +316,10 @@ public class CustomerInformationHolder {
 		return ResponseEntity.ok(responseDto);
 	}
 
-	@ApiOperation(value = "Create a new customer.")
+	@Operation(summary = "Create a new customer.")
 	@PostMapping // MAP operation responsibility: State Creation Operation
 	public ResponseEntity<CustomerResponseDto> createCustomer(
-			@ApiParam(value = "the customer's profile information", required = true) @Valid @RequestBody CustomerProfileUpdateRequestDto requestDto) {
+			@Parameter(description = "the customer's profile information", required = true) @Valid @RequestBody CustomerProfileUpdateRequestDto requestDto) {
 
 		CustomerProfileEntity customerProfile = requestDto.toDomainObject();
 		CustomerAggregateRoot customer = customerService.createCustomer(customerProfile);

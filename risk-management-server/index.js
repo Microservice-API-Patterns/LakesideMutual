@@ -7,7 +7,8 @@ require('log-timestamp')(() => {
 const nconf = require('nconf')
 const path = require('path')
 const stompit = require('stompit')
-const grpc = require('grpc')
+const protoLoader = require('@grpc/proto-loader')
+const grpc = require('@grpc/grpc-js')
 const DataManager = require('./lib/data-manager')
 const ReportGenerator = require('./lib/report-generator')
 
@@ -43,7 +44,7 @@ function handleMessage(channel, dataManager, error, message, subscription) {
       .then(() => {
         channel.ack(message)
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(`Error: ${error}`)
       })
   })
@@ -74,7 +75,7 @@ function consumeEvents(dataManager) {
 
   const connectFailover = new stompit.ConnectFailover([connectOptions])
 
-  connectFailover.on('error', error => {
+  connectFailover.on('error', (error) => {
     const connectArgs = error.connectArgs
     const address = `${connectArgs.host}:${connectArgs.port}`
     console.log(`Connection error to ${address}: ${error.message}`)
@@ -135,24 +136,26 @@ requests from the Risk Management Client.
 function startGRPCServer(dataManager) {
   const grpc_config = nconf.get('grpc')
   const PROTO_PATH = path.join(__dirname, '/riskmanagement.proto')
-  const proto = grpc.load(PROTO_PATH).riskmanagement
+  const packageDefinition = protoLoader.loadSync(PROTO_PATH)
+  const proto = grpc.loadPackageDefinition(packageDefinition).riskmanagement
   const server = new grpc.Server()
   const requestHandler = handleClientRequest.bind(null, dataManager)
   server.addService(proto.RiskManagement.service, {
     trigger: requestHandler,
   })
-  server.bind(
+  server.bindAsync(
     `${grpc_config.host}:${grpc_config.port}`,
-    grpc.ServerCredentials.createInsecure()
+    grpc.ServerCredentials.createInsecure(),
+    () => {
+      console.log(
+        `Listening for requests from Risk Management Client on ${grpc_config.host}:${grpc_config.port}`
+      )
+      server.start()
+    }
   )
-
-  console.log(
-    `Listening for requests from Risk Management Client on ${grpc_config.host}:${grpc_config.port}`
-  )
-  server.start()
 }
 
-process.on('unhandledRejection', err => {
+process.on('unhandledRejection', (err) => {
   console.error(err)
 })
 

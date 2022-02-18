@@ -40,9 +40,9 @@ If any of these ports is already used by a different application, you can change
 
 Warnings about a `java.net.ConnectException: Connection refused` can safely be ignored. See the [FAQ](../FAQ.md#im-getting-a-connection-refused-connect-exception-on-startup) for details.
 
-## Springfox
-[Springfox](https://github.com/springfox/springfox) is an automated JSON API documentation tool for APIs built with Spring. To access the Springfox
-documentation for the Policy Management backend, go to [http://localhost:8090/swagger-ui/](http://localhost:8090/swagger-ui/). The native Swagger file is available at [http://localhost:8090/v2/api-docs](http://localhost:8090/v2/api-docs).
+## Springdoc Open API documentation
+[Springdoc](https://springdoc.org/) is an automated JSON API documentation tool for APIs built with Spring.
+To access the documentation for the Policy Management backend, go to [http://localhost:8090/swagger-ui/index.html](http://localhost:8090/swagger-ui/index.html). The native Swagger file is available at [http://localhost:8090/v3/api-docs](http://localhost:8090/v3/api-docs).
 
 ## Testing
 To run the automated tests for the Policy Management backend, right-click on the project in the Spring Tool 

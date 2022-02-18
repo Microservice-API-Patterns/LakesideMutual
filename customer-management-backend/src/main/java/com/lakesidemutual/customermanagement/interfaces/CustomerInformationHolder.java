@@ -2,6 +2,8 @@ package com.lakesidemutual.customermanagement.interfaces;
 
 import javax.validation.Valid;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +23,6 @@ import com.lakesidemutual.customermanagement.interfaces.dtos.CustomerNotFoundExc
 import com.lakesidemutual.customermanagement.interfaces.dtos.CustomerProfileDto;
 import com.lakesidemutual.customermanagement.interfaces.dtos.PaginatedCustomerResponseDto;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-
 /**
  * This REST controller gives clients access to the customer data. It is an example of the
  * <i>Information Holder Resource</i> pattern. This particular one is a special type of information holder called <i>Master Data Holder</i>.
@@ -39,19 +38,19 @@ public class CustomerInformationHolder {
 	@Autowired
 	private CustomerCoreRemoteProxy customerCoreRemoteProxy;
 
-	@ApiOperation(value = "Get all customers.")
+	@Operation(summary = "Get all customers.")
 	@GetMapping
 	public ResponseEntity<PaginatedCustomerResponseDto> getCustomers(
-			@ApiParam(value = "search terms to filter the customers by name", required = false) @RequestParam(value = "filter", required = false, defaultValue = "") String filter,
-			@ApiParam(value = "the maximum number of customers per page", required = false) @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit,
-			@ApiParam(value = "the offset of the page's first customer", required = false) @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset) {
+			@Parameter(description = "search terms to filter the customers by name", required = false) @RequestParam(value = "filter", required = false, defaultValue = "") String filter,
+			@Parameter(description = "the maximum number of customers per page", required = false) @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit,
+			@Parameter(description = "the offset of the page's first customer", required = false) @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset) {
 		return ResponseEntity.ok(customerCoreRemoteProxy.getCustomers(filter, limit, offset));
 	}
 
-	@ApiOperation(value = "Get customer with a given customer id.")
+	@Operation(summary = "Get customer with a given customer id.")
 	@GetMapping(value = "/{customerId}")
 	public ResponseEntity<CustomerDto> getCustomer(
-			@ApiParam(value = "the customer's unique id", required = true) @PathVariable CustomerId customerId) {
+			@Parameter(description = "the customer's unique id", required = true) @PathVariable CustomerId customerId) {
 
 		CustomerDto customer = customerCoreRemoteProxy.getCustomer(customerId);
 		if(customer == null) {
@@ -62,11 +61,11 @@ public class CustomerInformationHolder {
 		return ResponseEntity.ok(customer);
 	}
 
-	@ApiOperation(value = "Update the profile of the customer with the given customer id")
+	@Operation(summary = "Update the profile of the customer with the given customer id")
 	@PutMapping(value = "/{customerId}")
 	public ResponseEntity<CustomerDto> updateCustomer(
-			@ApiParam(value = "the customer's unique id", required = true) @PathVariable CustomerId customerId,
-			@ApiParam(value = "the customer's updated profile", required = true) @Valid @RequestBody CustomerProfileDto customerProfile) {
+			@Parameter(description = "the customer's unique id", required = true) @PathVariable CustomerId customerId,
+			@Parameter(description = "the customer's updated profile", required = true) @Valid @RequestBody CustomerProfileDto customerProfile) {
 		return customerCoreRemoteProxy.updateCustomer(customerId, customerProfile);
 	}
 }

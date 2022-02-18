@@ -42,9 +42,4 @@ public class ErrorController extends AbstractErrorController {
 
 		return errorAttributes;
 	}
-
-	@Override
-	public String getErrorPath() {
-		return "/error";
-	}
 }

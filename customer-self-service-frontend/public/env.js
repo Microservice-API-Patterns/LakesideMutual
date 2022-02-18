@@ -1,1 +1,0 @@
-window._env = {"NODE_ENV":"development","REACT_APP_CUSTOMER_SELF_SERVICE_BACKEND":"http://localhost:8080","REACT_APP_POLICY_MANAGEMENT_BACKEND":"http://localhost:8090","REACT_APP_CUSTOMER_MANAGEMENT_BACKEND":"http://localhost:8100"};

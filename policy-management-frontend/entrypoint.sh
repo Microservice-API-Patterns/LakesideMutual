@@ -4,10 +4,8 @@ set -e
 
 echo "Serializing environment:"
 
-react-env --dest .
+react-env --prefix VUE_APP --dest .
 
-sed -i 's/REACT_APP_/VUE_APP_/g' env.js
-
-cat env.js
+cat __ENV.js
 
 exec "$@"

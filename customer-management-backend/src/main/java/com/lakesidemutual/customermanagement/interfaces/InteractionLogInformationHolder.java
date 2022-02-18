@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +28,6 @@ import com.lakesidemutual.customermanagement.infrastructure.InteractionLogReposi
 import com.lakesidemutual.customermanagement.interfaces.dtos.InteractionAcknowledgementDto;
 import com.lakesidemutual.customermanagement.interfaces.dtos.InteractionLogNotFoundException;
 import com.lakesidemutual.customermanagement.interfaces.dtos.NotificationDto;
-
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 
 /**
  * This REST controller gives clients access to a customer's interaction log. It is an example of the
@@ -51,10 +50,10 @@ public class InteractionLogInformationHolder {
 	@Autowired
 	private SimpMessagingTemplate simpMessagingTemplate;
 
-	@ApiOperation(value = "Get the interaction log for a customer with a given customer id.")
+	@Operation(summary = "Get the interaction log for a customer with a given customer id.")
 	@GetMapping(value = "/{customerId}")
 	public ResponseEntity<InteractionLogAggregateRoot> getInteractionLog(
-			@ApiParam(value = "the customer's unique id", required = true) @PathVariable CustomerId customerId) {
+			@Parameter(description = "the customer's unique id", required = true) @PathVariable CustomerId customerId) {
 		final String customerIdStr = customerId.getId();
 		Optional<InteractionLogAggregateRoot> optInteractionLog = interactionLogRepository.findById(customerIdStr);
 		if (!optInteractionLog.isPresent()) {
@@ -67,11 +66,11 @@ public class InteractionLogInformationHolder {
 		return ResponseEntity.ok(interactionLog);
 	}
 
-	@ApiOperation(value = "Acknowledge all of a given customer's interactions up to the given interaction id.")
+	@Operation(summary = "Acknowledge all of a given customer's interactions up to the given interaction id.")
 	@PatchMapping(value = "/{customerId}")
 	public ResponseEntity<InteractionLogAggregateRoot> acknowledgeInteractions(
-			@ApiParam(value = "the customer's unique id", required = true) @PathVariable CustomerId customerId,
-			@ApiParam(value = "the id of the newest acknowledged interaction", required = true) @Valid @RequestBody InteractionAcknowledgementDto interactionAcknowledgementDto) {
+			@Parameter(description = "the customer's unique id", required = true) @PathVariable CustomerId customerId,
+			@Parameter(description = "the id of the newest acknowledged interaction", required = true) @Valid @RequestBody InteractionAcknowledgementDto interactionAcknowledgementDto) {
 		final String customerIdStr = customerId.getId();
 		Optional<InteractionLogAggregateRoot> optInteractionLog = interactionLogRepository.findById(customerIdStr);
 		if (!optInteractionLog.isPresent()) {

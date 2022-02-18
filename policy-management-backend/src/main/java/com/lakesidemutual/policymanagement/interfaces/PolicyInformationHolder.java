@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,9 +49,6 @@ import com.lakesidemutual.policymanagement.interfaces.dtos.policy.PaginatedPolic
 import com.lakesidemutual.policymanagement.interfaces.dtos.policy.PolicyDto;
 import com.lakesidemutual.policymanagement.interfaces.dtos.policy.PolicyNotFoundException;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-
 /**
  * This REST controller gives clients access to the insurance policies. It is an example of the
  * <i>Information Holder Resource</i> pattern. This particular one is a special type of information holder called <i>Master Data Holder</i>.
@@ -71,10 +70,10 @@ public class PolicyInformationHolder {
 	@Autowired
 	private CustomerCoreRemoteProxy customerCoreRemoteProxy;
 
-	@ApiOperation(value = "Create a new policy.")
+	@Operation(summary = "Create a new policy.")
 	@PostMapping
 	public ResponseEntity<PolicyDto> createPolicy(
-			@ApiParam(value = "the policy that is to be added", required = true)
+			@Parameter(description = "the policy that is to be added", required = true)
 			@Valid
 			@RequestBody
 			CreatePolicyRequestDto createPolicyDto,
@@ -106,11 +105,11 @@ public class PolicyInformationHolder {
 		return ResponseEntity.ok(policyDto);
 	}
 
-	@ApiOperation(value = "Update an existing policy.")
+	@Operation(summary = "Update an existing policy.")
 	@PutMapping(value = "/{policyId}")
 	public ResponseEntity<PolicyDto> updatePolicy(
-			@ApiParam(value = "the policy's unique id", required = true) @PathVariable PolicyId policyId,
-			@ApiParam(value = "the updated policy", required = true) @Valid @RequestBody CreatePolicyRequestDto createPolicyDto,
+			@Parameter(description = "the policy's unique id", required = true) @PathVariable PolicyId policyId,
+			@Parameter(description = "the updated policy", required = true) @Valid @RequestBody CreatePolicyRequestDto createPolicyDto,
 			HttpServletRequest request) {
 		logger.info("Updating policy with id '{}'", policyId.getId());
 
@@ -154,10 +153,10 @@ public class PolicyInformationHolder {
 		return ResponseEntity.ok(response);
 	}
 
-	@ApiOperation(value = "Delete an existing policy.")
+	@Operation(summary = "Delete an existing policy.")
 	@DeleteMapping(value = "/{policyId}")
 	public ResponseEntity<Void> deletePolicy(
-			@ApiParam(value = "the policy's unique id", required = true) @PathVariable PolicyId policyId,
+			@Parameter(description = "the policy's unique id", required = true) @PathVariable PolicyId policyId,
 			HttpServletRequest request) {
 		logger.info("Deleting policy with id '{}'", policyId.getId());
 		policyRepository.deleteById(policyId);
@@ -210,12 +209,12 @@ public class PolicyInformationHolder {
 		return paginatedPolicyResponseDto;
 	}
 
-	@ApiOperation(value = "Get all policies, newest first.")
+	@Operation(summary = "Get all policies, newest first.")
 	@GetMapping
 	public ResponseEntity<PaginatedPolicyResponseDto> getPolicies(
-			@ApiParam(value = "the maximum number of policies per page", required = false) @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit,
-			@ApiParam(value = "the offset of the page's first policy", required = false) @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset,
-			@ApiParam(value = "a comma-separated list of the fields that should be expanded in the response", required = false) @RequestParam(value = "expand", required = false, defaultValue = "") String expand) {
+			@Parameter(description = "the maximum number of policies per page", required = false) @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit,
+			@Parameter(description = "the offset of the page's first policy", required = false) @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset,
+			@Parameter(description = "a comma-separated list of the fields that should be expanded in the response", required = false) @RequestParam(value = "expand", required = false, defaultValue = "") String expand) {
 		logger.debug("Fetching a page of policies (offset={},limit={},fields='{}')", offset, limit, expand);
 		List<PolicyAggregateRoot> allPolicies = policyRepository.findAll(Sort.by(Sort.Direction.DESC, PolicyAggregateRoot.FIELD_CREATION_DATE));
 		List<PolicyAggregateRoot> policies = allPolicies.stream().skip(offset).limit(limit).collect(Collectors.toList());
@@ -270,11 +269,11 @@ public class PolicyInformationHolder {
 	 * @see <a href=
 	 *      "https://www.microservice-api-patterns.org/patterns/quality/dataTransferParsimony/WishList">https://www.microservice-api-patterns.org/patterns/quality/dataTransferParsimony/WishList</a>
 	 */
-	@ApiOperation(value = "Get a single policy.")
+	@Operation(summary = "Get a single policy.")
 	@GetMapping(value = "/{policyId}")
 	public ResponseEntity<PolicyDto> getPolicy(
-			@ApiParam(value = "the policy's unique id", required = true) @PathVariable PolicyId policyId,
-			@ApiParam(value = "a comma-separated list of the fields that should be expanded in the response", required = false) @RequestParam(value = "expand", required = false, defaultValue = "") String expand) {
+			@Parameter(description = "the policy's unique id", required = true) @PathVariable PolicyId policyId,
+			@Parameter(description = "a comma-separated list of the fields that should be expanded in the response", required = false) @RequestParam(value = "expand", required = false, defaultValue = "") String expand) {
 		logger.debug("Fetching policy with id '{}'", policyId.getId());
 		Optional<PolicyAggregateRoot> optPolicy = policyRepository.findById(policyId);
 		if(!optPolicy.isPresent()) {

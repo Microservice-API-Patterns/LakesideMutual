@@ -1,5 +1,6 @@
 package com.lakesidemutual.customerselfservice.interfaces;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,8 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lakesidemutual.customerselfservice.domain.identityaccess.UserLoginEntity;
 import com.lakesidemutual.customerselfservice.infrastructure.UserLoginRepository;
 import com.lakesidemutual.customerselfservice.interfaces.dtos.identityaccess.UserResponseDto;
-
-import io.swagger.annotations.ApiOperation;
 
 /**
  * This REST controller gives clients access to the current user. It is an example of the
@@ -28,7 +27,7 @@ public class UserInformationHolder {
 	@Autowired
 	private UserLoginRepository userLoginRepository;
 
-	@ApiOperation(value = "Get the user details for the currently logged-in user.")
+	@Operation(summary = "Get the user details for the currently logged-in user.")
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping
 	public ResponseEntity<UserResponseDto> getCurrentUser(Authentication authentication) {

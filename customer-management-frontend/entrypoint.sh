@@ -6,6 +6,6 @@ echo "Serializing environment:"
 
 react-env --dest .
 
-cat env.js
+cat __ENV.js
 
 exec "$@"

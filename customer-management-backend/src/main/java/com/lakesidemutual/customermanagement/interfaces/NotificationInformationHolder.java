@@ -3,6 +3,7 @@ package com.lakesidemutual.customermanagement.interfaces;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lakesidemutual.customermanagement.domain.interactionlog.InteractionLogService;
 import com.lakesidemutual.customermanagement.interfaces.dtos.NotificationDto;
-
-import io.swagger.annotations.ApiOperation;
 
 /**
  * This REST controller gives clients access the current list of unacknowledged chat notifications. It is an example of the
@@ -27,7 +26,7 @@ public class NotificationInformationHolder {
 	@Autowired
 	private InteractionLogService interactionLogService;
 
-	@ApiOperation(value = "Get a list of all unacknowledged notifications.")
+	@Operation(summary = "Get a list of all unacknowledged notifications.")
 	@GetMapping
 	public ResponseEntity<List<NotificationDto>> getNotifications() {
 		final List<NotificationDto> notifications = interactionLogService.getNotifications().stream()

@@ -10,11 +10,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "grpc": "^1.24.3",
-    "json2csv": "^4.1.3",
-    "log-timestamp": "^0.2.1",
-    "nconf": "^0.10.0",
-    "stompit": "^0.25.0"
+    "@grpc/grpc-js": "^1.5.5",
+    "@grpc/proto-loader": "^0.6.9",
+    "json2csv": "^5.0.6",
+    "log-timestamp": "^0.3.0",
+    "nconf": "^0.11.3",
+    "stompit": "^1.0.0"
   },
   "prettier": {
     "trailingComma": "es5",

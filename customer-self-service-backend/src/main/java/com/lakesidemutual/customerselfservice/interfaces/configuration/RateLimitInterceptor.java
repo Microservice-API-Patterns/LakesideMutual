@@ -1,5 +1,8 @@
 package com.lakesidemutual.customerselfservice.interfaces.configuration;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -69,7 +72,7 @@ public class RateLimitInterceptor implements HandlerInterceptor {
 	public RateLimitInterceptor(@Value("${rate.limit.perMinute}") int requestsPerMinute) {
 		this.requestsPerMinute = requestsPerMinute;
 		Set<RequestLimitRule> rules = Collections
-				.singleton(RequestLimitRule.of(1, TimeUnit.MINUTES, requestsPerMinute));
+				.singleton(RequestLimitRule.of(Duration.of( 1, ChronoUnit.MINUTES), requestsPerMinute));
 		requestRateLimiter = new InMemorySlidingWindowRequestRateLimiter(rules);
 	}
 

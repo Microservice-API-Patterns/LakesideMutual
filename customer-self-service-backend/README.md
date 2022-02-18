@@ -46,9 +46,9 @@ The packages follow the conventions/recommendations of the original DDD book reg
 * There are `application` and `domain` packages that contain business logic (the actual domain model and its usage).
 * Data access and technical utilities can be found in `infrastructure`.
 
-## Springfox
-[Springfox](https://github.com/springfox/springfox) is an automated JSON API documentation tool for APIs built with Spring. To access the Springfox
-documentation for the Customer Self-Service backend, go to the Swagger Web UI available at [http://localhost:8080/swagger-ui/](http://localhost:8080/swagger-ui/). The native Swagger file is available at [http://localhost:8080/v2/api-docs](http://localhost:8080/v2/api-docs).
+## Springdoc Open API documentation
+[Springdoc](https://springdoc.org/) is an automated JSON API documentation tool for APIs built with Spring.
+To access the documentation for the Customer Self-Service backend, go to the Swagger Web UI available at [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html). The native Swagger file is available at [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs).
 
 ## Testing
 To run the automated tests for the Customer Self-Service backend, right-click on the project in the Spring Tool 
@@ -65,12 +65,12 @@ If you want to persist your changes across restarts, change the setting to:
 spring.jpa.hibernate.ddl-auto=update
 ```
 
-<!-- ZIO 4 STX: pls review this text and the implementation. Feel free to revise. Thanks! -->
+<!-- ZIO4STX: pls review this text and the implementation. Feel free to revise. Thanks! -->
 
 ## Circuit Breaker and JMX MBean (Demo/Proof-of-Concept)
 The Customer Self-Service backend retrieves customer master data from the Customer Core service. The outgoing HTTP connection is protected by a simple Hystrix circuit breaker; dummy data is returned during connection problems.
 
-The behavior of the connection and the `@HystrixCommand` can be observed via a simple JMX MBean; to simplify matterm, the remote service class serves as the implementation of the MBean interface. To access the MBean, any JMX client can be used, for instance the command-line tool `JConsole` or the Spring Boot Admin appliation (see below).
+The behavior of the connection and the `@HystrixCommand` can be observed via a simple JMX MBean; to simplify matters, the remote service class serves as the implementation of the MBean interface. To access the MBean, any JMX client can be used, for instance the command-line tool `JConsole` or the Spring Boot Admin appliation (see below).
 
 ## Spring Boot Admin
 The application is configured to connect to the Spring Boot Admin on startup. See the [README](../spring-boot-admin/README.md#how-it-works) to learn more. 

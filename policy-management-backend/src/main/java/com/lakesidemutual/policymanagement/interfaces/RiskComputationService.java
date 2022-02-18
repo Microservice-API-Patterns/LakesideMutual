@@ -7,6 +7,8 @@ import java.util.Date;
 
 import javax.validation.Valid;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lakesidemutual.policymanagement.interfaces.dtos.risk.RiskFactorRequestDto;
 import com.lakesidemutual.policymanagement.interfaces.dtos.risk.RiskFactorResponseDto;
-
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 
 /**
  * This REST controller allows clients to compute the risk factor for a given customer. It is an application of
@@ -34,10 +33,10 @@ import io.swagger.annotations.ApiParam;
 public class RiskComputationService {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	@ApiOperation(value = "Computes the risk factor for a given customer.")
+	@Operation(summary = "Computes the risk factor for a given customer.")
 	@PostMapping(value = "/compute")
 	public ResponseEntity<RiskFactorResponseDto> computeRiskFactor(
-			@ApiParam(value = "the request containing relevant customer attributes (e.g., postal code, birthday)", required = true)
+			@Parameter(description = "the request containing relevant customer attributes (e.g., postal code, birthday)", required = true)
 			@Valid
 			@RequestBody
 			RiskFactorRequestDto riskFactorRequest) {

@@ -37,9 +37,9 @@ By default, the Spring Boot application starts on port 8100. If this port is alr
 
 Warnings about a `java.net.ConnectException: Connection refused` can safely be ignored. See the [FAQ](../FAQ.md#im-getting-a-connection-refused-connect-exception-on-startup) for details.
 
-## Springfox
-[Springfox](https://github.com/springfox/springfox) is an automated JSON API documentation tool for APIs built with Spring. To access the Springfox
-documentation for the Customer Management backend, go to [http://localhost:8100/swagger-ui/](http://localhost:8100/swagger-ui/). The native Swagger file is available at [http://localhost:8100/v2/api-docs](http://localhost:8100/v2/api-docs).
+## Springdoc Open API documentation
+[Springdoc](https://springdoc.org/) is an automated JSON API documentation tool for APIs built with Spring. 
+To access the documentation for the Customer Management backend, go to [http://localhost:8100/swagger-ui/index.html](http://localhost:8100/swagger-ui/index.html). The native Swagger file is available at [http://localhost:8100/v3/api-docs](http://localhost:8100/v3/api-docs).
 
 <!-- There are currently no tests in this project. Once we have some, uncomment the following lines: -->
 <!--## Testing

@@ -22,4 +22,6 @@ First you need to start the Customer Management backend and the Customer Self-Se
 
 Run the command `npm start` in order to launch the Customer Management frontend. This will start a development server and automatically loads the application's home page (http://localhost:3020/ by default) in a new browser tab. By default, the application starts on port 3020. If this port is already used by a different application, you can change it in the `.env` file.
 
+To discover the location of the backend services, two variables are used (see [.env](.env)). They can be overridden using environment variables. When running in production, [React Env](https://github.com/andrewmclagan/react-env) can be used to handle this. See the [Dockerfile](Dockerfile) and [entrypoint.sh](entrypoint.sh) for details.
+
 To stop the application press `Ctrl+C` in the shell that was used to start the application and close the corresponding browser tab. Note that this only stops the Customer Management frontend but not the Customer Self-Service backend or the Customer Management backend.

@@ -29,7 +29,7 @@ export default {
     return {
       publicPath: process.env.BASE_URL,
       policyManagementBackend:
-        window._env.VUE_APP_POLICY_MANAGEMENT_BACKEND ||
+        window.__ENV ? window.__ENV.VUE_APP_POLICY_MANAGEMENT_BACKEND :
         process.env.VUE_APP_POLICY_MANAGEMENT_BACKEND
     }
   }

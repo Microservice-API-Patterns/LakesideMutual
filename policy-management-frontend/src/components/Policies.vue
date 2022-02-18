@@ -45,7 +45,7 @@
           >{{offset+1}}-{{offset+policies.length}} of {{size}}</span>
         </sui-table-header-cell>
         <sui-table-header-cell colspan="3">
-          <sui-menu v-sui-floated:right pagination>
+          <sui-menu pagination>
             <a
               is="sui-menu-item"
               icon="left chevron"

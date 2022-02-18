@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +38,6 @@ import com.lakesidemutual.customerselfservice.interfaces.dtos.insurancequoterequ
 import com.lakesidemutual.customerselfservice.interfaces.dtos.insurancequoterequest.InsuranceQuoteRequestNotFoundException;
 import com.lakesidemutual.customerselfservice.interfaces.dtos.insurancequoterequest.InsuranceQuoteResponseDto;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 
 /**
  * This REST controller gives clients access to the insurance quote requests. It is an example of the
@@ -70,7 +70,7 @@ public class InsuranceQuoteRequestCoordinator {
 	/**
 	 * This endpoint is only used for debugging purposes.
 	 * */
-	@ApiOperation(value = "Get all Insurance Quote Requests.")
+	@Operation(summary = "Get all Insurance Quote Requests.")
 	@GetMapping /* MAP: Retrieval Operation */ 
 	public ResponseEntity<List<InsuranceQuoteRequestDto>> getInsuranceQuoteRequests() {
 		List<InsuranceQuoteRequestAggregateRoot> quoteRequests = insuranceQuoteRequestRepository.findAllByOrderByDateDesc();
@@ -78,12 +78,12 @@ public class InsuranceQuoteRequestCoordinator {
 		return ResponseEntity.ok(quoteRequestDtos);
 	}
 
-	@ApiOperation(value = "Get a specific Insurance Quote Request.")
+	@Operation(summary = "Get a specific Insurance Quote Request.")
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping(value = "/{insuranceQuoteRequestId}") /* MAP: Retrieval Operation */ 
 	public ResponseEntity<InsuranceQuoteRequestDto> getInsuranceQuoteRequest(
 			Authentication authentication,
-			@ApiParam(value = "the insurance quote request's unique id", required = true) @PathVariable Long insuranceQuoteRequestId) {
+			@Parameter(description = "the insurance quote request's unique id", required = true) @PathVariable Long insuranceQuoteRequestId) {
 		Optional<InsuranceQuoteRequestAggregateRoot> optInsuranceQuoteRequest = insuranceQuoteRequestRepository.findById(insuranceQuoteRequestId);
 		if(!optInsuranceQuoteRequest.isPresent()) {
 			final String errorMessage = "Failed to find an insurance quote request with id '" + insuranceQuoteRequestId + "'.";
@@ -101,12 +101,12 @@ public class InsuranceQuoteRequestCoordinator {
 		return ResponseEntity.ok(InsuranceQuoteRequestDto.fromDomainObject(insuranceQuoteRequest));
 	}
 
-	@ApiOperation(value = "Create a new Insurance Quote Request.")
+	@Operation(summary = "Create a new Insurance Quote Request.")
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping /* MAP: State Creation Operation */ 
 	public ResponseEntity<InsuranceQuoteRequestDto> createInsuranceQuoteRequest(
 			Authentication authentication,
-			@ApiParam(value = "the insurance quote request", required = true) @Valid @RequestBody InsuranceQuoteRequestDto requestDto) {
+			@Parameter(description = "the insurance quote request", required = true) @Valid @RequestBody InsuranceQuoteRequestDto requestDto) {
 		String loggedInUserEmail = authentication.getName();
 		UserLoginEntity loggedInUser = userLoginRepository.findByEmail(loggedInUserEmail);
 		CustomerId loggedInCustomerId = loggedInUser.getCustomerId();
@@ -136,13 +136,13 @@ public class InsuranceQuoteRequestCoordinator {
 		return ResponseEntity.ok(responseDto);
 	}
 
-	@ApiOperation(value = "Updates the status of an existing Insurance Quote Request")
+	@Operation(summary = "Updates the status of an existing Insurance Quote Request")
 	@PreAuthorize("isAuthenticated()")
 	@PatchMapping(value = "/{id}") /* MAP: State Transition Operation */ 
 	public ResponseEntity<InsuranceQuoteRequestDto> respondToInsuranceQuote(
 			Authentication authentication,
-			@ApiParam(value = "the insurance quote request's unique id", required = true) @PathVariable Long id,
-			@ApiParam(value = "the response that contains the customer's decision whether to accept or reject an insurance quote", required = true)
+			@Parameter(description = "the insurance quote request's unique id", required = true) @PathVariable Long id,
+			@Parameter(description = "the response that contains the customer's decision whether to accept or reject an insurance quote", required = true)
 			@Valid @RequestBody InsuranceQuoteResponseDto insuranceQuoteResponseDto) {
 		String loggedInUserEmail = authentication.getName();
 		UserLoginEntity loggedInUser = userLoginRepository.findByEmail(loggedInUserEmail);
