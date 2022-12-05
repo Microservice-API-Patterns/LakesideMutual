@@ -40,7 +40,7 @@ Warnings about a `java.net.ConnectException: Connection refused` can safely be i
 
 ## Springdoc Open API documentation
 [Springdoc](https://springdoc.org/) is an automated JSON API documentation tool for APIs built with Spring. 
-To access the documentation for the Customer Core, go to [http://localhost:8100/swagger-ui/index.html](http://localhost:8110/localhost:8100/swagger-ui/index.html). The native Swagger file is available at [http://localhost:8110/v3/api-docs](http://localhost:8110/v3/api-docs).
+To access the documentation for the Customer Core, go to [http://localhost:8110/swagger-ui/index.html](http://localhost:8110/swagger-ui/index.html). The native Swagger file is available at [http://localhost:8110/v3/api-docs](http://localhost:8110/v3/api-docs).
 
 ## Testing
 To run the automated tests for the Customer Core, right-click on the project in the Spring Tool 
