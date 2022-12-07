@@ -29,11 +29,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private static final String[] AUTH_WHITELIST = {
-			// -- swagger ui
-			"/swagger-resources/**",
+			// -- Swagger UI v3 (OpenAPI)
+			"/v3/api-docs/**",
 			"/swagger-ui/**",
-			"/v2/api-docs",
-			"/webjars/**",
 			// spring-boot-starter-actuator health checks and other info
 			"/actuator/**",
 			"/actuator",
