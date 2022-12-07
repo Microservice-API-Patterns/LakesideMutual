@@ -107,7 +107,7 @@ services:
     build: 
       context: ./risk-management-server
     volumes: 
-      - ./risk-management-server/src:/usr/src/app
+      - ./risk-management-server:/usr/src/app
     depends_on:
       - policy-management-backend
     environment:

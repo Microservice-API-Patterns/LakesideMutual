@@ -14,13 +14,8 @@ nconf
 const grpc_config = nconf.get('gRPC')
 
 function printReport(report, outputPath) {
-  fs.writeFile(outputPath, report.csv, (err) => {
-    if (err) {
-      return console.log(err)
-    }
-
-    console.log(`Wrote results to ${outputPath}.`)
-  })
+  fs.writeFileSync(outputPath, report.csv)
+  console.log(`Wrote results to ${outputPath}.`)
 }
 
 program.command('run [output-path]').action((outputPath) => {
