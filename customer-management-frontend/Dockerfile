@@ -1,4 +1,4 @@
-FROM node:18 as build
+FROM node:16 as build
 WORKDIR /usr/src/app
 COPY package.json ./
 COPY package-lock.json ./
@@ -14,6 +14,7 @@ WORKDIR /usr/share/nginx/html
 
 RUN apk add --no-cache nodejs npm
 RUN npm install -g @beam-australia/react-env@3.1.1
+ADD .env ./
 ADD entrypoint.sh /var/entrypoint.sh
 ENTRYPOINT ["/var/entrypoint.sh"]
 

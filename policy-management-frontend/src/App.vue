@@ -13,9 +13,12 @@
     <sui-segment>
       <router-view />
     </sui-segment>
-    <p style="color: #0000">
-      VUE_APP_POLICY_MANAGEMENT_BACKEND: {{ policyManagementBackend }}
-    </p>
+    <sui-message style="color: #BBB" class="mini">
+      <sui-message-header>Environment Variable Debug Information</sui-message-header>
+      <p>
+        VUE_APP_POLICY_MANAGEMENT_BACKEND: {{ policyManagementBackend }}
+      </p>
+    </sui-message>
   </div>
 </template>
 

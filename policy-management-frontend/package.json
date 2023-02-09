@@ -8,10 +8,10 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "vue": "^2.6.14",
     "moment": "^2.29.4",
-    "semantic-ui-vue": "^0.11.0",
     "semantic-ui-css": "^2.5.0",
+    "semantic-ui-vue": "^0.11.0",
+    "vue": "^2.6.14",
     "vue-router": "^3.5.3"
   },
   "devDependencies": {

@@ -4,13 +4,19 @@
 # run in production mode, so there won't be any live-reloading of changes
 # or other development features. For development, we recommend to start
 # the applications invidually or use the run_all_applications scripts.
-##
+#
 # To build the Docker images:
 #   docker-compose build
 #
 # To run the applications:
 #   docker-compose up
 #
+# Note that you might have to adjust the REACT_APP_ and VUE_APP environment
+# variables pointing to the backend services, depending on your hosting
+# environment. By default, they point to localhost, which is fine when running 
+# the services locally. In a cloud deployment, these should be changed to the 
+# public domainname of the respective backend service.
+# 
 # To shut down the applications, simply terminate the previous command.
 #
 
@@ -46,6 +52,9 @@ services:
     image: lakesidemutual/customer-management-frontend
     depends_on:
       - customer-management-backend
+    environment:
+      - "REACT_APP_CUSTOMER_SELF_SERVICE_BACKEND=http://localhost:8080"
+      - "REACT_APP_CUSTOMER_MANAGEMENT_BACKEND=http://localhost:8100"
     ports:
       - "3020:80"
 
@@ -67,6 +76,8 @@ services:
     image: lakesidemutual/policy-management-frontend
     depends_on:
       - policy-management-backend
+    environment:
+      - "REACT_APP_POLICY_MANAGEMENT_BACKEND=http://localhost:8090"
     ports:
       - "3010:80"
 
@@ -90,6 +101,10 @@ services:
       - customer-self-service-backend
       - customer-management-backend
       - policy-management-backend
+    environment:
+      - "REACT_APP_CUSTOMER_SELF_SERVICE_BACKEND=http://localhost:8080"
+      - "REACT_APP_POLICY_MANAGEMENT_BACKEND=http://localhost:8090"
+      - "REACT_APP_CUSTOMER_MANAGEMENT_BACKEND=http://localhost:8100"
     ports:
       - "3000:80"
       
