@@ -55,7 +55,7 @@ To learn more about individual components, please have a look at the README file
 Detailed setup instructions can be found in each application's README file. To conveniently start all applications, the `run_all_applications` scripts can be used. Alternatively, to start a minimal subset of applications, i.e., the Customer Management Applications and the Customer Core, use the `run_customer_management_applications` script.
 
 
-1. Make sure you have [Java 8, 11 or 15](https://adoptopenjdk.net/) installed.
+1. Make sure you have [Java 8 or higher](https://adoptium.net/) installed.
 1. Install [Node](https://nodejs.org/en/). Version 8.2 or later is required. You can check the currently installed version by running `node --version`.
 1. Install Python. We don't use Python ourselves, but some Node.js packages require native addons that are built using node-gyp, which requires Python. See the [node-gyp README for details on which Python version to install](https://github.com/nodejs/node-gyp#on-unix).
 1. Install Maven (see [https://maven.apache.org](https://maven.apache.org) for installation instructions).
@@ -82,27 +82,11 @@ consult the README of the corresponding component:
 
 ## Docker
 
-All projects come with Dockerfiles that can be used to run the services as Docker containers. The [docker-compose.yml](./docker-compose.yml) builds and starts all applications in a single command in the **development** environment (hot module reloading), just like the `run_all_applications` scripts mentioned above. See the [docker-compose.yml](./docker-compose.yml) for more information. For a production environment, [docker-compose.prod.yml](./docker-compose.prod.yml) can be used.
-
-### Running production docker compose
-Note that the **production** Dockerfiles make use of [BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/) features. To be able to build the Docker images, you have to set the `DOCKER_BUILDKIT` environment variable accordingly.
-
-The easiest way to build the individual images is by running the following command in the corresponding project directory:
-
-```bash
-DOCKER_BUILDKIT=1 docker build
-```
-
-To build and run all applications with Docker Compose, use the following command:
-
-```bash
-COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.prod.yml up
-```
+All projects come with Dockerfiles that can be used to run the services as Docker containers. The [docker-compose.yml](./docker-compose.yml) builds and starts all applications in a single command. See the [docker-compose.yml](./docker-compose.yml) for more information. Note that building the images takes some time (without caches, our most recent build took 6 minutes on a development machine).
 
 ## Data Stores
 
 Each backend service has its own data store. The Spring-JPA based applications all use the H2 relational database. By default, all data will be lost during restarts, please see the individual README files to enable durable persistency. The backend services also contain the H2 Console to browse the database. It can be found at `/console`. For example, for the Customer Core, the address is [http://localhost:8110/console](http://localhost:8110/console).
-
 
 ## Frequently Asked Questions and Troubleshooting
 
@@ -110,4 +94,4 @@ See our [FAQ](./FAQ.md) for more information on running the applications and the
 
 ## License
 
-This project is made avaible under the Eclipse Public License v 2.0. See the [LICENSE](LICENSE.md) file for the full license.
+This project is made available under the Eclipse Public License v 2.0. See the [LICENSE](LICENSE.md) file for the full license.
