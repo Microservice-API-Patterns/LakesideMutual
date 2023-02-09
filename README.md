@@ -56,7 +56,7 @@ Detailed setup instructions can be found in each application's README file. To c
 
 
 1. Make sure you have [Java 8 or higher](https://adoptium.net/) installed.
-1. Install [Node](https://nodejs.org/en/). Version 8.2 or later is required. You can check the currently installed version by running `node --version`.
+1. Install [Node](https://nodejs.org/en/). Version 12 or later is required. You can check the currently installed version by running `node --version`.
 1. Install Python. We don't use Python ourselves, but some Node.js packages require native addons that are built using node-gyp, which requires Python. See the [node-gyp README for details on which Python version to install](https://github.com/nodejs/node-gyp#on-unix).
 1. Install Maven (see [https://maven.apache.org](https://maven.apache.org) for installation instructions).
 1. Run the `run_all_applications` script suitable for your platform. Note that the frontend applications might be running before the backends are ready. In that case, just reload the page in the browser.
