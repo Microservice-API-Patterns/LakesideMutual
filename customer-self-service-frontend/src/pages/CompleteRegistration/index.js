@@ -17,7 +17,7 @@ export type Props = {
   },
 }
 
-export default class extends React.Component<Props> {
+export default class CompleteRegistration extends React.Component<Props> {
   render() {
     const { user, customer } = this.props
 

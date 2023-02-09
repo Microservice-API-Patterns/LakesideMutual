@@ -9,7 +9,7 @@ export type Props = {}
 
 type State = {}
 
-export default class extends React.Component<Props, State> {
+export default class Home extends React.Component<Props, State> {
   state = {}
 
   render() {

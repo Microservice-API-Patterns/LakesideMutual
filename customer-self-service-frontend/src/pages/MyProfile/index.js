@@ -17,7 +17,7 @@ export type Props = {
   addressUpdateError: ?FormSubmissionError,
 }
 
-export default class extends React.Component<Props> {
+export default class MyProfile extends React.Component<Props> {
   render() {
     const { user, customer } = this.props
 
@@ -38,12 +38,12 @@ export default class extends React.Component<Props> {
           <Route
             exact
             path="/profile"
-            render={props => <Overview customer={customer} />}
+            render={(props) => <Overview customer={customer} />}
           />
           <Route
             exact
             path="/profile/change-address"
-            render={props => (
+            render={(props) => (
               <UpdateAddressForm
                 customer={customer}
                 isUpdatingAddress={this.props.isUpdatingAddress}

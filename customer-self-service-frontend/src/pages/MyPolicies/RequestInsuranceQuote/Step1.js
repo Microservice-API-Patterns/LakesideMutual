@@ -14,7 +14,7 @@ type FormData = {
 
 export type Props = {
   onNext: () => void,
-  onChange: FormData => void,
+  onChange: (FormData) => void,
   formData: FormData,
 }
 
@@ -34,7 +34,7 @@ const context = new Map([
   [billingAddressCityKey, "City"],
 ])
 
-export default class extends React.Component<Props> {
+export default class Step1 extends React.Component<Props> {
   handleChange = (
     e: Event,
     { name, value }: { name: string, value: string }
@@ -109,10 +109,10 @@ export default class extends React.Component<Props> {
             onChange={(props, { checked }) => {
               if (checked) {
                 this.props.onChange({
-                  contactAddressStreetAddress: this.props.formData
-                    .contactAddressStreetAddress,
-                  contactAddressPostalCode: this.props.formData
-                    .contactAddressPostalCode,
+                  contactAddressStreetAddress:
+                    this.props.formData.contactAddressStreetAddress,
+                  contactAddressPostalCode:
+                    this.props.formData.contactAddressPostalCode,
                   contactAddressCity: this.props.formData.contactAddressCity,
                   billingAddressStreetAddress: null,
                   billingAddressPostalCode: null,
@@ -120,10 +120,10 @@ export default class extends React.Component<Props> {
                 })
               } else {
                 this.props.onChange({
-                  contactAddressStreetAddress: this.props.formData
-                    .contactAddressStreetAddress,
-                  contactAddressPostalCode: this.props.formData
-                    .contactAddressPostalCode,
+                  contactAddressStreetAddress:
+                    this.props.formData.contactAddressStreetAddress,
+                  contactAddressPostalCode:
+                    this.props.formData.contactAddressPostalCode,
                   contactAddressCity: this.props.formData.contactAddressCity,
                   billingAddressStreetAddress: "",
                   billingAddressPostalCode: "",

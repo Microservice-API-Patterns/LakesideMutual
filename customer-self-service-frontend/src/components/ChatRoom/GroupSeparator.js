@@ -8,10 +8,12 @@ export type Props = {
   date: Date,
 }
 
-export default (props: Props) => (
+const GroupSeparator = (props: Props) => (
   <li className="groupSeparator">
     <Divider clearing section horizontal>
       {moment(props.date).fromNow()}
     </Divider>
   </li>
 )
+
+export default GroupSeparator

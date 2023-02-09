@@ -13,7 +13,7 @@ type State = {
   showOldAddresses: boolean,
 }
 
-export default class extends React.Component<Props, State> {
+export default class CustomerProfileView extends React.Component<Props, State> {
   state = {
     showOldAddresses: false,
   }

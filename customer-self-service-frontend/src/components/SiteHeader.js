@@ -33,7 +33,7 @@ export type Props = {
   isAuthenticated: boolean,
 }
 
-export default (props: Props) => {
+const SiteHeader = (props: Props) => {
   if (!props.isAuthenticated) {
     return null
   }
@@ -49,3 +49,5 @@ export default (props: Props) => {
     </Link>
   )
 }
+
+export default SiteHeader

@@ -27,7 +27,7 @@ type State = {
   messages: Array<Message>,
 }
 
-export default class extends React.Component<Props, State> {
+export default class Chat extends React.Component<Props, State> {
   state = {
     didTimeout: false,
     isConnected: false,
@@ -55,7 +55,7 @@ export default class extends React.Component<Props, State> {
       const interactionLog = this.props.interactionLog
       const interactions = interactionLog.interactions
 
-      const messages: Array<Message> = interactions.map(interaction => ({
+      const messages: Array<Message> = interactions.map((interaction) => ({
         username: interactionLog.username,
         content: interaction.content,
         customerId: customerId,
@@ -87,7 +87,7 @@ export default class extends React.Component<Props, State> {
         <SockJsClient
           url={`${customerManagementBackend}/ws`}
           topics={["/topic/messages"]}
-          onMessage={message => {
+          onMessage={(message) => {
             if (customer.customerId === message.customerId) {
               this.appendMessage(message)
             }
@@ -104,7 +104,7 @@ export default class extends React.Component<Props, State> {
           <React.Fragment>
             <ChatRoom
               messages={messages}
-              onSubmit={text => {
+              onSubmit={(text) => {
                 const customer = this.props.customer
                 const client = this.clientRef.current
                 if (client) {

@@ -11,7 +11,7 @@ type FormData = {
 export type Props = {
   onNext: () => void,
   onPrev: () => void,
-  onChange: FormData => void,
+  onChange: (FormData) => void,
   formData: FormData,
 }
 
@@ -31,7 +31,7 @@ const deductibleValues = [
   { key: "2500", text: "2500 CHF", value: "2500 CHF" },
 ]
 
-export default class extends React.Component<Props> {
+export default class Step2 extends React.Component<Props> {
   render() {
     const { startDate, insuranceType, deductible } = this.props.formData
     return (

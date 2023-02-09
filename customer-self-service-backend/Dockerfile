@@ -1,13 +1,19 @@
-FROM maven:3.6.1-jdk-8-alpine AS build
-ARG BASE=/usr/src/app
-COPY pom.xml ${BASE}/
-COPY src ${BASE}/src
-RUN --mount=type=cache,target=/root/.m2 mvn -f ${BASE}/pom.xml install -DskipTests
+FROM openjdk:17-slim-buster as build
 
-FROM openjdk:8-jdk-alpine
-COPY --from=build /usr/src/app/target/dependency/BOOT-INF/lib/* /app/lib/
-COPY --from=build /usr/src/app/target/dependency/META-INF /app/META-INF
-COPY --from=build /usr/src/app/target/dependency/BOOT-INF/classes /app
+COPY .mvn .mvn
+COPY mvnw .
+COPY pom.xml .
+
+RUN ./mvnw -B dependency:go-offline                          
+
+COPY src src
+
+RUN ./mvnw -B package                                        
+
+FROM openjdk:17-slim-buster
+
+COPY --from=build target/customer-self-service-backend-0.0.1-SNAPSHOT.jar .
 
 EXPOSE 8080
-ENTRYPOINT ["java","-cp","app:app/lib/*","com.lakesidemutual.customerselfservice.CustomerSelfServiceApplication"]
+
+ENTRYPOINT ["java", "-jar", "customer-self-service-backend-0.0.1-SNAPSHOT.jar"]

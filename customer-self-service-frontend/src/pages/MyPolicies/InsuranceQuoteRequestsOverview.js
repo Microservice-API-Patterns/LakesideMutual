@@ -29,7 +29,10 @@ type State = {
   redirectLink: ?string,
 }
 
-export default class extends React.Component<Props, State> {
+export default class InsuranceQuoteRequestsOverview extends React.Component<
+  Props,
+  State
+> {
   state = {
     showArchivedInsuranceQuoteRequests: false,
     redirectLink: null,
@@ -89,7 +92,7 @@ export default class extends React.Component<Props, State> {
     } else if (insuranceQuoteRequests && insuranceQuoteRequests.length > 0) {
       const filteredInsuranceQuoteRequests = showArchivedInsuranceQuoteRequests
         ? insuranceQuoteRequests
-        : insuranceQuoteRequests.filter(request => {
+        : insuranceQuoteRequests.filter((request) => {
             const status =
               request.statusHistory[request.statusHistory.length - 1].status
             return (
@@ -127,8 +130,9 @@ export default class extends React.Component<Props, State> {
                       style={{ cursor: "pointer" }}
                       onClick={() =>
                         this.setState({
-                          redirectLink: `/policies/insurance-quote-requests/${insuranceQuoteRequest.id ||
-                            ""}`,
+                          redirectLink: `/policies/insurance-quote-requests/${
+                            insuranceQuoteRequest.id || ""
+                          }`,
                         })
                       }
                     >

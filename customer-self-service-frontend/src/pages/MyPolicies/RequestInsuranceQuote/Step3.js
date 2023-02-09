@@ -25,10 +25,10 @@ export type Props = {
   },
 }
 
-export default class extends React.Component<Props> {
+export default class Step3 extends React.Component<Props> {
   render() {
-    const isSubmittingInsuranceQuoteRequest = this.props
-      .isSubmittingInsuranceQuoteRequest
+    const isSubmittingInsuranceQuoteRequest =
+      this.props.isSubmittingInsuranceQuoteRequest
     const step1Data = this.props.data.step1
     const contactAddressStreetAddress = step1Data.contactAddressStreetAddress
     const contactAddressPostalCode = step1Data.contactAddressPostalCode

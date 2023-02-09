@@ -6,8 +6,10 @@ export type Props = {
   message: Message,
 }
 
-export default (props: Props) => (
+const MessageBubble = (props: Props) => (
   <li className={`chat ${!props.message.sentByOperator ? "right" : "left"}`}>
     {props.message.content}
   </li>
 )
+
+export default MessageBubble

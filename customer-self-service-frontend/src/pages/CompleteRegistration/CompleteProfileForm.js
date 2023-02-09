@@ -49,7 +49,7 @@ type State = {
   cityOptions: Array<{ key: string, text: string, value: string }>,
 }
 
-export default class extends React.Component<Props, State> {
+export default class CompleteProfileForm extends React.Component<Props, State> {
   state = {
     formContent: {
       firstname: "",
@@ -71,7 +71,7 @@ export default class extends React.Component<Props, State> {
   }
 
   handleChange = (e: Event, { name, value }: { name: string, value: string }) =>
-    this.setState(prevState => {
+    this.setState((prevState) => {
       return { formContent: { ...prevState.formContent, [name]: value } }
     })
 
@@ -103,7 +103,7 @@ export default class extends React.Component<Props, State> {
     e: Event,
     { searchQuery }: { searchQuery: string }
   ) => {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       return {
         formContent: { ...prevState.formContent, [cityKey]: searchQuery },
         citySearch: searchQuery,
@@ -113,7 +113,7 @@ export default class extends React.Component<Props, State> {
   }
 
   handleCityItemSelect = (e: Event, { value }: { value: string }) => {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       return {
         formContent: { ...prevState.formContent, [cityKey]: value },
         citySearch: "",
@@ -128,7 +128,7 @@ export default class extends React.Component<Props, State> {
 
     try {
       const result = await this.props.actions.lookupCitiySuggestions(postalCode)
-      const cityOptions = result.cities.map(city => {
+      const cityOptions = result.cities.map((city) => {
         return {
           key: city,
           text: city,

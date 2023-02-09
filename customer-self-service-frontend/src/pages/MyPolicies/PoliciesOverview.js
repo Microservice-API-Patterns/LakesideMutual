@@ -16,7 +16,7 @@ export type Props = {
   },
 }
 
-export default class extends React.Component<Props> {
+export default class PoliciesOverview extends React.Component<Props> {
   componentDidMount() {
     if (
       !this.props.isFetchingPolicies &&
@@ -56,7 +56,7 @@ export default class extends React.Component<Props> {
     } else if (policies && policies.length > 0) {
       return (
         <Fragment>
-          {policies.map(policy => (
+          {policies.map((policy) => (
             <Fragment key={policy.policyId}>
               <PolicyOverview policy={policy} />
               <br />

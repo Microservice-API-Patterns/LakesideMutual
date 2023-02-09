@@ -15,7 +15,7 @@ type ReactRef<ElementType: React.ElementType> = {
 export type Props = {
   customer: Customer,
   interactionLog: InteractionLog,
-  didReceiveMessage: MessageDto => void,
+  didReceiveMessage: (MessageDto) => void,
 }
 
 type State = {
@@ -24,13 +24,13 @@ type State = {
   messages: Array<MessageDto>,
 }
 
-export default class extends React.Component<Props, State> {
+export default class ChatView extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
 
     const { customer, interactionLog } = props
     const interactions = interactionLog.interactions
-    const messages: Array<MessageDto> = interactions.map(interaction => ({
+    const messages: Array<MessageDto> = interactions.map((interaction) => ({
       id: interaction.id,
       username: interactionLog.username,
       content: interaction.content,
@@ -73,7 +73,7 @@ export default class extends React.Component<Props, State> {
         <SockJsClient
           url={`${customerManagementBackend}/ws`}
           topics={["/topic/messages"]}
-          onMessage={message => {
+          onMessage={(message) => {
             this.props.didReceiveMessage(message)
             if (customer.customerId === message.customerId) {
               this.appendMessage(message)
@@ -87,42 +87,37 @@ export default class extends React.Component<Props, State> {
           }}
           ref={this.clientRef}
         />
-        {isConnected &&
-          !didTimeout && (
-            <ChatRoom
-              messages={messages}
-              onSubmit={text => {
-                const client = this.clientRef.current
-                if (client) {
-                  const message: MessageDto = {
-                    id: null,
-                    date: null,
-                    username: `${customer.firstname} ${customer.lastname}`,
-                    content: text,
-                    customerId: customer.customerId,
-                    sentByOperator: true,
-                  }
-                  client.sendMessage("/chat/messages", JSON.stringify(message))
+        {isConnected && !didTimeout && (
+          <ChatRoom
+            messages={messages}
+            onSubmit={(text) => {
+              const client = this.clientRef.current
+              if (client) {
+                const message: MessageDto = {
+                  id: null,
+                  date: null,
+                  username: `${customer.firstname} ${customer.lastname}`,
+                  content: text,
+                  customerId: customer.customerId,
+                  sentByOperator: true,
                 }
-              }}
-            />
-          )}
-        {!isConnected &&
-          !didTimeout && (
-            <Loader active inline="centered">
-              Loading
-            </Loader>
-          )}
-        {!isConnected &&
-          didTimeout && (
-            <Message
-              error
-              header="Error"
-              content={
-                errorMessages.customerManagementBackendNotAvailable
+                client.sendMessage("/chat/messages", JSON.stringify(message))
               }
-            />
-          )}
+            }}
+          />
+        )}
+        {!isConnected && !didTimeout && (
+          <Loader active inline="centered">
+            Loading
+          </Loader>
+        )}
+        {!isConnected && didTimeout && (
+          <Message
+            error
+            header="Error"
+            content={errorMessages.customerManagementBackendNotAvailable}
+          />
+        )}
       </Fragment>
     )
   }

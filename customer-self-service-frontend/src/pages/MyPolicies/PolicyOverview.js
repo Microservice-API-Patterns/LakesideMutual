@@ -17,7 +17,7 @@ function formatDate(str: string): string {
   return moment(str).format("DD. MMM YYYY")
 }
 
-export default class extends React.Component<Props, State> {
+export default class PolicyOverview extends React.Component<Props, State> {
   state = {
     showInfoModal: false,
     infoType: "",
@@ -109,9 +109,7 @@ export default class extends React.Component<Props, State> {
                     />
                   </Grid.Column>
                   <Grid.Column width="11">
-                    {`${policy.deductible.amount} ${
-                      policy.deductible.currency
-                    }`}
+                    {`${policy.deductible.amount} ${policy.deductible.currency}`}
                   </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>
@@ -126,9 +124,7 @@ export default class extends React.Component<Props, State> {
                     />
                   </Grid.Column>
                   <Grid.Column width="11">
-                    {`${policy.insurancePremium.amount} ${
-                      policy.insurancePremium.currency
-                    }`}
+                    {`${policy.insurancePremium.amount} ${policy.insurancePremium.currency}`}
                   </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>
@@ -143,9 +139,7 @@ export default class extends React.Component<Props, State> {
                     />
                   </Grid.Column>
                   <Grid.Column width="11">
-                    {`${policy.policyLimit.amount} ${
-                      policy.policyLimit.currency
-                    }`}
+                    {`${policy.policyLimit.amount} ${policy.policyLimit.currency}`}
                   </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>

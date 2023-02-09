@@ -2,7 +2,7 @@
 
 import React from "react"
 import { BrowserRouter, Route, Switch } from "react-router-dom"
-import { Container } from "semantic-ui-react"
+import { Container, Message } from "semantic-ui-react"
 
 import Home from "./pages/Home"
 import NewCustomer from "./pages/NewCustomer"
@@ -28,30 +28,35 @@ export default class App extends React.Component<{}> {
             <MenuBar />
 
             <Switch>
-              <Route exact path="/" render={props => <Home {...props} />} />
+              <Route exact path="/" render={(props) => <Home {...props} />} />
               <Route
                 exact
                 path="/customers/new"
-                render={props => <NewCustomer {...props} />}
+                render={(props) => <NewCustomer {...props} />}
               />
               <Route
                 exact
                 path="/customers/:customerId"
-                render={props => <CustomerDetail {...props} />}
+                render={(props) => <CustomerDetail {...props} />}
               />
               <Route
                 exact
                 path="/customers/:customerId/edit_profile"
-                render={props => <EditCustomer {...props} />}
+                render={(props) => <EditCustomer {...props} />}
               />
             </Switch>
-            <p style={{ color: "#0000" }}>
-              REACT_APP_CUSTOMER_SELF_SERVICE_BACKEND:{" "}
-              {customerSelfServiceBackend}
-            </p>
-            <p style={{ color: "#0000" }}>
-              REACT_APP_CUSTOMER_MANAGEMENT_BACKEND: {customerManagementBackend}
-            </p>
+            <Message style={{ color: "#BBB" }} size="mini">
+              <Message.Header>
+                Environment Variable Debug Information
+              </Message.Header>
+              <p>
+                REACT_APP_CUSTOMER_SELF_SERVICE_BACKEND:{" "}
+                {customerSelfServiceBackend}
+                <br />
+                REACT_APP_CUSTOMER_MANAGEMENT_BACKEND:{" "}
+                {customerManagementBackend}
+              </p>
+            </Message>
           </Container>
         </BrowserRouter>
       </Provider>

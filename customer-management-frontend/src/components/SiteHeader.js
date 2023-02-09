@@ -30,8 +30,7 @@ const styles = {
 }
 
 export type Props = {}
-
-export default (props: Props) => {
+const SiteHeader = (props: Props) => {
   return (
     <Link to="/">
       <div style={styles.siteheader}>
@@ -44,3 +43,5 @@ export default (props: Props) => {
     </Link>
   )
 }
+
+export default SiteHeader

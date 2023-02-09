@@ -3,20 +3,20 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "@beam-australia/react-env": "^3.1.1",
-    "flow-bin": "^0.170.0",
-    "react-scripts": "2.1.5"
+    "flow-bin": "^0.196.3",
+    "react-scripts": "5.0.1"
   },
   "dependencies": {
-    "documentation": "^13.2.5",
-    "moment": "^2.29.1",
+    "@beam-australia/react-env": "^3.1.1",
+    "documentation": "^14.0.1",
+    "moment": "^2.29.4",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-stomp": "^5.1.0",
-    "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^2.1.1",
+    "semantic-ui-css": "^2.5.0",
+    "semantic-ui-react": "^2.1.4",
     "unstated": "^2.1.1",
     "whatwg-fetch": "^3.6.2"
   },

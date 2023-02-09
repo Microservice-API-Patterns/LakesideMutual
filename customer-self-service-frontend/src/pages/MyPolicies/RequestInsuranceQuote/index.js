@@ -16,7 +16,7 @@ export type Props = {
   isCreatingInsuranceQuoteRequest: boolean,
   insuranceQuoteRequestCreationError: ?Error,
   actions: {
-    createInsuranceQuoteRequest: InsuranceQuoteRequest => Promise<void>,
+    createInsuranceQuoteRequest: (InsuranceQuoteRequest) => Promise<void>,
     resetInsuranceQuoteRequestCreationError: () => void,
   },
 }
@@ -61,7 +61,10 @@ const context = new Map([
   [billingCityKey, "City of Billing Address"],
 ])
 
-export default class extends React.Component<Props, State> {
+export default class RequestInsuranceCode extends React.Component<
+  Props,
+  State
+> {
   constructor(props: Props) {
     super(props)
     const { customer } = this.props
@@ -166,8 +169,8 @@ export default class extends React.Component<Props, State> {
   }
 
   getFormError(): ?FormError {
-    const insuranceQuoteRequestCreationError = this.props
-      .insuranceQuoteRequestCreationError
+    const insuranceQuoteRequestCreationError =
+      this.props.insuranceQuoteRequestCreationError
 
     if (
       insuranceQuoteRequestCreationError != null &&
@@ -248,7 +251,7 @@ export default class extends React.Component<Props, State> {
         {currentStep === 0 && (
           <Step1
             onNext={() => this.goToStep(1)}
-            onChange={formData => this.setState({ step1: formData })}
+            onChange={(formData) => this.setState({ step1: formData })}
             formData={this.state.step1}
           />
         )}
@@ -256,7 +259,7 @@ export default class extends React.Component<Props, State> {
           <Step2
             onPrev={() => this.goToStep(0)}
             onNext={() => this.goToStep(2)}
-            onChange={formData => this.setState({ step2: formData })}
+            onChange={(formData) => this.setState({ step2: formData })}
             formData={this.state.step2}
           />
         )}

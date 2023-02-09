@@ -26,7 +26,7 @@ export type Props = {
   actions: {
     fetchPolicies: (customerId: CustomerId) => Promise<void>,
     fetchInsuranceQuoteRequests: (customerId: CustomerId) => Promise<void>,
-    createInsuranceQuoteRequest: InsuranceQuoteRequest => Promise<void>,
+    createInsuranceQuoteRequest: (InsuranceQuoteRequest) => Promise<void>,
     resetInsuranceQuoteRequestCreationError: () => void,
     fetchInsuranceQuoteRequest: (id: string) => Promise<void>,
     respondToInsuranceQuote: (
@@ -36,7 +36,7 @@ export type Props = {
   },
 }
 
-export default class extends React.Component<Props> {
+export default class MyPolicies extends React.Component<Props> {
   render() {
     const {
       user,
@@ -72,7 +72,7 @@ export default class extends React.Component<Props> {
           <Route
             exact
             path="/policies"
-            render={props => (
+            render={(props) => (
               <Segment>
                 <InsuranceQuoteRequestsOverview
                   customer={customer}
@@ -98,7 +98,7 @@ export default class extends React.Component<Props> {
           <Route
             exact
             path="/policies/new-insurance-quote-request"
-            render={props => (
+            render={(props) => (
               <RequestInsuranceQuote
                 customer={customer}
                 isCreatingInsuranceQuoteRequest={
@@ -114,7 +114,7 @@ export default class extends React.Component<Props> {
           <Route
             exact
             path="/policies/insurance-quote-requests/:id"
-            render={props => (
+            render={(props) => (
               <InsuranceQuoteRequestDetail
                 insuranceQuoteRequest={insuranceQuoteRequest}
                 isFetchingInsuranceQuoteRequest={

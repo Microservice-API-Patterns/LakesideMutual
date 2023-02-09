@@ -16,14 +16,14 @@ type ReactRef<ElementType: React.ElementType> = {
 
 export type Props = {
   messages: Array<MessageDto>,
-  onSubmit: string => void,
+  onSubmit: (string) => void,
 }
 
 type State = {
   content: string,
 }
 
-export default class extends React.Component<Props, State> {
+export default class ChatRoom extends React.Component<Props, State> {
   chatRef: ReactRef<"ul"> = React.createRef()
 
   state = {
