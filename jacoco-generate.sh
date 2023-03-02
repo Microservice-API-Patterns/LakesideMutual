@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/bash
 
 java -jar jacoco/lib/jacococli.jar dump --address 127.0.0.1 --port 36300 --destfile report/customercore.exec
 java -jar jacoco/lib/jacococli.jar report report/customercore.exec --classfiles classdump/customercore --sourcefiles customer-core/src/main/java/ --html report/customercore
