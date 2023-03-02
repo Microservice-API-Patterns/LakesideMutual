@@ -4,3 +4,8 @@ __ENV.js
 
 # Ignore the H2 databases
 *.mv.db
+
+# jacoco miscellanoues
+jacoco
+classdump
+report

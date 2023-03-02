@@ -18,4 +18,4 @@ EXPOSE 8090
 EXPOSE 61613
 EXPOSE 61616
 
-ENTRYPOINT ["java", "-jar", "policy-management-backend-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-javaagent:/jacoco/lib/jacocoagent.jar=includes=com.lakesidemutual.policymanagement.*,output=tcpserver,port=6300,address=*,classdumpdir=/classdump,append=false", "-jar", "policy-management-backend-0.0.1-SNAPSHOT.jar"]
