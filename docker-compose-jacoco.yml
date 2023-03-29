@@ -38,7 +38,7 @@ services:
     image: lakesidemutual/customer-core
     volumes:
       - jacoco:/jacoco:ro
-      - /home/alpaca/Projects/mine/LakesideMutual/classdump/customercore:/classdump/com/lakesidemutual/customercore
+      - ./classdump:/classdump:rw
     environment:
       - "SPRING_BOOT_ADMIN_CLIENT_URL=http://spring-boot-admin:9000"
     ports:
@@ -52,7 +52,7 @@ services:
     image: lakesidemutual/customer-management-backend
     volumes:
       - jacoco:/jacoco:ro
-      - /home/alpaca/Projects/mine/LakesideMutual/classdump/customermanagement:/classdump/com/lakesidemutual/customermanagement
+      - ./classdump:/classdump:rw
     depends_on:
       - customer-core
     environment:
@@ -78,7 +78,7 @@ services:
     image: lakesidemutual/policy-management-backend
     volumes:
       - jacoco:/jacoco:ro
-      - /home/alpaca/Projects/mine/LakesideMutual/classdump/policymanagement:/classdump/com/lakesidemutual/policymanagement
+      - ./classdump:/classdump:rw
     depends_on:
       - customer-core
     environment:
@@ -105,7 +105,7 @@ services:
     image: lakesidemutual/customer-self-service-backend
     volumes:
       - jacoco:/jacoco:ro
-      - /home/alpaca/Projects/mine/LakesideMutual/classdump/customerselfservice:/classdump/com/lakesidemutual/customerselfservice
+      - ./classdump:/classdump:rw
     depends_on:
       - customer-core
       - policy-management-backend

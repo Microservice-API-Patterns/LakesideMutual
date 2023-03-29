@@ -1,9 +1,13 @@
 # Generate Jacoco Report
-- make sure you are in the `jacoco-report` branch
+- make sure you are in the `swagger-unified` branch
+- download jacoco cli, run `wget -O jacoco.zip https://search.maven.org/remotecontent?filepath=org/jacoco/jacoco/0.8.8/jacoco-0.8.8.zip && unzip jacoco.zip -d jacoco && rm jacoco.zip`
 - build all service, run `find . -name "pom.xml" -exec mvn clean -f '{}' \;`
+- remove old files, run `sudo rm -rf classdump report`
 - build docker images, run `docker compose -f docker-compose-jacoco.yml build`
 - start docker containers, run `docker compose -f docker-compose-jacoco.yml up -d`
-- explore the webpage or run the integration test
-- generate report, run `./jacoco-generate.sh`
+- run the integration test, or run RESTler
+- dump all runtime data, run `./jacoco-dump.sh`
+- shut down and remove service containers, run `docker compose -f docker-compose-jacoco.yml down`
+- change the permission of all dumped classfiles, run `sudo chmod -R 755 classdump`
+- generate jacoco report, run `java -jar jacoco/lib/jacococli.jar report report/*.exec --classfiles classdump/ --html report`
 - generated reports are under a folder named `report`
-- start docker containers, run `docker compose -f docker-compose-jacoco.yml down`
