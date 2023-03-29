@@ -1,5 +1,4 @@
 # Generate Jacoco Report
-- make sure you are in the `swagger-unified` branch
 - download jacoco cli, run `wget -O jacoco.zip https://search.maven.org/remotecontent?filepath=org/jacoco/jacoco/0.8.8/jacoco-0.8.8.zip && unzip jacoco.zip -d jacoco && rm jacoco.zip`
 - build all service, run `find . -name "pom.xml" -exec mvn clean -f '{}' \;`
 - remove old files, run `sudo rm -rf classdump report`
