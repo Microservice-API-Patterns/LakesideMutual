@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - env:
-            - name: REACT_APP_POLICY_MANAGEMENT_BACKEND
+            - name: VUE_APP_POLICY_MANAGEMENT_BACKEND
               value: http://34.65.192.94:8090
           image: gcr.io/lakeside-mutual-2020/policy-management-frontend
           imagePullPolicy: Always
