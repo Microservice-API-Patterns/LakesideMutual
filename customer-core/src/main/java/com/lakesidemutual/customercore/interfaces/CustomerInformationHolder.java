@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -80,10 +81,10 @@ public class CustomerInformationHolder {
 		final Set<String> includedFields = getIncludedFields(fields);
 		CustomerResponseDto customerResponseDto = new CustomerResponseDto(includedFields, customer);
 		Link selfLink = linkTo(
-				methodOn(CustomerInformationHolder.class).getCustomer(customer.getId().toString(), fields))
+				methodOn(CustomerInformationHolder.class).getCustomer(customer.getId().toString(), fields, "link"))
 				.withSelfRel();
 
-		Link updateAddressLink = linkTo(methodOn(CustomerInformationHolder.class).changeAddress(customer.getId(), null))
+		Link updateAddressLink = linkTo(methodOn(CustomerInformationHolder.class).changeAddress(customer.getId(), null, "link"))
 				.withRel("address.change");
 
 		customerResponseDto.add(selfLink);
@@ -98,17 +99,17 @@ public class CustomerInformationHolder {
 				offset, size, customerDtos);
 
 		paginatedCustomerResponseDto
-		.add(linkTo(methodOn(CustomerInformationHolder.class).getCustomers(filter, limit, offset, fields))
+		.add(linkTo(methodOn(CustomerInformationHolder.class).getCustomers(filter, limit, offset, fields, "link"))
 				.withSelfRel());
 
 		if (offset > 0) {
 			paginatedCustomerResponseDto.add(linkTo(methodOn(CustomerInformationHolder.class).getCustomers(filter,
-					limit, Math.max(0, offset - limit), fields)).withRel("prev"));
+					limit, Math.max(0, offset - limit), fields, "link")).withRel("prev"));
 		}
 
 		if (offset < size - limit) {
 			paginatedCustomerResponseDto.add(linkTo(
-					methodOn(CustomerInformationHolder.class).getCustomers(filter, limit, offset + limit, fields))
+					methodOn(CustomerInformationHolder.class).getCustomers(filter, limit, offset + limit, fields, "link"))
 					.withRel("next"));
 		}
 
@@ -171,8 +172,14 @@ public class CustomerInformationHolder {
 			@Parameter(description = "search terms to filter the customers by name", required = false) @RequestParam(value = "filter", required = false, defaultValue = "") String filter,
 			@Parameter(description = "the maximum number of customers per page", required = false) @RequestParam(value = "limit", required = false, defaultValue = "10") Integer limit,
 			@Parameter(description = "the offset of the page's first customer", required = false) @RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset,
-			@Parameter(description = "a comma-separated list of the fields that should be included in the response", required = false) @RequestParam(value = "fields", required = false, defaultValue = "") String fields) {
-
+			@Parameter(description = "a comma-separated list of the fields that should be included in the response", required = false) @RequestParam(value = "fields", required = false, defaultValue = "") String fields,
+			@RequestHeader(value = "rest-tester", required = false) String restTester) {
+		
+		if(restTester == null){
+			logger.info("TRIGGERED EDGE");
+		} else {
+			logger.info("TRIGGERED NODE: " + restTester);
+		} 
 		final String decodedFilter = UriUtils.decode(filter, "UTF-8");
 		final Page<CustomerAggregateRoot> customerPage = customerService.getCustomers(decodedFilter, limit, offset);
 		List<CustomerResponseDto> customerDtos = customerPage.getElements().stream().map(c -> createCustomerResponseDto(c, fields)).collect(Collectors.toList());
@@ -268,13 +275,19 @@ public class CustomerInformationHolder {
 	@GetMapping(value = "/{ids}") // MAP operation responsibility: Retrieval Operation
 	public ResponseEntity<CustomersResponseDto> getCustomer(
 			@Parameter(description = "a comma-separated list of customer ids", required = true) @PathVariable String ids,
-			@Parameter(description = "a comma-separated list of the fields that should be included in the response", required = false) @RequestParam(value = "fields", required = false, defaultValue = "") String fields) {
-
+			@Parameter(description = "a comma-separated list of the fields that should be included in the response", required = false) @RequestParam(value = "fields", required = false, defaultValue = "") String fields,
+			@RequestHeader(value = "rest-tester", required = false) String restTester) {
+		
+		if(restTester == null){
+			logger.info("TRIGGERED EDGE");
+		} else {
+			logger.info("TRIGGERED NODE: " + restTester);
+		} 
 		List<CustomerAggregateRoot> customers = customerService.getCustomers(ids);
 		List<CustomerResponseDto> customerResponseDtos = customers.stream()
 				.map(customer -> createCustomerResponseDto(customer, fields)).collect(Collectors.toList());
 		CustomersResponseDto customersResponseDto = new CustomersResponseDto(customerResponseDtos);
-		Link selfLink = linkTo(methodOn(CustomerInformationHolder.class).getCustomer(ids, fields)).withSelfRel();
+		Link selfLink = linkTo(methodOn(CustomerInformationHolder.class).getCustomer(ids, fields, "link")).withSelfRel();
 		customersResponseDto.add(selfLink);
 		return ResponseEntity.ok(customersResponseDto);
 	}
@@ -302,7 +315,14 @@ public class CustomerInformationHolder {
 	@PutMapping(value = "/{customerId}/address") // MAP operation responsibility: State Transition Operation (Partial Update)
 	public ResponseEntity<AddressDto> changeAddress(
 			@Parameter(description = "the customer's unique id", required = true) @PathVariable CustomerId customerId,
-			@Parameter(description = "the customer's new address", required = true) @Valid @RequestBody AddressDto requestDto) {
+			@Parameter(description = "the customer's new address", required = true) @Valid @RequestBody AddressDto requestDto,
+			@RequestHeader(value = "rest-tester", required = false) String restTester) {
+		
+		if(restTester == null){
+			logger.info("TRIGGERED EDGE");
+		} else {
+			logger.info("TRIGGERED NODE: " + restTester);
+		} 
 
 		Address updatedAddress = requestDto.toDomainObject();
 		Optional<CustomerAggregateRoot> optCustomer = customerService.updateAddress(customerId, updatedAddress);
@@ -319,8 +339,14 @@ public class CustomerInformationHolder {
 	@Operation(summary = "Create a new customer.")
 	@PostMapping // MAP operation responsibility: State Creation Operation
 	public ResponseEntity<CustomerResponseDto> createCustomer(
-			@Parameter(description = "the customer's profile information", required = true) @Valid @RequestBody CustomerProfileUpdateRequestDto requestDto) {
-
+			@Parameter(description = "the customer's profile information", required = true) @Valid @RequestBody CustomerProfileUpdateRequestDto requestDto,
+			@RequestHeader(value = "rest-tester", required = false) String restTester) {
+		
+		if(restTester == null){
+			logger.info("TRIGGERED EDGE");
+		} else {
+			logger.info("TRIGGERED NODE: " + restTester);
+		}
 		CustomerProfileEntity customerProfile = requestDto.toDomainObject();
 		CustomerAggregateRoot customer = customerService.createCustomer(customerProfile);
 		return ResponseEntity.ok(createCustomerResponseDto(customer, ""));
