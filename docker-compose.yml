@@ -77,7 +77,7 @@ services:
     depends_on:
       - policy-management-backend
     environment:
-      - "REACT_APP_POLICY_MANAGEMENT_BACKEND=http://localhost:8090"
+      - "VUE_APP_POLICY_MANAGEMENT_BACKEND=http://localhost:8090"
     ports:
       - "3010:80"
 
