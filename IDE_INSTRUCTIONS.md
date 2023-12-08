@@ -4,17 +4,11 @@
 Note: We assume you already cloned the corresponding application and have the source code on your local file system. We further assume that you installed Java and Maven on your system.
 
 ### IntelliJ IDEA
-In IDEA you can import an existing Maven project with `File -> New -> Project From Existing Sources...`.
+In IDEA you can import an existing Maven project with `File -> Open...`. A dialog opens on which you can choose the directory of your project (for example `~/source/LakesideMutual` to import all projects at once).
 
-![Create Project from existing sources](./resources/screenshots/intellij-idea-import-maven-project-1.png)
+A pop-up opens to inform you about "Maven build scripts found" that you can then import by clicking _load_:
 
-A dialog opens on which you can choose the directory of your project (for example `~/source/LakesideMutual/customer-management-backend`). 
-
-![Select Maven Project in IntelliJ IDEA Import Dialog](./resources/screenshots/intellij-idea-import-maven-project-2.png)
-
-On the following import dialog, choose `Maven` and press `Finish`:
-
-![Choose Maven in IntelliJ IDEA Import Dialog](./resources/screenshots/intellij-idea-import-maven-project-3.png)
+![Choose Maven in IntelliJ IDEA Import Dialog](./resources/screenshots/intellij-idea-import-maven.png)
 
 ### Visual Studio (VS) Code
 Preconditions: in VS Code you will need a few extensions for Java development. We recommend to install the [Java Extension Pack](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack) which also includes support for Maven.
