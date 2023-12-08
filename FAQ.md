@@ -2,7 +2,7 @@
 
 ## Can I use other IDEs instead of the Spring Tools Suite?
 
-See [IDE instructions](./IDE_INSTRUCTIONS) for details on how to use IntelliJ IDEA or Visual Studio Code.
+See [IDE instructions](./IDE_INSTRUCTIONS.md) for details on how to use IntelliJ IDEA or Visual Studio Code.
 
 ## Which Spring anotations are used and what do they do? 
 
