@@ -90,7 +90,7 @@ Each backend service has its own data store. The Spring-JPA based applications a
 
 ## Frequently Asked Questions and Troubleshooting
 
-See our [FAQ](./FAQ.md) for more information on running the applications and the [IDE instructions](./IDE_INSTRUCTIONS) page to get started with IntelliJ IDEA, Eclipse and Visual Studio Code.
+See our [FAQ](./FAQ.md) for more information on running the applications and the [IDE instructions](./IDE_INSTRUCTIONS.md) page to get started with IntelliJ IDEA, Eclipse and Visual Studio Code.
 
 ## License
 
