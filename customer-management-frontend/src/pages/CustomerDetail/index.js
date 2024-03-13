@@ -23,6 +23,7 @@ import { type Match, Link } from "react-router-dom"
 import CustomerProfileView from "./CustomerProfileView"
 import ChatView from "./ChatView"
 import errorMessages from "../../errorMessages"
+import { policyManagementFrontend } from "../../config"
 
 export type Props = {
   customer: ?Customer,
@@ -93,7 +94,7 @@ class CustomerDetail extends React.Component<Props, State> {
     ) {
       const interactionLog = this.props.interactionLog
       const interactions = interactionLog.interactions.filter(
-        interaction => !interaction.sentByOperator
+        (interaction) => !interaction.sentByOperator
       )
       if (
         interactions.length > 0 &&
@@ -142,8 +143,9 @@ class CustomerDetail extends React.Component<Props, State> {
           compact
           size="mini"
           floated="right"
-          href={`http://localhost:3010/customers/${this.props.match.params
-            .customerId || ""}`}
+          href={`${policyManagementFrontend}/customers/${
+            this.props.match.params.customerId || ""
+          }`}
         >
           <Icon name="external" />
           Open in Policy Management
@@ -192,7 +194,7 @@ class CustomerDetail extends React.Component<Props, State> {
               <ChatView
                 customer={customer}
                 interactionLog={interactionLog}
-                didReceiveMessage={message => {
+                didReceiveMessage={(message) => {
                   if (!message.sentByOperator && message.id != null) {
                     this.acknowledgeInteractions(message.id)
                   }
@@ -214,7 +216,7 @@ const mapStateToProps = (state, props) => {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   retrieveCustomer: (customerId, onSuccess, onError) =>
     dispatch(
       retrieveCustomer({ onSuccess, onError, urlParams: { customerId } })
@@ -235,7 +237,4 @@ const mapDispatchToProps = dispatch => ({
     ),
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CustomerDetail)
+export default connect(mapStateToProps, mapDispatchToProps)(CustomerDetail)

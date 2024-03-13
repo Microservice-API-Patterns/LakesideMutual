@@ -13,7 +13,11 @@ import MenuBar from "./components/MenuBar"
 
 import { Provider } from "react-redux"
 import configureStore from "./redux/configureStore"
-import { customerSelfServiceBackend, customerManagementBackend } from "./config"
+import {
+  customerSelfServiceBackend,
+  customerManagementBackend,
+  policyManagementFrontend,
+} from "./config"
 
 const store = configureStore()
 
@@ -55,6 +59,8 @@ export default class App extends React.Component<{}> {
                 <br />
                 REACT_APP_CUSTOMER_MANAGEMENT_BACKEND:{" "}
                 {customerManagementBackend}
+                <br />
+                REACT_APP_POLICY_MANAGEMENT_FRONTEND: {policyManagementFrontend}
               </p>
             </Message>
           </Container>

@@ -5,3 +5,5 @@ export const customerSelfServiceBackend =
 
 export const customerManagementBackend =
   env("CUSTOMER_MANAGEMENT_BACKEND") || ""
+
+export const policyManagementFrontend = env("POLICY_MANAGEMENT_FRONTEND") || ""
