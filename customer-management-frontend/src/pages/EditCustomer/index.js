@@ -3,7 +3,6 @@
 import React from "react"
 import { Loader, Breadcrumb, Segment } from "semantic-ui-react"
 import { Button, Form, Message } from "semantic-ui-react"
-import { Redirect } from "react-router-dom"
 import { type Match, Link } from "react-router-dom"
 import {
   getCustomer,
@@ -14,6 +13,7 @@ import {
 import { connect } from "@brigad/redux-rest-easy"
 import moment from "moment"
 import errorMessages from "../../errorMessages"
+import { Navigate } from "react-router";
 
 function extractFormError(error, context: Map<string, string>): ?FormError {
   if (error.errors != null) {
@@ -251,7 +251,7 @@ class EditCustomer extends React.Component<Props, State> {
     if (!customer) {
       return <Loader active />
     } else if (this.state.redirectToOverview) {
-      return <Redirect to={`/customers/${customer.customerId}`} push />
+      return <Navigate to={`/customers/${customer.customerId}`} push />
     } else {
       return (
         <Segment>

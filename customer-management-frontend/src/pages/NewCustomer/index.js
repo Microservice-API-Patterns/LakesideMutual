@@ -9,12 +9,12 @@ import {
   Message,
   Header,
 } from "semantic-ui-react"
-import { Redirect } from "react-router-dom"
 import { Link } from "react-router-dom"
 import { signupUser, loginUser } from "../../redux-rest-easy/users"
 import { createCustomer } from "../../redux-rest-easy/customers"
 import { connect } from "@brigad/redux-rest-easy"
 import errorMessages from "../../errorMessages"
+import { Navigate } from "react-router";
 
 function extractFormError(error, context: Map<string, string>): ?FormError {
   if (error.status === 409) {
@@ -202,7 +202,7 @@ class NewCustomer extends React.Component<Props, State> {
     const errorMessages = formError ? formError.errorMessages : []
 
     if (this.state.redirectToOverview) {
-      return <Redirect to="/" push />
+      return <Navigate to="/" push />
     } else {
       return (
         <Segment>

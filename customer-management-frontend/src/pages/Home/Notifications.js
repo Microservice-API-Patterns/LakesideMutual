@@ -5,7 +5,6 @@ import { Fragment } from "react"
 import { connect } from "@brigad/redux-rest-easy"
 import { Message, Label, Loader } from "semantic-ui-react"
 import { Table } from "semantic-ui-react"
-import { Redirect } from "react-router-dom"
 import errorMessages from "../../errorMessages"
 import SockJsClient from "react-stomp"
 import { customerManagementBackend } from "../../config"
@@ -14,6 +13,7 @@ import {
   retrieveNotifications,
   resetNotifications,
 } from "../../redux-rest-easy/notifications"
+import { Navigate } from "react-router";
 
 type ReactRef<ElementType: React.ElementType> = {
   current: null | React.ElementRef<ElementType>,
@@ -137,7 +137,7 @@ class Notifications extends React.Component<Props, State> {
     const { redirectCustomerId } = this.state
 
     if (redirectCustomerId != null) {
-      return <Redirect to={`/customers/${redirectCustomerId}`} push />
+      return <Navigate to={`/customers/${redirectCustomerId}`} push />
     }
 
     return this.renderNotifications()
