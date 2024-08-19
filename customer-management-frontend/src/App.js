@@ -1,7 +1,7 @@
 // @flow
 
 import React from "react"
-import { BrowserRouter, Route, Switch } from "react-router-dom"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { Container, Message } from "semantic-ui-react"
 
 import Home from "./pages/Home"
@@ -31,7 +31,7 @@ export default class App extends React.Component<{}> {
 
             <MenuBar />
 
-            <Switch>
+            <Routes>
               <Route exact path="/" render={(props) => <Home {...props} />} />
               <Route
                 exact
@@ -48,7 +48,7 @@ export default class App extends React.Component<{}> {
                 path="/customers/:customerId/edit_profile"
                 render={(props) => <EditCustomer {...props} />}
               />
-            </Switch>
+            </Routes>
             <Message style={{ color: "#BBB" }} size="mini">
               <Message.Header>
                 Environment Variable Debug Information
