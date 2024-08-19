@@ -2,7 +2,7 @@
 
 import React from "react"
 import { Menu, Segment } from "semantic-ui-react"
-import { Link, withRouter, type Location } from "react-router-dom"
+import { Link, type Location } from "react-router-dom"
 
 export type Props = {
   location: Location,
@@ -26,4 +26,4 @@ const MenuBar = (props: Props) => {
   )
 }
 
-export default withRouter(MenuBar)
+export default MenuBar
