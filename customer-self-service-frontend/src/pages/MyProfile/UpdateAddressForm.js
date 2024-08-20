@@ -4,7 +4,7 @@ import React from "react"
 import { Header } from "semantic-ui-react"
 import { Button, Form, Message } from "semantic-ui-react"
 import { extractFormError } from "../../utils"
-import { Redirect } from "react-router-dom"
+import { Navigate } from "react-router-dom"
 import errorMessages from "../../errorMessages"
 import { ApiError } from "../../api/helpers"
 
@@ -98,7 +98,7 @@ class UpdateAddressForm extends React.Component<Props, State> {
 
   render() {
     if (this.state.redirectToOverview) {
-      return <Redirect to={"/profile"} />
+      return <Navigate to={"/profile"} />
     } else {
       const { isUpdatingAddress, addressUpdateError } = this.props
       const { streetAddress, city, postalCode } = this.state

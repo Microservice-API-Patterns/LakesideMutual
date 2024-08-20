@@ -1,7 +1,7 @@
 // @flow
 
 import React from "react"
-import { Redirect } from "react-router-dom"
+import { Navigate } from "react-router-dom"
 import { Loader } from "semantic-ui-react"
 import CompleteProfileForm from "./CompleteProfileForm"
 
@@ -33,7 +33,7 @@ export default class CompleteRegistration extends React.Component<Props> {
     } else if (user != null && user.customerId == null && customer == null) {
       return <CompleteProfileForm {...this.props} />
     } else {
-      return <Redirect to={"/policies"} />
+      return <Navigate to={"/policies"} />
     }
   }
 }

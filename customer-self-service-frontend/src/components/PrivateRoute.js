@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from "react"
-import { Route, Redirect } from "react-router-dom"
+import { Route, Navigate } from "react-router-dom"
 
 export type Props = {
   isAuthenticated: boolean,
@@ -18,7 +18,7 @@ function PrivateRoute({ isAuthenticated, render, ...rest }: Props) {
       <Route
         {...rest}
         render={props => (
-          <Redirect
+          <Navigate
             to={{ pathname: "/login", state: { from: props.location } }}
           />
         )}
