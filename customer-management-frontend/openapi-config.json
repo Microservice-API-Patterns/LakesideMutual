@@ -1,0 +1,8 @@
+{
+  "schemaFile": "http://localhost:8100/v3/api-docs",
+  "apiFile": "./src/store/baseApi.js",
+  "apiImport": "baseApi",
+  "outputFile": "./src/store/customerManagementApi.ts",
+  "exportName": "customerManagementApi",
+  "hooks": true
+}

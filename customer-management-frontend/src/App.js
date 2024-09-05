@@ -1,35 +1,25 @@
 // @flow
 
 import React from "react"
-import { BrowserRouter, Route, Routes } from "react-router-dom"
-import { Container, Message } from "semantic-ui-react"
-
-import Home from "./pages/Home"
-import NewCustomer from "./pages/NewCustomer"
-import CustomerDetail from "./pages/CustomerDetail"
-import EditCustomer from "./pages/EditCustomer"
+import {BrowserRouter, Route, Routes} from "react-router-dom"
+import {Container, Message} from "semantic-ui-react"
 import SiteHeader from "./components/SiteHeader"
 import MenuBar from "./components/MenuBar"
 
-import { Provider } from "react-redux"
-import configureStore from "./redux/configureStore"
-import {
-  customerSelfServiceBackend,
-  customerManagementBackend,
-  policyManagementFrontend,
-} from "./config"
-
-const store = configureStore()
+import {Provider} from "react-redux"
+import {store} from "./store/store"
+import {customerManagementBackend, customerSelfServiceBackend, policyManagementFrontend,} from "./config"
+import Home from "./pages/Home";
 
 export default class App extends React.Component<{}> {
-  render() {
-    return (
-      <Provider store={store}>
-        <BrowserRouter>
-          <Container text>
-            <SiteHeader />
+    render() {
+        return (
+            <Provider store={store}>
+                <BrowserRouter>
+                    <Container text>
+                        <SiteHeader/>
 
-            <MenuBar />
+                        <MenuBar/>
 
             <Routes>
               <Route exact path="/" render={(props) => <Home {...props} />} />
