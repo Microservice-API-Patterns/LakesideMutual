@@ -1,64 +1,35 @@
 // @flow
 
-import React from "react"
-import { Loader, Breadcrumb, Segment } from "semantic-ui-react"
-import { Button, Form, Message } from "semantic-ui-react"
-import { type Match, Link } from "react-router-dom"
-import {
-  getCustomer,
-  retrieveCustomer,
-  updateCustomer,
-  isUpdatingCustomer,
-} from "../../redux-rest-easy/customers"
-import { connect } from "@brigad/redux-rest-easy"
+import React, {useEffect, useState} from "react"
+import {Breadcrumb, Button, Form, Loader, Message, Segment} from "semantic-ui-react"
+import {Link} from "react-router-dom"
 import moment from "moment"
 import errorMessages from "../../errorMessages"
-import { Navigate } from "react-router";
+import {Navigate, useParams} from "react-router";
+import {
+    CustomerDto,
+    useGetCustomerQuery,
+    useUpdateCustomerMutation
+} from "../../store/customer-management/customerManagementApi";
 
 function extractFormError(error, context: Map<string, string>): ?FormError {
-  if (error.errors != null) {
-    const errorFields = error.errors.map(error => error.field)
-    const errorMessages = error.errors.map(
-      error =>
-        `${context.get(error.field) || error.field} ${error.defaultMessage}`
-    )
+    if (error.errors != null) {
+        const errorFields = error.errors.map(error => error.field)
+        const errorMessages = error.errors.map(
+            error =>
+                `${context.get(error.field) || error.field} ${error.defaultMessage}`
+        )
 
-    return {
-      errorFields,
-      errorMessages,
+        return {
+            errorFields,
+            errorMessages,
+        }
+    } else {
+        return {
+            errorFields: [],
+            errorMessages: [errorMessages.customerManagementBackendNotAvailable],
+        }
     }
-  } else {
-    return {
-      errorFields: [],
-      errorMessages: [errorMessages.customerManagementBackendNotAvailable],
-    }
-  }
-}
-
-export type Props = {
-  customer: ?Customer,
-  retrieveCustomer: (
-    customerId: string,
-    onSuccess: () => void,
-    onError: () => void
-  ) => void,
-  updateCustomer: (
-    customerId: string,
-    updatedCustomer: {
-      firstname: string,
-      lastname: string,
-      city: string,
-      streetAddress: string,
-      postalCode: string,
-      email: string,
-      phoneNumber: string,
-      birthday: string,
-    },
-    onSuccess: () => void,
-    onError: () => void
-  ) => void,
-  isUpdatingCustomer: boolean,
-  match: Match,
 }
 
 const firstnameKey = "firstname"
@@ -71,280 +42,218 @@ const emailKey = "email"
 const phoneNumberKey = "phoneNumber"
 
 const context = new Map([
-  [firstnameKey, "First Name"],
-  [lastnameKey, "Last Name"],
-  [birthdayKey, "Date of Birth"],
-  [streetAddressKey, "Street Address"],
-  [postalCodeKey, "Postal Code"],
-  [cityKey, "City"],
-  [emailKey, "Email Address"],
-  [phoneNumberKey, "Phone Number"],
+    [firstnameKey, "First Name"],
+    [lastnameKey, "Last Name"],
+    [birthdayKey, "Date of Birth"],
+    [streetAddressKey, "Street Address"],
+    [postalCodeKey, "Postal Code"],
+    [cityKey, "City"],
+    [emailKey, "Email Address"],
+    [phoneNumberKey, "Phone Number"],
 ])
 
 type State = {
-  fetchCustomerError: boolean,
-  redirectToOverview: boolean,
-  firstname: string,
-  lastname: string,
-  birthday: string,
-  streetAddress: string,
-  postalCode: string,
-  city: string,
-  phoneNumber: string,
-  email: string,
-  formError: ?FormError,
+    fetchCustomerError: boolean,
+    redirectToOverview: boolean,
+    firstname: string,
+    lastname: string,
+    birthday: string,
+    streetAddress: string,
+    postalCode: string,
+    city: string,
+    phoneNumber: string,
+    email: string,
+    formError: ?FormError,
 }
 
-class EditCustomer extends React.Component<Props, State> {
-  state = {
-    fetchCustomerError: false,
-    redirectToOverview: false,
-    firstname: "",
-    lastname: "",
-    birthday: "",
-    streetAddress: "",
-    postalCode: "",
-    city: "",
-    phoneNumber: "",
-    email: "",
-    formError: null,
-  }
-
-  componentDidMount() {
-    if (this.props.customer) {
-      this.updateFormState(this.props.customer)
-    } else {
-      const customerId = this.props.match.params.customerId
-      if (customerId != null) {
-        this.props.retrieveCustomer(
-          customerId,
-          () => {
-            this.setState({ fetchCustomerError: false })
-          },
-          () => {
-            this.setState({ fetchCustomerError: true })
-          }
-        )
-      }
-    }
-  }
-
-  updateFormState(customer: Customer) {
-    const {
-      firstname,
-      lastname,
-      birthday,
-      streetAddress,
-      postalCode,
-      city,
-      email,
-      phoneNumber,
-    } = customer
-
-    const formattedBirthday = moment(birthday).format("YYYY-MM-DD")
-    this.setState({
-      firstname,
-      lastname,
-      birthday: formattedBirthday,
-      streetAddress,
-      postalCode,
-      city,
-      email,
-      phoneNumber,
+function EditCustomer(): React$Element {
+    const {customerId} = useParams();
+    const [isUpdatingCustomer, setIsUpdatingCustomer] = useState<boolean>(false)
+    const [redirectToOverview, setRedirectToOverview] = useState<boolean>(false)
+    const [formError, setFormError] = useState<FormError>()
+    const [formData, setFormData] = useState<FormData>({
+        email: "",
+        password: "",
+        firstname: "",
+        lastname: "",
+        birthday: "",
+        streetAddress: "",
+        postalCode: "",
+        city: "",
+        phoneNumber: ""
     })
-  }
 
-  componentDidUpdate(prevProps: Props) {
-    if (this.props.customer && !prevProps.customer) {
-      this.updateFormState(this.props.customer)
+    const {data: customerResponse, isError: fetchCustomerError} = useGetCustomerQuery({customerId})
+    const [updateCustomer] = useUpdateCustomerMutation()
+
+    useEffect(() => {
+        if (customerResponse == null) return
+        updateFormState(customerResponse)
+    }, [customerResponse]);
+
+    function updateFormState(customer: CustomerDto) {
+        const {
+            firstname,
+            lastname,
+            birthday,
+            streetAddress,
+            postalCode,
+            city,
+            email,
+            phoneNumber,
+        } = customer
+
+        const formattedBirthday = moment(birthday).format("YYYY-MM-DD")
+        setFormData({
+            firstname,
+            lastname,
+            birthday: formattedBirthday,
+            streetAddress,
+            postalCode,
+            city,
+            email,
+            phoneNumber,
+        })
     }
-  }
 
-  handleChange = (
-    e: Event,
-    { name, value }: { name: string, value: string }
-  ) => {
-    this.setState({ [name]: value })
-  }
+    function handleChange(event: Event,
+                          {name, value}: { name: string, value: string }) {
+        setFormData({...formData, [name]: value})
+    }
 
-  handleSubmit = async () => {
-    const customerId = this.props.match.params.customerId
-    if (customerId != null) {
-      const {
-        firstname,
-        lastname,
-        birthday,
-        streetAddress,
-        postalCode,
-        city,
-        email,
-        phoneNumber,
-      } = this.state
-      const updatedCustomer = {
-        firstname,
-        lastname,
-        birthday,
-        streetAddress,
-        postalCode,
-        city,
-        email,
-        phoneNumber,
-      }
-      this.props.updateCustomer(
-        customerId,
-        updatedCustomer,
-        () => {
-          this.setState({ formError: null, redirectToOverview: true })
-        },
-        error => {
-          if (!error) {
-            return
-          }
+    async function handleSubmit() {
+        if (customerId == null) return
 
-          error.response.json().then(response => {
-            const formError = extractFormError(response, context)
-            this.setState({ formError })
-          })
+        const {
+            firstname,
+            lastname,
+            birthday,
+            streetAddress,
+            postalCode,
+            city,
+            email,
+            phoneNumber,
+        } = formData
+        const updatedCustomer = {
+            firstname,
+            lastname,
+            birthday,
+            streetAddress,
+            postalCode,
+            city,
+            email,
+            phoneNumber,
         }
-      )
+
+        try {
+            setIsUpdatingCustomer(true)
+            await updateCustomer({customerId, customerProfileDto: updatedCustomer}).unwrap()
+            setIsUpdatingCustomer(false)
+            setRedirectToOverview(true)
+        } catch (error) {
+            setIsUpdatingCustomer(false)
+            const formError = extractFormError(error, context)
+            setFormError(formError)
+        }
     }
-  }
 
-  renderTextField(
-    key: string,
-    value: string,
-    errorFields: Array<string>,
-    type: string = "text"
-  ) {
-    return (
-      <Form.Input
-        label={context.get(key)}
-        placeholder={context.get(key)}
-        type={type}
-        name={key}
-        value={value}
-        onChange={this.handleChange}
-        error={errorFields.includes(key)}
-      />
-    )
-  }
+    function renderTextField(key: string, value: string, errorFields: Array<string>, type: string = "text") {
+        return (
+            <Form.Input
+                label={context.get(key)}
+                placeholder={context.get(key)}
+                type={type}
+                name={key}
+                value={value}
+                onChange={handleChange}
+                error={errorFields.includes(key)}
+            />
+        )
+    }
 
-  render() {
-    const { customer, isUpdatingCustomer } = this.props
-    const {
-      fetchCustomerError,
-      firstname,
-      lastname,
-      birthday,
-      streetAddress,
-      postalCode,
-      city,
-      email,
-      phoneNumber,
-      formError,
-    } = this.state
-
-    const hasError = !!formError
-    const errorFields = formError ? formError.errorFields : []
-    const errorMessages = formError ? formError.errorMessages : []
-
-    if (!customer) {
-      return <Loader active />
-    } else if (this.state.redirectToOverview) {
-      return <Navigate to={`/customers/${customer.customerId}`} push />
+    if (!customerResponse || !formData) {
+        return <Loader active/>
+    } else if (redirectToOverview) {
+        return <Navigate to={`/customers/${customerId}`} push/>
     } else {
-      return (
-        <Segment>
-          <Breadcrumb
-            style={{
-              fontSize: "1.28571429rem",
-              marginTop: 0,
-              paddingTop: 0,
-            }}
-          >
-            <Breadcrumb.Section link as={Link} to="/">
-              Customers
-            </Breadcrumb.Section>
-            <Breadcrumb.Divider icon="right angle" />
-            <Breadcrumb.Section
-              link
-              as={Link}
-              to={`/customers/${customer ? customer.customerId : ""}`}
-            >
-              {customer &&
-                !fetchCustomerError &&
-                `${customer.firstname} ${customer.lastname}`}
-              {!customer && !fetchCustomerError && "Loading..."}
-              {!customer && fetchCustomerError && "Error!"}
-            </Breadcrumb.Section>
-            <Breadcrumb.Divider icon="right angle" />
-            <Breadcrumb.Section>Edit Profile</Breadcrumb.Section>
-          </Breadcrumb>
-          <br />
-          <br />
+        const {
+            firstname,
+            lastname,
+            birthday,
+            streetAddress,
+            postalCode,
+            city,
+            email,
+            phoneNumber,
+        } = formData
 
-          <Form onSubmit={this.handleSubmit} error={hasError}>
-            <Form.Group widths="equal">
-              {this.renderTextField(firstnameKey, firstname, errorFields)}
-              {this.renderTextField(lastnameKey, lastname, errorFields)}
-            </Form.Group>
+        const hasError = !!formError
+        const errorFields = formError ? formError.errorFields : []
+        const errorMessages = formError ? formError.errorMessages : []
 
-            {this.renderTextField(birthdayKey, birthday, errorFields, "date")}
-            {this.renderTextField(streetAddressKey, streetAddress, errorFields)}
+        return (
+            <Segment>
+                <Breadcrumb
+                    style={{
+                        fontSize: "1.28571429rem",
+                        marginTop: 0,
+                        paddingTop: 0,
+                    }}
+                >
+                    <Breadcrumb.Section link as={Link} to="/">
+                        Customers
+                    </Breadcrumb.Section>
+                    <Breadcrumb.Divider icon="right angle"/>
+                    <Breadcrumb.Section
+                        link
+                        as={Link}
+                        to={`/customers/${customerId ?? ""}`}
+                    >
+                        {customerResponse &&
+                            !fetchCustomerError &&
+                            `${customerResponse.firstname} ${customerResponse.lastname}`}
+                        {!customerResponse && !fetchCustomerError && "Loading..."}
+                        {!customerResponse && fetchCustomerError && "Error!"}
+                    </Breadcrumb.Section>
+                    <Breadcrumb.Divider icon="right angle"/>
+                    <Breadcrumb.Section>Edit Profile</Breadcrumb.Section>
+                </Breadcrumb>
+                <br/>
+                <br/>
+                <Form onSubmit={handleSubmit} error={hasError}>
+                    <Form.Group widths="equal">
+                        {renderTextField(firstnameKey, firstname, errorFields)}
+                        {renderTextField(lastnameKey, lastname, errorFields)}
+                    </Form.Group>
 
-            <Form.Group widths="equal">
-              {this.renderTextField(postalCodeKey, postalCode, errorFields)}
-              {this.renderTextField(cityKey, city, errorFields)}
-            </Form.Group>
+                    {renderTextField(birthdayKey, birthday, errorFields, "date")}
+                    {renderTextField(streetAddressKey, streetAddress, errorFields)}
 
-            {this.renderTextField(emailKey, email, errorFields)}
-            {this.renderTextField(phoneNumberKey, phoneNumber, errorFields)}
+                    <Form.Group widths="equal">
+                        {renderTextField(postalCodeKey, postalCode, errorFields)}
+                        {renderTextField(cityKey, city, errorFields)}
+                    </Form.Group>
 
-            <Button
-              fluid
-              color="blue"
-              disabled={isUpdatingCustomer}
-              loading={isUpdatingCustomer}
-            >
-              Save Changes
-            </Button>
+                    {renderTextField(emailKey, email, errorFields)}
+                    {renderTextField(phoneNumberKey, phoneNumber, errorFields)}
 
-            <Message error>
-              <Message.Header>Update failed</Message.Header>
-              <Message.List items={errorMessages} />
-            </Message>
-          </Form>
-        </Segment>
-      )
+                    <Button
+                        fluid
+                        color="blue"
+                        disabled={isUpdatingCustomer}
+                        loading={isUpdatingCustomer}
+                    >
+                        Save Changes
+                    </Button>
+
+                    <Message error>
+                        <Message.Header>Update failed</Message.Header>
+                        <Message.List items={errorMessages}/>
+                    </Message>
+                </Form>
+            </Segment>
+        )
     }
-  }
 }
 
-const mapStateToProps = (state, props) => {
-  const customerId = props.match.params.customerId
-  return {
-    customer: getCustomer(state, customerId),
-    isUpdatingCustomer: isUpdatingCustomer(state, props),
-  }
-}
-
-const mapDispatchToProps = dispatch => ({
-  retrieveCustomer: (customerId, onSuccess, onError) =>
-    dispatch(
-      retrieveCustomer({ onSuccess, onError, urlParams: { customerId } })
-    ),
-  updateCustomer: (customerId, updatedCustomer, onSuccess, onError) =>
-    dispatch(
-      updateCustomer({
-        onSuccess,
-        onError,
-        urlParams: { customerId },
-        body: updatedCustomer,
-      })
-    ),
-})
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EditCustomer)
+export default EditCustomer
