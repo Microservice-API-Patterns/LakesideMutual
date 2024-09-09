@@ -1,58 +1,53 @@
 // @flow
 
-import React from "react"
-import {
-  Breadcrumb,
-  Segment,
-  Button,
-  Form,
-  Message,
-  Header,
-} from "semantic-ui-react"
-import { Link } from "react-router-dom"
-import { signupUser, loginUser } from "../../redux-rest-easy/users"
-import { createCustomer } from "../../redux-rest-easy/customers"
-import { connect } from "@brigad/redux-rest-easy"
+import React, {useState} from "react"
+import {Breadcrumb, Button, Form, Header, Message, Segment,} from "semantic-ui-react"
+import {Link} from "react-router-dom"
 import errorMessages from "../../errorMessages"
-import { Navigate } from "react-router";
+import {Navigate} from "react-router";
+import {
+    useAuthenticationRequestMutation,
+    useRegisterCustomerMutation,
+    useSignupUserMutation
+} from "../../store/customer-self-service/customerSelfServiceApi";
 
 function extractFormError(error, context: Map<string, string>): ?FormError {
-  if (error.status === 409) {
-    return {
-      errorFields: ["email"],
-      errorMessages: ["This email address has already been taken."],
-    }
-  } else if (error.errors != null) {
-    const errorFields = error.errors.map(error => error.field)
-    const errorMessages = error.errors.map(
-      error =>
-        `${context.get(error.field) || error.field} ${error.defaultMessage}`
-    )
+    if (error.status === 409) {
+        return {
+            errorFields: ["email"],
+            errorMessages: ["This email address has already been taken."],
+        }
+    } else if (error.errors != null) {
+        const errorFields = error.errors.map(error => error.field)
+        const errorMessages = error.errors.map(
+            error =>
+                `${context.get(error.field) || error.field} ${error.defaultMessage}`
+        )
 
-    return {
-      errorFields,
-      errorMessages,
+        return {
+            errorFields,
+            errorMessages,
+        }
+    } else {
+        return {
+            errorFields: [],
+            errorMessages: [errorMessages.customerManagementBackendNotAvailable],
+        }
     }
-  } else {
-    return {
-      errorFields: [],
-      errorMessages: [errorMessages.customerManagementBackendNotAvailable],
-    }
-  }
 }
 
 export type Props = {
-  signupUser: (email: string, password: string) => Promise<void>,
-  loginUser: (email: string, password: string) => Promise<string>,
-  createCustomer: (
-    firstname: string,
-    lastname: string,
-    birthday: string,
-    streetAddress: string,
-    postalCode: string,
-    city: string,
-    phoneNumber: string
-  ) => Promise<void>,
+    signupUser: (email: string, password: string) => Promise<void>,
+    loginUser: (email: string, password: string) => Promise<string>,
+    createCustomer: (
+        firstname: string,
+        lastname: string,
+        birthday: string,
+        streetAddress: string,
+        postalCode: string,
+        city: string,
+        phoneNumber: string
+    ) => Promise<void>,
 }
 
 const emailKey = "email"
@@ -66,250 +61,58 @@ const cityKey = "city"
 const phoneNumberKey = "phoneNumber"
 
 const context = new Map([
-  [emailKey, "Email Address"],
-  [passwordKey, "Password"],
-  [firstnameKey, "First Name"],
-  [lastnameKey, "Last Name"],
-  [birthdayKey, "Date of Birth"],
-  [streetAddressKey, "Street Address"],
-  [postalCodeKey, "Postal Code"],
-  [cityKey, "City"],
-  [phoneNumberKey, "Phone Number"],
+    [emailKey, "Email Address"],
+    [passwordKey, "Password"],
+    [firstnameKey, "First Name"],
+    [lastnameKey, "Last Name"],
+    [birthdayKey, "Date of Birth"],
+    [streetAddressKey, "Street Address"],
+    [postalCodeKey, "Postal Code"],
+    [cityKey, "City"],
+    [phoneNumberKey, "Phone Number"],
 ])
 
-type State = {
-  isCreatingCustomer: boolean,
-  redirectToOverview: boolean,
-  email: string,
-  password: string,
-  firstname: string,
-  lastname: string,
-  birthday: string,
-  streetAddress: string,
-  postalCode: string,
-  city: string,
-  phoneNumber: string,
-  formError: ?FormError,
+type FormData = {
+    email: string,
+    password: string,
+    firstname: string,
+    lastname: string,
+    birthday: string,
+    streetAddress: string,
+    postalCode: string,
+    city: string,
+    phoneNumber: string
 }
 
-class NewCustomer extends React.Component<Props, State> {
-  state = {
-    isCreatingCustomer: false,
-    redirectToOverview: false,
-    email: "",
-    password: "",
-    firstname: "",
-    lastname: "",
-    birthday: "",
-    streetAddress: "",
-    postalCode: "",
-    city: "",
-    phoneNumber: "",
-    formError: null,
-  }
+function NewCustomer(): React$Element {
+    const [isCreatingCustomer, setIsCreatingCustomer] = useState<boolean>(false)
+    const [redirectToOverview, setRedirectToOverview] = useState<boolean>(false)
+    const [formError, setFormError] = useState<FormError>()
+    const [formData, setFormData] = useState<FormData>({
+        email: "",
+        password: "",
+        firstname: "",
+        lastname: "",
+        birthday: "",
+        streetAddress: "",
+        postalCode: "",
+        city: "",
+        phoneNumber: ""
+    })
 
-  handleChange = (
-    e: Event,
-    { name, value }: { name: string, value: string }
-  ) => {
-    this.setState({ [name]: value })
-  }
+    const [signupUser] = useSignupUserMutation()
+    const [loginUser] = useAuthenticationRequestMutation()
+    const [createCustomer] = useRegisterCustomerMutation()
 
-  handleSubmit = async () => {
-    const {
-      email,
-      password,
-      firstname,
-      lastname,
-      birthday,
-      streetAddress,
-      postalCode,
-      city,
-      phoneNumber,
-    } = this.state
-
-    try {
-      this.setState({ isCreatingCustomer: true })
-      await this.props.signupUser(email, password)
-      const token = await this.props.loginUser(email, password)
-      localStorage.setItem("token", token)
-      await this.props.createCustomer(
-        firstname,
-        lastname,
-        birthday,
-        streetAddress,
-        postalCode,
-        city,
-        phoneNumber
-      )
-      this.setState({ isCreatingCustomer: false, redirectToOverview: true })
-    } catch (error) {
-      this.setState({ isCreatingCustomer: false })
-
-      error.response.json().then(response => {
-        const formError = extractFormError(response, context)
-        this.setState({ formError })
-      })
+    function handleChange(event: Event,
+                          {name, value}: { name: string, value: string }) {
+        setFormData({...formData, [name]: value})
     }
-  }
 
-  renderTextField(
-    key: string,
-    value: string,
-    errorFields: Array<string>,
-    type: string = "text"
-  ) {
-    return (
-      <Form.Input
-        label={context.get(key)}
-        placeholder={context.get(key)}
-        type={type}
-        name={key}
-        value={value}
-        onChange={this.handleChange}
-        error={errorFields.includes(key)}
-      />
-    )
-  }
-
-  render() {
-    const {
-      isCreatingCustomer,
-      email,
-      password,
-      firstname,
-      lastname,
-      birthday,
-      streetAddress,
-      postalCode,
-      city,
-      phoneNumber,
-      formError,
-    } = this.state
-
-    const hasEmptyFields =
-      !email ||
-      !password ||
-      !firstname ||
-      !lastname ||
-      !birthday ||
-      !streetAddress ||
-      !postalCode ||
-      !city ||
-      !phoneNumber
-    const hasError = !!formError
-    const errorFields = formError ? formError.errorFields : []
-    const errorMessages = formError ? formError.errorMessages : []
-
-    if (this.state.redirectToOverview) {
-      return <Navigate to="/" push />
-    } else {
-      return (
-        <Segment>
-          <Breadcrumb
-            style={{
-              fontSize: "1.28571429rem",
-              marginTop: 0,
-              paddingTop: 0,
-            }}
-          >
-            <Breadcrumb.Section link as={Link} to="/">
-              Customers
-            </Breadcrumb.Section>
-            <Breadcrumb.Divider icon="right angle" />
-            <Breadcrumb.Section>New Customer</Breadcrumb.Section>
-          </Breadcrumb>
-          <br />
-          <br />
-
-          <Form onSubmit={this.handleSubmit} error={hasError}>
-            <Header>Login Credentials</Header>
-            <Form.Group widths="equal">
-              {this.renderTextField(emailKey, email, errorFields)}
-              {this.renderTextField(
-                passwordKey,
-                password,
-                errorFields,
-                "password"
-              )}
-            </Form.Group>
-
-            <Header>Customer Profile</Header>
-            <Form.Group widths="equal">
-              {this.renderTextField(firstnameKey, firstname, errorFields)}
-              {this.renderTextField(lastnameKey, lastname, errorFields)}
-            </Form.Group>
-
-            {this.renderTextField(birthdayKey, birthday, errorFields, "date")}
-            {this.renderTextField(streetAddressKey, streetAddress, errorFields)}
-
-            <Form.Group widths="equal">
-              {this.renderTextField(postalCodeKey, postalCode, errorFields)}
-              {this.renderTextField(cityKey, city, errorFields)}
-            </Form.Group>
-
-            {this.renderTextField(phoneNumberKey, phoneNumber, errorFields)}
-
-            <Button
-              fluid
-              color="blue"
-              disabled={hasEmptyFields || isCreatingCustomer}
-              loading={isCreatingCustomer}
-            >
-              Create Customer
-            </Button>
-
-            <Message error>
-              <Message.Header>Update failed</Message.Header>
-              <Message.List items={errorMessages} />
-            </Message>
-          </Form>
-        </Segment>
-      )
-    }
-  }
-}
-
-const mapStateToProps = (state, props) => {
-  return {}
-}
-
-const mapDispatchToProps = dispatch => ({
-  signupUser: (email, password) =>
-    new Promise((resolve, reject) => {
-      dispatch(
-        signupUser({
-          onSuccess: resolve,
-          onError: reject,
-          body: { email, password },
-        })
-      )
-    }),
-  loginUser: (email, password) =>
-    new Promise((resolve, reject) => {
-      dispatch(
-        loginUser({
-          onSuccess: data => resolve(data.users[email].token),
-          onError: reject,
-          body: { email, password },
-        })
-      )
-    }),
-  createCustomer: (
-    firstname,
-    lastname,
-    birthday,
-    streetAddress,
-    postalCode,
-    city,
-    phoneNumber
-  ) =>
-    new Promise((resolve, reject) => {
-      dispatch(
-        createCustomer({
-          onSuccess: resolve,
-          onError: reject,
-          body: {
+    async function handleSubmit() {
+        const {
+            email,
+            password,
             firstname,
             lastname,
             birthday,
@@ -317,13 +120,135 @@ const mapDispatchToProps = dispatch => ({
             postalCode,
             city,
             phoneNumber,
-          },
-        })
-      )
-    }),
-})
+        } = formData
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(NewCustomer)
+        try {
+            setIsCreatingCustomer(true)
+            await signupUser({signupRequestDto: {email, password}}).unwrap()
+            const response = await loginUser({authenticationRequestDto: {email, password}}).unwrap()
+            localStorage.setItem("token", response.token)
+            await createCustomer({
+                customerRegistrationRequestDto: {
+                    firstname,
+                    lastname,
+                    birthday,
+                    streetAddress,
+                    postalCode,
+                    city,
+                    phoneNumber
+                }
+            }).unwrap()
+            setIsCreatingCustomer(false)
+            setRedirectToOverview(true)
+        } catch (error) {
+            setIsCreatingCustomer(false)
+            const formError = extractFormError(error, context)
+            setFormError(formError)
+        }
+    }
+
+    function renderTextField(key: string, value: string, errorFields: Array<string>, type: string = "text") {
+        return (
+            <Form.Input
+                label={context.get(key)}
+                placeholder={context.get(key)}
+                type={type}
+                name={key}
+                value={value}
+                onChange={handleChange}
+                error={errorFields.includes(key)}
+            />
+        )
+    }
+
+    const {
+        email,
+        password,
+        firstname,
+        lastname,
+        birthday,
+        streetAddress,
+        postalCode,
+        city,
+        phoneNumber
+    } = formData
+
+    const hasEmptyFields =
+        !email ||
+        !password ||
+        !firstname ||
+        !lastname ||
+        !birthday ||
+        !streetAddress ||
+        !postalCode ||
+        !city ||
+        !phoneNumber
+    const hasError = !!formError
+    const errorFields = formError ? formError.errorFields : []
+    const errorMessages = formError ? formError.errorMessages : []
+
+    if (redirectToOverview) {
+        return <Navigate to="/" push/>
+    } else {
+        return (
+            <Segment>
+                <Breadcrumb
+                    style={{
+                        fontSize: "1.28571429rem",
+                        marginTop: 0,
+                        paddingTop: 0,
+                    }}>
+                    <Breadcrumb.Section link as={Link} to="/">
+                        Customers
+                    </Breadcrumb.Section>
+                    <Breadcrumb.Divider icon="right angle"/>
+                    <Breadcrumb.Section>New Customer</Breadcrumb.Section>
+                </Breadcrumb>
+                <br/>
+                <br/>
+                <Form onSubmit={handleSubmit} error={hasError}>
+                    <Header>Login Credentials</Header>
+                    <Form.Group widths="equal">
+                        {renderTextField(emailKey, email, errorFields)}
+                        {renderTextField(
+                            passwordKey,
+                            password,
+                            errorFields,
+                            "password"
+                        )}
+                    </Form.Group>
+
+                    <Header>Customer Profile</Header>
+                    <Form.Group widths="equal">
+                        {renderTextField(firstnameKey, firstname, errorFields)}
+                        {renderTextField(lastnameKey, lastname, errorFields)}
+                    </Form.Group>
+
+                    {renderTextField(birthdayKey, birthday, errorFields, "date")}
+                    {renderTextField(streetAddressKey, streetAddress, errorFields)}
+
+                    <Form.Group widths="equal">
+                        {renderTextField(postalCodeKey, postalCode, errorFields)}
+                        {renderTextField(cityKey, city, errorFields)}
+                    </Form.Group>
+
+                    {renderTextField(phoneNumberKey, phoneNumber, errorFields)}
+
+                    <Button
+                        fluid
+                        color="blue"
+                        disabled={hasEmptyFields || isCreatingCustomer}
+                        loading={isCreatingCustomer}>
+                        Create Customer
+                    </Button>
+                    <Message error>
+                        <Message.Header>Update failed</Message.Header>
+                        <Message.List items={errorMessages}/>
+                    </Message>
+                </Form>
+            </Segment>
+        )
+    }
+}
+
+export default NewCustomer
