@@ -4,5 +4,6 @@
   "apiImport": "customerSelfServiceBase",
   "outputFile": "./customerSelfServiceApi.ts",
   "exportName": "customerSelfServiceApi",
-  "hooks": true
+  "hooks": true,
+  "tag": true
 }

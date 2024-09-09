@@ -4,5 +4,6 @@
   "apiImport": "customerManagementBase",
   "outputFile": "./customerManagementApi.ts",
   "exportName": "customerManagementApi",
-  "hooks": true
+  "hooks": true,
+  "tag": true
 }

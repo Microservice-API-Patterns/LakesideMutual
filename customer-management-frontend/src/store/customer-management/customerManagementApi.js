@@ -1,8 +1,19 @@
 import { customerManagementBase as api } from "./customerManagementBase";
-const injectedRtkApi = api.injectEndpoints({
+export const addTagTypes = [
+    "customer-information-holder",
+    "interaction-log-information-holder",
+    "notification-information-holder",
+    "error-controller",
+];
+const injectedRtkApi = api
+    .enhanceEndpoints({
+    addTagTypes,
+})
+    .injectEndpoints({
     endpoints: (build) => ({
         getCustomer: build.query({
             query: (queryArg) => ({ url: `/customers/${queryArg.customerId}` }),
+            providesTags: ["customer-information-holder"],
         }),
         updateCustomer: build.mutation({
             query: (queryArg) => ({
@@ -10,11 +21,13 @@ const injectedRtkApi = api.injectEndpoints({
                 method: "PUT",
                 body: queryArg.customerProfileDto,
             }),
+            invalidatesTags: ["customer-information-holder"],
         }),
         getInteractionLog: build.query({
             query: (queryArg) => ({
                 url: `/interaction-logs/${queryArg.customerId}`,
             }),
+            providesTags: ["interaction-log-information-holder"],
         }),
         acknowledgeInteractions: build.mutation({
             query: (queryArg) => ({
@@ -22,9 +35,11 @@ const injectedRtkApi = api.injectEndpoints({
                 method: "PATCH",
                 body: queryArg.interactionAcknowledgementDto,
             }),
+            invalidatesTags: ["interaction-log-information-holder"],
         }),
         getNotifications: build.query({
             query: () => ({ url: `/notifications` }),
+            providesTags: ["notification-information-holder"],
         }),
         getCustomers: build.query({
             query: (queryArg) => ({
@@ -35,30 +50,38 @@ const injectedRtkApi = api.injectEndpoints({
                     offset: queryArg.offset,
                 },
             }),
+            providesTags: ["customer-information-holder"],
         }),
-        handleError6: build.query({
+        handleError3: build.query({
             query: () => ({ url: `/error` }),
+            providesTags: ["error-controller"],
         }),
-        handleError: build.mutation({
+        handleError6: build.mutation({
             query: () => ({ url: `/error`, method: "PUT" }),
+            invalidatesTags: ["error-controller"],
         }),
-        handleError5: build.mutation({
+        handleError4: build.mutation({
             query: () => ({ url: `/error`, method: "POST" }),
+            invalidatesTags: ["error-controller"],
         }),
         handleError2: build.mutation({
             query: () => ({ url: `/error`, method: "DELETE" }),
-        }),
-        handleError3: build.mutation({
-            query: () => ({ url: `/error`, method: "OPTIONS" }),
-        }),
-        handleError4: build.mutation({
-            query: () => ({ url: `/error`, method: "HEAD" }),
+            invalidatesTags: ["error-controller"],
         }),
         handleError1: build.mutation({
+            query: () => ({ url: `/error`, method: "OPTIONS" }),
+            invalidatesTags: ["error-controller"],
+        }),
+        handleError5: build.mutation({
+            query: () => ({ url: `/error`, method: "HEAD" }),
+            invalidatesTags: ["error-controller"],
+        }),
+        handleError: build.mutation({
             query: () => ({ url: `/error`, method: "PATCH" }),
+            invalidatesTags: ["error-controller"],
         }),
     }),
     overrideExisting: false,
 });
 export { injectedRtkApi as customerManagementApi };
-export const { useGetCustomerQuery, useUpdateCustomerMutation, useGetInteractionLogQuery, useAcknowledgeInteractionsMutation, useGetNotificationsQuery, useGetCustomersQuery, useHandleError6Query, useHandleErrorMutation, useHandleError5Mutation, useHandleError2Mutation, useHandleError3Mutation, useHandleError4Mutation, useHandleError1Mutation, } = injectedRtkApi;
+export const { useGetCustomerQuery, useUpdateCustomerMutation, useGetInteractionLogQuery, useAcknowledgeInteractionsMutation, useGetNotificationsQuery, useGetCustomersQuery, useHandleError3Query, useHandleError6Mutation, useHandleError4Mutation, useHandleError2Mutation, useHandleError1Mutation, useHandleError5Mutation, useHandleErrorMutation, } = injectedRtkApi;
