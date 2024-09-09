@@ -7,7 +7,7 @@ import errorMessages from "../../errorMessages"
 import SockJsClient from "react-stomp"
 import {customerManagementBackend} from "../../config"
 import {Navigate} from "react-router";
-import {useGetNotificationsQuery} from "../../store/customerManagementApi";
+import {useGetNotificationsQuery} from "../../store/customer-management/customerManagementApi";
 
 function Notifications(): React$Element {
     const [didTimeout, setDidTimeout] = useState<boolean>(false)

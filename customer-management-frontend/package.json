@@ -33,7 +33,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "doc": "documentation build src/** -f html -o docs",
-    "generate-api-endpoints": "npx tsc ./src/store/customerManagementApi.ts --target ES2016 --module ESNext --moduleResolution Node --skipLibCheck",
+    "generate-api-endpoints": "npx @rtk-query/codegen-openapi ./src/store/customer-management/openapi-config.json &&  npx @rtk-query/codegen-openapi ./src/store/customer-self-service/openapi-config.json && npx tsc src/store/**/*.ts --target ES2016 --module ESNext --moduleResolution Node --skipLibCheck",
     "flow": "flow"
   },
   "prettier": {

@@ -5,7 +5,7 @@ import {Fragment, useState} from "react"
 import {Button, Form, Grid, Icon, Input, Menu, Message, Table} from "semantic-ui-react"
 import {Link} from "react-router-dom"
 import errorMessages from "../../errorMessages"
-import {useGetCustomersQuery} from "../../store/customerManagementApi";
+import {useGetCustomersQuery} from "../../store/customer-management/customerManagementApi";
 
 function Customers(): React$Element {
     const [filter, setFilter] = useState<string>("")

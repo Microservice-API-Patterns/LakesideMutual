@@ -1,14 +1,19 @@
 // @flow
 
-import {customerManagementApi} from "./customerManagementApi";
+import {customerManagementApi} from "./customer-management/customerManagementApi";
 import {configureStore} from "@reduxjs/toolkit";
+import {customerSelfServiceApi} from "./customer-self-service/customerSelfServiceApi";
 
 // See https://redux-toolkit.js.org/rtk-query/overview#configure-the-store
 export const store = configureStore({
-    reducer: { [customerManagementApi.reducerPath]: customerManagementApi.reducer },
-    middleware: (getDefaultMiddleware) => 
+    reducer: {
+        [customerManagementApi.reducerPath]: customerManagementApi.reducer,
+        [customerSelfServiceApi.reducerPath]: customerSelfServiceApi.reducer
+    },
+    middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware()
             .concat(customerManagementApi.middleware)
+            .concat(customerSelfServiceApi.middleware)
 })
 
 
