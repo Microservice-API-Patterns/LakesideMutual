@@ -68,40 +68,40 @@ const injectedRtkApi = api
         query: () => ({ url: `/error` }),
         providesTags: ["error-controller"],
       }),
-      handleError6: build.mutation<HandleError6ApiResponse, HandleError6ApiArg>(
+      handleError5: build.mutation<HandleError5ApiResponse, HandleError5ApiArg>(
         {
           query: () => ({ url: `/error`, method: "PUT" }),
           invalidatesTags: ["error-controller"],
         }
       ),
-      handleError4: build.mutation<HandleError4ApiResponse, HandleError4ApiArg>(
-        {
-          query: () => ({ url: `/error`, method: "POST" }),
-          invalidatesTags: ["error-controller"],
-        }
-      ),
-      handleError2: build.mutation<HandleError2ApiResponse, HandleError2ApiArg>(
+      handleError: build.mutation<HandleErrorApiResponse, HandleErrorApiArg>({
+        query: () => ({ url: `/error`, method: "POST" }),
+        invalidatesTags: ["error-controller"],
+      }),
+      handleError1: build.mutation<HandleError1ApiResponse, HandleError1ApiArg>(
         {
           query: () => ({ url: `/error`, method: "DELETE" }),
           invalidatesTags: ["error-controller"],
         }
       ),
-      handleError1: build.mutation<HandleError1ApiResponse, HandleError1ApiArg>(
+      handleError4: build.mutation<HandleError4ApiResponse, HandleError4ApiArg>(
         {
           query: () => ({ url: `/error`, method: "OPTIONS" }),
           invalidatesTags: ["error-controller"],
         }
       ),
-      handleError5: build.mutation<HandleError5ApiResponse, HandleError5ApiArg>(
+      handleError2: build.mutation<HandleError2ApiResponse, HandleError2ApiArg>(
         {
           query: () => ({ url: `/error`, method: "HEAD" }),
           invalidatesTags: ["error-controller"],
         }
       ),
-      handleError: build.mutation<HandleErrorApiResponse, HandleErrorApiArg>({
-        query: () => ({ url: `/error`, method: "PATCH" }),
-        invalidatesTags: ["error-controller"],
-      }),
+      handleError6: build.mutation<HandleError6ApiResponse, HandleError6ApiArg>(
+        {
+          query: () => ({ url: `/error`, method: "PATCH" }),
+          invalidatesTags: ["error-controller"],
+        }
+      ),
     }),
     overrideExisting: false,
   })
@@ -146,22 +146,6 @@ export type HandleError3ApiResponse = /** status 200 OK */ {
   [key: string]: object
 }
 export type HandleError3ApiArg = void
-export type HandleError6ApiResponse = /** status 200 OK */ {
-  [key: string]: object
-}
-export type HandleError6ApiArg = void
-export type HandleError4ApiResponse = /** status 200 OK */ {
-  [key: string]: object
-}
-export type HandleError4ApiArg = void
-export type HandleError2ApiResponse = /** status 200 OK */ {
-  [key: string]: object
-}
-export type HandleError2ApiArg = void
-export type HandleError1ApiResponse = /** status 200 OK */ {
-  [key: string]: object
-}
-export type HandleError1ApiArg = void
 export type HandleError5ApiResponse = /** status 200 OK */ {
   [key: string]: object
 }
@@ -170,6 +154,22 @@ export type HandleErrorApiResponse = /** status 200 OK */ {
   [key: string]: object
 }
 export type HandleErrorApiArg = void
+export type HandleError1ApiResponse = /** status 200 OK */ {
+  [key: string]: object
+}
+export type HandleError1ApiArg = void
+export type HandleError4ApiResponse = /** status 200 OK */ {
+  [key: string]: object
+}
+export type HandleError4ApiArg = void
+export type HandleError2ApiResponse = /** status 200 OK */ {
+  [key: string]: object
+}
+export type HandleError2ApiArg = void
+export type HandleError6ApiResponse = /** status 200 OK */ {
+  [key: string]: object
+}
+export type HandleError6ApiArg = void
 export type AddressDto = {
   streetAddress?: string
   postalCode?: string
@@ -250,10 +250,10 @@ export const {
   useGetNotificationsQuery,
   useGetCustomersQuery,
   useHandleError3Query,
-  useHandleError6Mutation,
-  useHandleError4Mutation,
-  useHandleError2Mutation,
-  useHandleError1Mutation,
   useHandleError5Mutation,
   useHandleErrorMutation,
+  useHandleError1Mutation,
+  useHandleError4Mutation,
+  useHandleError2Mutation,
+  useHandleError6Mutation,
 } = injectedRtkApi

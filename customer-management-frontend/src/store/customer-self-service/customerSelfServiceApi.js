@@ -89,27 +89,27 @@ const injectedRtkApi = api
             query: (queryArg) => ({ url: `/cities/${queryArg.postalCode}` }),
             providesTags: ["city-reference-data-holder"],
         }),
-        handleError1: build.query({
+        handleError4: build.query({
             query: () => ({ url: `/error` }),
             providesTags: ["error-controller"],
         }),
-        handleError6: build.mutation({
+        handleError1: build.mutation({
             query: () => ({ url: `/error`, method: "PUT" }),
             invalidatesTags: ["error-controller"],
         }),
-        handleError5: build.mutation({
+        handleError3: build.mutation({
             query: () => ({ url: `/error`, method: "POST" }),
             invalidatesTags: ["error-controller"],
         }),
-        handleError2: build.mutation({
+        handleError5: build.mutation({
             query: () => ({ url: `/error`, method: "DELETE" }),
             invalidatesTags: ["error-controller"],
         }),
-        handleError3: build.mutation({
+        handleError2: build.mutation({
             query: () => ({ url: `/error`, method: "OPTIONS" }),
             invalidatesTags: ["error-controller"],
         }),
-        handleError4: build.mutation({
+        handleError6: build.mutation({
             query: () => ({ url: `/error`, method: "HEAD" }),
             invalidatesTags: ["error-controller"],
         }),
@@ -121,4 +121,4 @@ const injectedRtkApi = api
     overrideExisting: false,
 });
 export { injectedRtkApi as customerSelfServiceApi };
-export const { useChangeAddressMutation, useGetInsuranceQuoteRequestsQuery, useCreateInsuranceQuoteRequestMutation, useRegisterCustomerMutation, useAuthenticationRequestMutation, useSignupUserMutation, useRespondToInsuranceQuoteMutation, useGetCurrentUserQuery, useGetInsuranceQuoteRequestQuery, useGetCustomerQuery, useGetInsuranceQuoteRequests1Query, useGetCitiesForPostalCodeQuery, useHandleError1Query, useHandleError6Mutation, useHandleError5Mutation, useHandleError2Mutation, useHandleError3Mutation, useHandleError4Mutation, useHandleErrorMutation, } = injectedRtkApi;
+export const { useChangeAddressMutation, useGetInsuranceQuoteRequestsQuery, useCreateInsuranceQuoteRequestMutation, useRegisterCustomerMutation, useAuthenticationRequestMutation, useSignupUserMutation, useRespondToInsuranceQuoteMutation, useGetCurrentUserQuery, useGetInsuranceQuoteRequestQuery, useGetCustomerQuery, useGetInsuranceQuoteRequests1Query, useGetCitiesForPostalCodeQuery, useHandleError4Query, useHandleError1Mutation, useHandleError3Mutation, useHandleError5Mutation, useHandleError2Mutation, useHandleError6Mutation, useHandleErrorMutation, } = injectedRtkApi;

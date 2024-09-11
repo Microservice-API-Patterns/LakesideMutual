@@ -56,27 +56,27 @@ const injectedRtkApi = api
             query: () => ({ url: `/error` }),
             providesTags: ["error-controller"],
         }),
-        handleError6: build.mutation({
+        handleError5: build.mutation({
             query: () => ({ url: `/error`, method: "PUT" }),
             invalidatesTags: ["error-controller"],
         }),
-        handleError4: build.mutation({
+        handleError: build.mutation({
             query: () => ({ url: `/error`, method: "POST" }),
             invalidatesTags: ["error-controller"],
         }),
-        handleError2: build.mutation({
+        handleError1: build.mutation({
             query: () => ({ url: `/error`, method: "DELETE" }),
             invalidatesTags: ["error-controller"],
         }),
-        handleError1: build.mutation({
+        handleError4: build.mutation({
             query: () => ({ url: `/error`, method: "OPTIONS" }),
             invalidatesTags: ["error-controller"],
         }),
-        handleError5: build.mutation({
+        handleError2: build.mutation({
             query: () => ({ url: `/error`, method: "HEAD" }),
             invalidatesTags: ["error-controller"],
         }),
-        handleError: build.mutation({
+        handleError6: build.mutation({
             query: () => ({ url: `/error`, method: "PATCH" }),
             invalidatesTags: ["error-controller"],
         }),
@@ -84,4 +84,4 @@ const injectedRtkApi = api
     overrideExisting: false,
 });
 export { injectedRtkApi as customerManagementApi };
-export const { useGetCustomerQuery, useUpdateCustomerMutation, useGetInteractionLogQuery, useAcknowledgeInteractionsMutation, useGetNotificationsQuery, useGetCustomersQuery, useHandleError3Query, useHandleError6Mutation, useHandleError4Mutation, useHandleError2Mutation, useHandleError1Mutation, useHandleError5Mutation, useHandleErrorMutation, } = injectedRtkApi;
+export const { useGetCustomerQuery, useUpdateCustomerMutation, useGetInteractionLogQuery, useAcknowledgeInteractionsMutation, useGetNotificationsQuery, useGetCustomersQuery, useHandleError3Query, useHandleError5Mutation, useHandleErrorMutation, useHandleError1Mutation, useHandleError4Mutation, useHandleError2Mutation, useHandleError6Mutation, } = injectedRtkApi;

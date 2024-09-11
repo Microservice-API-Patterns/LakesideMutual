@@ -119,35 +119,35 @@ const injectedRtkApi = api
         query: (queryArg) => ({ url: `/cities/${queryArg.postalCode}` }),
         providesTags: ["city-reference-data-holder"],
       }),
-      handleError1: build.query<HandleError1ApiResponse, HandleError1ApiArg>({
+      handleError4: build.query<HandleError4ApiResponse, HandleError4ApiArg>({
         query: () => ({ url: `/error` }),
         providesTags: ["error-controller"],
       }),
-      handleError6: build.mutation<HandleError6ApiResponse, HandleError6ApiArg>(
+      handleError1: build.mutation<HandleError1ApiResponse, HandleError1ApiArg>(
         {
           query: () => ({ url: `/error`, method: "PUT" }),
           invalidatesTags: ["error-controller"],
         }
       ),
-      handleError5: build.mutation<HandleError5ApiResponse, HandleError5ApiArg>(
+      handleError3: build.mutation<HandleError3ApiResponse, HandleError3ApiArg>(
         {
           query: () => ({ url: `/error`, method: "POST" }),
           invalidatesTags: ["error-controller"],
         }
       ),
-      handleError2: build.mutation<HandleError2ApiResponse, HandleError2ApiArg>(
+      handleError5: build.mutation<HandleError5ApiResponse, HandleError5ApiArg>(
         {
           query: () => ({ url: `/error`, method: "DELETE" }),
           invalidatesTags: ["error-controller"],
         }
       ),
-      handleError3: build.mutation<HandleError3ApiResponse, HandleError3ApiArg>(
+      handleError2: build.mutation<HandleError2ApiResponse, HandleError2ApiArg>(
         {
           query: () => ({ url: `/error`, method: "OPTIONS" }),
           invalidatesTags: ["error-controller"],
         }
       ),
-      handleError4: build.mutation<HandleError4ApiResponse, HandleError4ApiArg>(
+      handleError6: build.mutation<HandleError6ApiResponse, HandleError6ApiArg>(
         {
           query: () => ({ url: `/error`, method: "HEAD" }),
           invalidatesTags: ["error-controller"],
@@ -220,14 +220,18 @@ export type GetCitiesForPostalCodeApiArg = {
   /** the postal code */
   postalCode: string
 }
+export type HandleError4ApiResponse = /** status 200 OK */ {
+  [key: string]: object
+}
+export type HandleError4ApiArg = void
 export type HandleError1ApiResponse = /** status 200 OK */ {
   [key: string]: object
 }
 export type HandleError1ApiArg = void
-export type HandleError6ApiResponse = /** status 200 OK */ {
+export type HandleError3ApiResponse = /** status 200 OK */ {
   [key: string]: object
 }
-export type HandleError6ApiArg = void
+export type HandleError3ApiArg = void
 export type HandleError5ApiResponse = /** status 200 OK */ {
   [key: string]: object
 }
@@ -236,14 +240,10 @@ export type HandleError2ApiResponse = /** status 200 OK */ {
   [key: string]: object
 }
 export type HandleError2ApiArg = void
-export type HandleError3ApiResponse = /** status 200 OK */ {
+export type HandleError6ApiResponse = /** status 200 OK */ {
   [key: string]: object
 }
-export type HandleError3ApiArg = void
-export type HandleError4ApiResponse = /** status 200 OK */ {
-  [key: string]: object
-}
-export type HandleError4ApiArg = void
+export type HandleError6ApiArg = void
 export type HandleErrorApiResponse = /** status 200 OK */ {
   [key: string]: object
 }
@@ -361,11 +361,11 @@ export const {
   useGetCustomerQuery,
   useGetInsuranceQuoteRequests1Query,
   useGetCitiesForPostalCodeQuery,
-  useHandleError1Query,
-  useHandleError6Mutation,
+  useHandleError4Query,
+  useHandleError1Mutation,
+  useHandleError3Mutation,
   useHandleError5Mutation,
   useHandleError2Mutation,
-  useHandleError3Mutation,
-  useHandleError4Mutation,
+  useHandleError6Mutation,
   useHandleErrorMutation,
 } = injectedRtkApi
