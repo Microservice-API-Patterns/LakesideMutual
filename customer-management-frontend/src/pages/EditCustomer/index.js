@@ -52,20 +52,6 @@ const context = new Map([
     [phoneNumberKey, "Phone Number"],
 ])
 
-type State = {
-    fetchCustomerError: boolean,
-    redirectToOverview: boolean,
-    firstname: string,
-    lastname: string,
-    birthday: string,
-    streetAddress: string,
-    postalCode: string,
-    city: string,
-    phoneNumber: string,
-    email: string,
-    formError: ?FormError,
-}
-
 function EditCustomer(): React$Element {
     const {customerId} = useParams();
     const [isUpdatingCustomer, setIsUpdatingCustomer] = useState<boolean>(false)

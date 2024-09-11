@@ -18,6 +18,8 @@ function ChatView({customer, interactionLog, didReceiveMessage}: Props) {
     const [didTimeout, setDidTimeout] = useState<boolean>(false)
     const [isConnected, setIsConnected] = useState<boolean>(false)
     const [messages, setMessages] = useState<MessageDto[]>([])
+    const [timeoutId, setTimeoutId] = useState<TimeoutID>()
+    const clientRef: React$Ref<SockJsClient> = useRef()
 
     useEffect(() => {
         if (interactionLog == null) return
@@ -30,23 +32,22 @@ function ChatView({customer, interactionLog, didReceiveMessage}: Props) {
             date: interaction.date,
             sentByOperator: interaction.sentByOperator,
         })))
-    }, [interactionLog]);
-
-    const clientRef: React$Ref<SockJsClient> = useRef()
-    let timeout: ?TimeoutID;
+    }, [interactionLog, customer]);
 
     useEffect(() => {
-        timeout = setTimeout(() => {
+        if (isConnected) return
+        const timeout = setTimeout(() => {
             const client = clientRef.current;
-            if (!isConnected && client) {
+            if (!isConnected) {
                 setDidTimeout(true)
-                client.disconnect();
+                client?.disconnect();
             }
         }, 5000)
+        setTimeoutId(timeout)
         return () => {
             clearTimeout(timeout);
         }
-    })
+    }, [isConnected])
 
     function appendMessage(message: MessageDto) {
         setMessages(messages.concat([message]))
@@ -64,8 +65,9 @@ function ChatView({customer, interactionLog, didReceiveMessage}: Props) {
                     }
                 }}
                 onConnect={() => {
-                    if (timeout != null) {
-                        clearTimeout(timeout)
+                    if (timeoutId != null) {
+                        clearTimeout(timeoutId)
+                        setTimeoutId(undefined)
                     }
                     setIsConnected(true)
                 }}

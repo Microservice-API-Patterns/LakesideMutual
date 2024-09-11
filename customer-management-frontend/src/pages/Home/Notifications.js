@@ -14,24 +14,25 @@ function Notifications(): React$Element {
     const [isConnected, setIsConnected] = useState<boolean>(false)
     const [notifications, setNotifications] = useState<Notification[]>([])
     const [redirectCustomerId, setRedirectCustomerId] = useState<string | null>(null)
-
+    const [timeoutId, setTimeoutId] = useState<TimeoutID>()
     const clientRef: React$Ref<SockJsClient> = useRef()
-    let timeout: ?TimeoutID;
 
     const {data} = useGetNotificationsQuery();
 
     useEffect(() => {
-        timeout = setTimeout(() => {
+        if (isConnected) return
+        const timeout = setTimeout(() => {
             const client = clientRef.current;
-            if (!isConnected && client) {
+            if (!isConnected) {
                 setDidTimeout(true)
-                client.disconnect();
+                client?.disconnect();
             }
         }, 5000)
+        setTimeoutId(timeout)
         return () => {
             clearTimeout(timeout);
         }
-    })
+    }, [isConnected])
 
     useEffect(() => {
         if (data != null &&
@@ -39,7 +40,7 @@ function Notifications(): React$Element {
             notifications.length === 0) {
             setNotifications(data)
         }
-    }, [data]);
+    }, [data, notifications]);
 
     if (redirectCustomerId != null) {
         return <Navigate to={`/customers/${redirectCustomerId}`} push/>
@@ -97,8 +98,9 @@ function Notifications(): React$Element {
                     setNotifications(message)
                 }}
                 onConnect={() => {
-                    if (timeout) {
-                        clearTimeout(timeout)
+                    if (timeoutId != null) {
+                        clearTimeout(timeoutId)
+                        setTimeoutId(undefined)
                     }
                     setIsConnected(true)
                 }}
