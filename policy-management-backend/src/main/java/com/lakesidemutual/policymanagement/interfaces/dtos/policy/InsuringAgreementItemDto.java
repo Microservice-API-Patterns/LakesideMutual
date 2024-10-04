@@ -1,7 +1,7 @@
 package com.lakesidemutual.policymanagement.interfaces.dtos.policy;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 
 import com.lakesidemutual.policymanagement.domain.policy.InsuringAgreementItem;
 

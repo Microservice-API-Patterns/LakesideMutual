@@ -8,13 +8,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -26,8 +29,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+@EnableMethodSecurity(prePostEnabled = true)
+public class WebSecurityConfiguration {
 	private static final String[] AUTH_WHITELIST = {
 			// -- Swagger UI v3 (OpenAPI)
 			"/v3/api-docs/**",
@@ -51,37 +54,48 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private UserDetailsService userDetailsService;
 
 	@Bean
-	@Override
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
 	}
 
 	@Bean
-	public AuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
+	public AuthenticationTokenFilter authenticationTokenFilterBean(AuthenticationManager authenticationManager) {
 		AuthenticationTokenFilter authenticationTokenFilter = new AuthenticationTokenFilter();
-		authenticationTokenFilter.setAuthenticationManager(authenticationManagerBean());
+		authenticationTokenFilter.setAuthenticationManager(authenticationManager);
 		return authenticationTokenFilter;
 	}
 
-	@Override
-	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.headers().frameOptions().disable().and().cors().and().csrf().disable().exceptionHandling()
-		.authenticationEntryPoint(this.unauthorizedHandler).and().sessionManagement()
-		.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-		.antMatchers(HttpMethod.OPTIONS, "/**").permitAll().antMatchers("/auth/**").permitAll().and()
-		.authorizeRequests().antMatchers("/console/**").permitAll()
-		.antMatchers(AUTH_WHITELIST).permitAll().anyRequest().authenticated();
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+		httpSecurity
+				.csrf(AbstractHttpConfigurer::disable)
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+				.authorizeHttpRequests(authz -> authz
+						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+						.requestMatchers("/auth/**").permitAll()
+						.requestMatchers(AUTH_WHITELIST).permitAll()
+						.anyRequest().authenticated()
+				)
+				.addFilterBefore(authenticationTokenFilterBean(authenticationManager(httpSecurity.getSharedObject(AuthenticationConfiguration.class))), UsernamePasswordAuthenticationFilter.class)
+				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+				.headers(headers -> {
+					headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable);
+					headers.cacheControl(HeadersConfigurer.CacheControlConfig::disable);
+				});
 
-		httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
-
-		// Disable Cache-Control for Conditional Requests
-		httpSecurity.headers().cacheControl().disable();
+		return httpSecurity.build();
 	}
 
 	@Autowired
 	public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
 		authenticationManagerBuilder.userDetailsService(this.userDetailsService)
 		.passwordEncoder(new BCryptPasswordEncoder());
+	}
+
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 	@Bean

@@ -1,7 +1,8 @@
 package com.lakesidemutual.customercore.interfaces.configuration;
 
-import javax.servlet.Filter;
+import jakarta.servlet.Filter;
 
+import org.h2.server.web.JakartaWebServlet;
 import org.h2.server.web.WebServlet;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +19,8 @@ public class WebConfiguration implements WebMvcConfigurer {
 	 * This web servlet makes the web console of the H2 database engine available at the "/console" endpoint.
 	 * */
 	@Bean
-	public ServletRegistrationBean<WebServlet> h2servletRegistration() {
-		ServletRegistrationBean<WebServlet> registrationBean = new ServletRegistrationBean<>(new WebServlet());
+	public ServletRegistrationBean<JakartaWebServlet> h2servletRegistration() {
+		ServletRegistrationBean<JakartaWebServlet> registrationBean = new ServletRegistrationBean<>(new JakartaWebServlet());
 		registrationBean.addUrlMappings("/console/*");
 		return registrationBean;
 	}

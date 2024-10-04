@@ -1,6 +1,6 @@
 package com.lakesidemutual.customermanagement.interfaces.dtos;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 /**
  * InteractionAcknowledgementDto is a data transfer object (DTO) that is sent from the Customer Management Frontend

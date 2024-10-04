@@ -2,9 +2,9 @@ package com.lakesidemutual.customerselfservice.interfaces.dtos.insurancequotereq
 
 import java.util.Date;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lakesidemutual.customerselfservice.domain.insurancequoterequest.InsuranceOptionsEntity;

@@ -1,8 +1,8 @@
 package com.lakesidemutual.customerselfservice.interfaces.dtos.insurancequoterequest;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import com.lakesidemutual.customerselfservice.domain.customer.CustomerId;
 import com.lakesidemutual.customerselfservice.domain.insurancequoterequest.CustomerInfoEntity;

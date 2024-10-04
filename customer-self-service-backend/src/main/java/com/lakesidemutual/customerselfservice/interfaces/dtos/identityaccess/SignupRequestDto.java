@@ -1,7 +1,7 @@
 package com.lakesidemutual.customerselfservice.interfaces.dtos.identityaccess;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 
 /**
  * SignupRequestDto is a data transfer object (DTO) that represents the login credentials of a new user. It is

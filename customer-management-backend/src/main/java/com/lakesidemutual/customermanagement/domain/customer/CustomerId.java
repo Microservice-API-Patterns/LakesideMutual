@@ -3,7 +3,7 @@ package com.lakesidemutual.customermanagement.domain.customer;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
 
 import org.microserviceapipatterns.domaindrivendesign.EntityIdentifier;
 import org.microserviceapipatterns.domaindrivendesign.ValueObject;

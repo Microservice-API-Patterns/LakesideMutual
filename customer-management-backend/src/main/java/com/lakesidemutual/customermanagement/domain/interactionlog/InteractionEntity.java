@@ -2,9 +2,9 @@ package com.lakesidemutual.customermanagement.domain.interactionlog;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 /**
  * InteractionEntity is an entity that contains the content and metadata of a chat message.

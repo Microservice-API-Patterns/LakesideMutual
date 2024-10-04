@@ -5,11 +5,13 @@ import java.util.Collections;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -20,15 +22,23 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-	@Override
-	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.headers().frameOptions().disable().and().cors().and().csrf().disable().exceptionHandling()
-		.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+@EnableMethodSecurity(prePostEnabled = true)
+public class WebSecurityConfiguration  {
 
-		// Disable Cache-Control for Conditional Requests
-		httpSecurity.headers().cacheControl().disable();
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+		httpSecurity
+				.csrf(AbstractHttpConfigurer::disable)  // Disable CSRF
+				.cors(cors -> {})               // Enable CORS (customize it if needed)
+				.headers(headers -> {
+					headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable);  // Disable X-Frame-Options
+					headers.cacheControl(HeadersConfigurer.CacheControlConfig::disable);  // Disable Cache-Control
+				})
+				.sessionManagement(session -> session
+						.sessionCreationPolicy(SessionCreationPolicy.STATELESS))  // Stateless session
+				.exceptionHandling(exception -> {});  // Handle exceptions (customize it if needed)
+
+		return httpSecurity.build();
 	}
 
 	@Bean

@@ -2,7 +2,7 @@ package com.lakesidemutual.customermanagement.interfaces.dtos;
 
 import java.util.Date;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 /**
  * MessageDto is a data transfer object (DTO) that contains the content and metadata of a chat message.

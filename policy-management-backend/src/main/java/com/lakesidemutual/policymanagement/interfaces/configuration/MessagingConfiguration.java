@@ -1,5 +1,6 @@
 package com.lakesidemutual.policymanagement.interfaces.configuration;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,6 +8,8 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.broker.BrokerPlugin;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.activemq.security.SimpleAuthenticationPlugin;
+import org.apache.activemq.store.kahadb.KahaDBStore;
+import org.apache.activemq.usage.SystemUsage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,6 +47,10 @@ public class MessagingConfiguration {
 		broker.addConnector(tcpBrokerBindAddress);
 		broker.setPersistent(true);
 		broker.setUseJmx(true);
+
+		// Set store limit
+		SystemUsage systemUsage = broker.getSystemUsage();
+		systemUsage.getStoreUsage().setLimit(100 * 1024 * 1024); // Set store limit to 100 MB
 
 		final Map<String, String> userPasswords = new HashMap<>();
 		userPasswords.put(username, password);

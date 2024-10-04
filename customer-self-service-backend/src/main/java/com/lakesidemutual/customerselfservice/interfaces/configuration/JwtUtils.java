@@ -1,9 +1,12 @@
 package com.lakesidemutual.customerselfservice.interfaces.configuration;
 
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -73,7 +76,7 @@ public class JwtUtils {
 	private Claims getClaimsFromToken(String token) {
 		Claims claims;
 		try {
-			claims = Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token).getBody();
+			claims = Jwts.parser().setSigningKey(this.secret).build().parseSignedClaims(token).getPayload();
 		} catch (Exception e) {
 			claims = null;
 		}

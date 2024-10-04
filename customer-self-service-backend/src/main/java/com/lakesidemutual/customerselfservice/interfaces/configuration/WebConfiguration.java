@@ -1,6 +1,6 @@
 package com.lakesidemutual.customerselfservice.interfaces.configuration;
 
-import javax.servlet.Filter;
+import jakarta.servlet.Filter;
 
 import org.h2.server.web.WebServlet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +27,6 @@ public class WebConfiguration implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(rateLimitInterceptor);
-	}
-
-	/**
-	 * This web servlet makes the web console of the H2 database engine available at the "/console" endpoint.
-	 * */
-	@Bean
-	public ServletRegistrationBean<WebServlet> h2servletRegistration() {
-		ServletRegistrationBean<WebServlet> registrationBean = new ServletRegistrationBean<>(new WebServlet());
-		registrationBean.addUrlMappings("/console/*");
-		return registrationBean;
 	}
 
 	/**

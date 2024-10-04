@@ -7,7 +7,7 @@ import org.microserviceapipatterns.domaindrivendesign.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +32,7 @@ public class CustomerService implements ApplicationService {
 
 	public Optional<CustomerAggregateRoot> updateAddress(CustomerId customerId, Address updatedAddress) {
 		Optional<CustomerAggregateRoot> optCustomer = customerRepository.findById(customerId);
-		if (!optCustomer.isPresent()) {
+		if (optCustomer.isEmpty()) {
 			return optCustomer;
 		}
 
@@ -44,7 +44,7 @@ public class CustomerService implements ApplicationService {
 
 	public Optional<CustomerAggregateRoot> updateCustomerProfile(CustomerId customerId, CustomerProfileEntity updatedCustomerProfile) {
 		Optional<CustomerAggregateRoot> optCustomer = customerRepository.findById(customerId);
-		if (!optCustomer.isPresent()) {
+		if (optCustomer.isEmpty()) {
 			return optCustomer;
 		}
 
@@ -61,7 +61,7 @@ public class CustomerService implements ApplicationService {
 	}
 
 	public List<CustomerAggregateRoot> getCustomers(String ids) {
-		List<CustomerId> customerIds = Arrays.stream(ids.split(",")).map(id -> new CustomerId(id.trim())).collect(Collectors.toList());
+		List<CustomerId> customerIds = Arrays.stream(ids.split(",")).map(id -> new CustomerId(id.trim())).toList();
 
 		List<CustomerAggregateRoot> customers = new ArrayList<>();
 		for (CustomerId customerId : customerIds) {
@@ -80,14 +80,14 @@ public class CustomerService implements ApplicationService {
 
 		long totalSize = entityManager.createQuery(
 						"select count(1) from CustomerAggregateRoot c " +
-								"left join fetch c.customerProfile " +
+								"left join c.customerProfile " +
 								"where c.customerProfile.firstname like :filter or c.customerProfile.lastname like :filter", Long.class)
 				.setParameter("filter", filterParameter)
 				.getSingleResult();
 
 		List<CustomerId> customerIds = entityManager.createQuery(
 						"select c.id from CustomerAggregateRoot c " +
-								"left join fetch c.customerProfile " +
+								"left join c.customerProfile " +
 								"where c.customerProfile.firstname like :filter or c.customerProfile.lastname like :filter " +
 								"order by c.customerProfile.firstname, c.customerProfile.lastname", CustomerId.class)
 				.setParameter("filter", filterParameter)
@@ -102,7 +102,6 @@ public class CustomerService implements ApplicationService {
 								"where c.id in (:customerIds) " +
 								"order by c.customerProfile.firstname, c.customerProfile.lastname", CustomerAggregateRoot.class)
 				.setParameter("customerIds", customerIds)
-				.setHint(QueryHints.HINT_PASS_DISTINCT_THROUGH, false)
 				.getResultList();
 
 		return new Page<>(customerAggregateRoots, offset, limit, (int) totalSize);

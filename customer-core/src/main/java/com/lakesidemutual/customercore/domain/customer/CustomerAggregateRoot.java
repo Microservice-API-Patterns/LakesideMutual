@@ -1,9 +1,6 @@
 package com.lakesidemutual.customercore.domain.customer;
 
-import javax.persistence.Embedded;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import jakarta.persistence.*;
 
 import org.microserviceapipatterns.domaindrivendesign.RootEntity;
 
@@ -20,7 +17,7 @@ public class CustomerAggregateRoot implements RootEntity {
 	@EmbeddedId
 	private CustomerId id;
 
-	@Embedded
+	@OneToOne(cascade = CascadeType.ALL)
 	private CustomerProfileEntity customerProfile;
 
 	public CustomerAggregateRoot() {

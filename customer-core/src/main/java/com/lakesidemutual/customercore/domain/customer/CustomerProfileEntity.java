@@ -5,21 +5,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Embeddable;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import jakarta.persistence.*;
 
 import com.google.common.base.Objects;
-import org.microserviceapipatterns.domaindrivendesign.Entity;
+import jakarta.persistence.Entity;
 
 /**
  * CustomerProfileEntity is an entity that contains the personal data (customer profile) of a CustomerAggregateRoot.
  */
-@Embeddable
-public class CustomerProfileEntity implements Serializable, Entity {
+@Entity
+public class CustomerProfileEntity implements Serializable, org.microserviceapipatterns.domaindrivendesign.Entity {
 
 	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	private String firstname;
 

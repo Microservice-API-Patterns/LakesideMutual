@@ -3,7 +3,7 @@ package com.lakesidemutual.policymanagement.domain.policy;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
 
 import org.apache.commons.lang3.RandomStringUtils;
 

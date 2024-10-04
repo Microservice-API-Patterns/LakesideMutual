@@ -1,6 +1,6 @@
 package com.lakesidemutual.policymanagement.interfaces.configuration;
 
-import javax.servlet.Filter;
+import jakarta.servlet.Filter;
 
 import org.h2.server.web.WebServlet;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -13,15 +13,6 @@ import org.springframework.web.filter.ShallowEtagHeaderFilter;
  * */
 @Configuration
 public class WebConfiguration {
-	/**
-	 * This web servlet makes the web console of the H2 database engine available at the "/console" endpoint.
-	 * */
-	@Bean
-	public ServletRegistrationBean<WebServlet> h2servletRegistration() {
-		ServletRegistrationBean<WebServlet> registrationBean = new ServletRegistrationBean<>(new WebServlet());
-		registrationBean.addUrlMappings("/console/*");
-		return registrationBean;
-	}
 
 	/**
 	 * This is a filter that generates an ETag value based on the content of the response. This ETag is compared to the If-None-Match header
