@@ -117,5 +117,6 @@ public class ArchitectureTests {
 	.should().haveSimpleNameEndingWith("Controller")
 	.orShould().haveSimpleNameEndingWith("DataHolder")
 	.orShould().haveSimpleNameEndingWith("ComputationService")
+	.orShould().haveSimpleNameEndingWith("ProcessingResource")
 	.orShould().haveSimpleNameEndingWith("InformationHolder");
 }

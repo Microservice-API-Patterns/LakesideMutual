@@ -116,5 +116,6 @@ public class ArchitectureTests {
 	.that().areAnnotatedWith(RestController.class)
 	.should().haveSimpleNameEndingWith("Controller")
 	.orShould().haveSimpleNameEndingWith("DataHolder")
-	.orShould().haveSimpleNameEndingWith("InformationHolder");
+	.orShould().haveSimpleNameEndingWith("InformationHolder")
+	.orShould().haveSimpleNameEndingWith("RequestCoordinator");
 }

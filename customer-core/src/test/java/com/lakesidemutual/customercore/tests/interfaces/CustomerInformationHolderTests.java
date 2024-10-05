@@ -2,6 +2,7 @@ package com.lakesidemutual.customercore.tests.interfaces;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Answers.CALLS_REAL_METHODS;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -13,13 +14,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 
+import com.lakesidemutual.customercore.application.Page;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
@@ -45,8 +49,9 @@ import com.lakesidemutual.customercore.tests.TestUtils;
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
-@WebMvcTest(value = CustomerInformationHolder.class)
 @WithMockUser
+@SpringBootTest
+@AutoConfigureMockMvc
 public class CustomerInformationHolderTests {
 	private CustomerAggregateRoot customerA;
 	private CustomerAggregateRoot customerB;
@@ -62,12 +67,15 @@ public class CustomerInformationHolderTests {
 
 		@Bean
 		public CustomerService customerService() {
-			return new CustomerService();
+			return Mockito.mock(CustomerService.class, CALLS_REAL_METHODS);
 		}
 	}
 
 	@Autowired
 	private MockMvc mvc;
+
+	@Autowired
+	private CustomerService customerService;
 
 	@MockBean
 	private CustomerRepository customerRepository;
@@ -117,7 +125,8 @@ public class CustomerInformationHolderTests {
 
 	@Test
 	public void whenCustomersExist_thenGetAllCustomersShouldAllCustomers() throws Exception {
-		Mockito.when(customerRepository.findAll(Sort.by(Sort.Direction.ASC, "customerProfile.firstname", "customerProfile.lastname"))).thenReturn(Arrays.asList(customerA, customerB, customerC));
+		Mockito.when(customerService.getCustomers("", 10, 0)).thenReturn(
+				new Page<>(Arrays.asList(customerA, customerB, customerC), 0, 10, 3));
 
 		mvc.perform(get("/customers"))
 		.andExpect(status().isOk())
@@ -160,7 +169,7 @@ public class CustomerInformationHolderTests {
 	public void whenExistingCustomerIdIsUsedWithFieldsParameter_thenCustomerFieldsShouldBeReturned() throws Exception {
 		Mockito.when(customerRepository.findById(customerA.getId())).thenReturn(Optional.of(customerA));
 
-		mvc.perform(get("/customers/" + customerA.getId().toString() + "/?fields=firstname"))
+		mvc.perform(get("/customers/" + customerA.getId().toString() + "?fields=firstname"))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.customers", hasSize(1)))
 		.andExpect(jsonPath("$.customers[0].firstname", is(customerA.getCustomerProfile().getFirstname())))
@@ -168,7 +177,7 @@ public class CustomerInformationHolderTests {
 		.andExpect(jsonPath("$.customers[0].streetAddress").doesNotExist())
 		.andExpect(jsonPath("$.customers[0].email").doesNotExist());
 
-		mvc.perform(get("/customers/" + customerA.getId().toString() + "/?fields=lastname,streetAddress,email"))
+		mvc.perform(get("/customers/" + customerA.getId().toString() + "?fields=lastname,streetAddress,email"))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.customers", hasSize(1)))
 		.andExpect(jsonPath("$.customers[0].firstname").doesNotExist())
