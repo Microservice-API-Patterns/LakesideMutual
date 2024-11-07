@@ -1,13 +1,11 @@
 package com.lakesidemutual.customercore.domain.customer;
 
-import javax.persistence.Embedded;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-import org.microserviceapipatterns.domaindrivendesign.RootEntity;
-
 import io.github.adr.embedded.MADR;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import org.microserviceapipatterns.domaindrivendesign.RootEntity;
 
 /**
  * CustomerAggregateRoot is the root entity of the Customer aggregate. Note that there is

@@ -1,8 +1,7 @@
 package com.lakesidemutual.customercore.interfaces.dtos.customer;
 
-import javax.validation.constraints.NotEmpty;
-
 import com.lakesidemutual.customercore.domain.customer.Address;
+import jakarta.validation.constraints.NotEmpty;
 
 /**
  * The AddressDto represents the message payload to change a customer's address. This is an example of the <a href=

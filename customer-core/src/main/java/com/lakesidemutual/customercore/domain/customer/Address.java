@@ -1,13 +1,12 @@
 package com.lakesidemutual.customercore.domain.customer;
 
-import java.util.Objects;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import org.microserviceapipatterns.domaindrivendesign.ValueObject;
+
+import java.util.Objects;
 
 /**
  * An Address is a value object that is used to represent the postal address of a customer.

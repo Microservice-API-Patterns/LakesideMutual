@@ -1,26 +1,17 @@
 package com.lakesidemutual.customercore.tests;
 
-import static com.tngtech.archunit.core.domain.JavaClass.Predicates.implement;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
-
 import com.tngtech.archunit.core.importer.ImportOption;
-import org.junit.runner.RunWith;
-import org.microserviceapipatterns.domaindrivendesign.Aggregate;
-import org.microserviceapipatterns.domaindrivendesign.DomainEvent;
-import org.microserviceapipatterns.domaindrivendesign.DomainService;
-import org.microserviceapipatterns.domaindrivendesign.Entity;
-import org.microserviceapipatterns.domaindrivendesign.EntityIdentifier;
-import org.microserviceapipatterns.domaindrivendesign.Factory;
-import org.microserviceapipatterns.domaindrivendesign.Repository;
-import org.microserviceapipatterns.domaindrivendesign.RootEntity;
-import org.microserviceapipatterns.domaindrivendesign.ValueObject;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.junit.ArchUnitRunner;
 import com.tngtech.archunit.lang.ArchRule;
+import org.junit.runner.RunWith;
+import org.microserviceapipatterns.domaindrivendesign.*;
+import org.springframework.web.bind.annotation.RestController;
+
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.implement;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 
 @RunWith(ArchUnitRunner.class)
 @AnalyzeClasses(
@@ -64,7 +55,7 @@ public class ArchitectureTests {
 	.should().resideInAPackage(DOMAIN_PKG);
 
 	@ArchTest
-	public static final ArchRule layer_dependencies_are_respected = layeredArchitecture()
+	public static final ArchRule layer_dependencies_are_respected = layeredArchitecture().consideringAllDependencies()
 	.layer(INTERFACES_LAYER).definedBy(INTERFACES_PKG)
 	.layer(APPLICATION_LAYER).definedBy(APPLICATION_PKG)
 	.layer(DOMAIN_LAYER).definedBy(DOMAIN_PKG)

@@ -2,12 +2,11 @@ package com.lakesidemutual.customercore.application;
 
 import com.lakesidemutual.customercore.domain.customer.*;
 import com.lakesidemutual.customercore.infrastructure.CustomerRepository;
-import org.hibernate.jpa.QueryHints;
+import jakarta.persistence.EntityManager;
 import org.microserviceapipatterns.domaindrivendesign.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -102,7 +101,6 @@ public class CustomerService implements ApplicationService {
 								"where c.id in (:customerIds) " +
 								"order by c.customerProfile.firstname, c.customerProfile.lastname", CustomerAggregateRoot.class)
 				.setParameter("customerIds", customerIds)
-				.setHint(QueryHints.HINT_PASS_DISTINCT_THROUGH, false)
 				.getResultList();
 
 		return new Page<>(customerAggregateRoots, offset, limit, (int) totalSize);
