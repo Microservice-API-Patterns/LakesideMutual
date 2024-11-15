@@ -3,10 +3,10 @@ package com.lakesidemutual.policymanagement.interfaces.dtos.policy;
 import java.math.BigDecimal;
 import java.util.Currency;
 
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import com.lakesidemutual.policymanagement.domain.policy.MoneyAmount;
 

@@ -3,7 +3,7 @@ package com.lakesidemutual.policymanagement.domain.policy;
 import java.util.Date;
 import java.util.Objects;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
 
 import org.microserviceapipatterns.domaindrivendesign.ValueObject;
 

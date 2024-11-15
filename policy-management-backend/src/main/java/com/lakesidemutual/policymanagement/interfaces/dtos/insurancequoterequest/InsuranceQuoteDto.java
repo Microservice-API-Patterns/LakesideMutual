@@ -2,8 +2,8 @@ package com.lakesidemutual.policymanagement.interfaces.dtos.insurancequotereques
 
 import java.util.Date;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 import com.lakesidemutual.policymanagement.domain.insurancequoterequest.InsuranceQuoteEntity;
 import com.lakesidemutual.policymanagement.interfaces.dtos.policy.MoneyAmountDto;

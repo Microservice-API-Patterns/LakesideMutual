@@ -1,7 +1,7 @@
 package com.lakesidemutual.policymanagement.interfaces.dtos.policy;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * CreatePolicyRequestDto is a data transfer object (DTO) that is sent to the Policy Management backend when a

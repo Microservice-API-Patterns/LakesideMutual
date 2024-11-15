@@ -2,7 +2,7 @@ package com.lakesidemutual.policymanagement.interfaces.dtos.policy;
 
 import java.util.Date;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import com.lakesidemutual.policymanagement.domain.policy.PolicyPeriod;
 
