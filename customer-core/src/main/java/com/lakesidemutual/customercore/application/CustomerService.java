@@ -79,14 +79,14 @@ public class CustomerService implements ApplicationService {
 
 		long totalSize = entityManager.createQuery(
 						"select count(1) from CustomerAggregateRoot c " +
-								"left join fetch c.customerProfile " +
+								"left join c.customerProfile " +
 								"where c.customerProfile.firstname like :filter or c.customerProfile.lastname like :filter", Long.class)
 				.setParameter("filter", filterParameter)
 				.getSingleResult();
 
 		List<CustomerId> customerIds = entityManager.createQuery(
 						"select c.id from CustomerAggregateRoot c " +
-								"left join fetch c.customerProfile " +
+								"left join c.customerProfile " +
 								"where c.customerProfile.firstname like :filter or c.customerProfile.lastname like :filter " +
 								"order by c.customerProfile.firstname, c.customerProfile.lastname", CustomerId.class)
 				.setParameter("filter", filterParameter)
