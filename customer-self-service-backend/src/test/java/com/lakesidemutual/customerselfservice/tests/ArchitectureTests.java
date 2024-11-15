@@ -65,7 +65,7 @@ public class ArchitectureTests {
 	.should().resideInAPackage(DOMAIN_PKG);
 
 	@ArchTest
-	public static final ArchRule layer_dependencies_are_respected = layeredArchitecture()
+	public static final ArchRule layer_dependencies_are_respected = layeredArchitecture().consideringAllDependencies()
 	.layer(INTERFACES_LAYER).definedBy(INTERFACES_PKG)
 	.layer(APPLICATION_LAYER).definedBy(APPLICATION_PKG)
 	.layer(DOMAIN_LAYER).definedBy(DOMAIN_PKG)

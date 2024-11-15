@@ -2,8 +2,8 @@ package com.lakesidemutual.customerselfservice.interfaces.dtos.insurancequotereq
 
 import java.util.Date;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 
 import com.lakesidemutual.customerselfservice.domain.insurancequoterequest.RequestStatusChange;
 

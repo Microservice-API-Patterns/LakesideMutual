@@ -2,8 +2,8 @@ package com.lakesidemutual.customerselfservice.interfaces.dtos.insurancequotereq
 
 import java.util.Date;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 
 /**
  * InsuranceQuoteResponseDto is a data transfer object (DTO) that contains Lakeside Mutual's

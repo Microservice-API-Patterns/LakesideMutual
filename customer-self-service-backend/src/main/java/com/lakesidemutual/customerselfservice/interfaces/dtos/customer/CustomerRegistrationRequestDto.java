@@ -1,13 +1,13 @@
 package com.lakesidemutual.customerselfservice.interfaces.dtos.customer;
 
 import java.util.Date;
+import java.util.Objects;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.google.common.base.Objects;
 import com.lakesidemutual.customerselfservice.interfaces.validation.PhoneNumber;
 
 /**
@@ -99,31 +99,15 @@ public class CustomerRegistrationRequestDto {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-
-		if (obj == null) {
-			return false;
-		}
-
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-
-		CustomerRegistrationRequestDto other = (CustomerRegistrationRequestDto)obj;
-		return Objects.equal(firstname, other.firstname) &&
-				Objects.equal(lastname, other.lastname) &&
-				Objects.equal(birthday, other.birthday) &&
-				Objects.equal(city, other.city) &&
-				Objects.equal(streetAddress, other.streetAddress) &&
-				Objects.equal(postalCode, other.postalCode) &&
-				Objects.equal(phoneNumber, other.phoneNumber);
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		CustomerRegistrationRequestDto that = (CustomerRegistrationRequestDto) o;
+		return Objects.equals(firstname, that.firstname) && Objects.equals(lastname, that.lastname) && Objects.equals(birthday, that.birthday) && Objects.equals(city, that.city) && Objects.equals(streetAddress, that.streetAddress) && Objects.equals(postalCode, that.postalCode) && Objects.equals(phoneNumber, that.phoneNumber);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(firstname, lastname, birthday, city, streetAddress, postalCode, phoneNumber);
+		return Objects.hash(firstname, lastname, birthday, city, streetAddress, postalCode, phoneNumber);
 	}
 }

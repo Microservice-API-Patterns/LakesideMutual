@@ -73,7 +73,7 @@ public class JwtUtils {
 	private Claims getClaimsFromToken(String token) {
 		Claims claims;
 		try {
-			claims = Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token).getBody();
+			claims = Jwts.parser().setSigningKey(this.secret).build().parseClaimsJws(token).getBody();
 		} catch (Exception e) {
 			claims = null;
 		}

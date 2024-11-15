@@ -1,6 +1,6 @@
 package com.lakesidemutual.customerselfservice.interfaces.dtos.customer;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 import com.lakesidemutual.customerselfservice.domain.customer.Address;
 
