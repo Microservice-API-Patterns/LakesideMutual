@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.security.Keys;
+import io.micrometer.core.instrument.config.validate.Validated;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -14,14 +17,15 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import javax.crypto.SecretKey;
+
 /**
  * JwtUtils is a utility class that lets clients generate, validate and parse JSON Web Tokens (JWT).
  * */
 @Component
 public class JwtUtils {
 
-	@Value("${token.secret}")
-	private String secret = "sssshhhh!";
+	private final SecretKey secret = Jwts.SIG.HS512.key().build();
 
 	@Value("${token.expiration}")
 	private int expirationInSeconds = 3600 * 24 * 7;
@@ -73,7 +77,7 @@ public class JwtUtils {
 	private Claims getClaimsFromToken(String token) {
 		Claims claims;
 		try {
-			claims = Jwts.parser().setSigningKey(this.secret).build().parseClaimsJws(token).getBody();
+			claims = Jwts.parser().verifyWith(this.secret).build().parseSignedClaims(token).getPayload();
 		} catch (Exception e) {
 			claims = null;
 		}
@@ -101,8 +105,11 @@ public class JwtUtils {
 	}
 
 	private String generateToken(Map<String, Object> claims) {
-		return Jwts.builder().setClaims(claims).setExpiration(this.generateExpirationDate())
-				.signWith(SignatureAlgorithm.HS512, this.secret).compact();
+		return Jwts.builder()
+				.claims(claims)
+				.expiration(this.generateExpirationDate())
+				.signWith(this.secret)
+				.compact();
 	}
 
 	public String refreshToken(String token) {
