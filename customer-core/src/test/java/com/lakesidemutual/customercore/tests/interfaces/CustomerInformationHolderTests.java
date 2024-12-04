@@ -2,6 +2,7 @@ package com.lakesidemutual.customercore.tests.interfaces;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Answers.CALLS_REAL_METHODS;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -13,13 +14,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 
+import com.lakesidemutual.customercore.application.Page;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
@@ -45,8 +49,9 @@ import com.lakesidemutual.customercore.tests.TestUtils;
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
-@WebMvcTest(value = CustomerInformationHolder.class)
 @WithMockUser
+@SpringBootTest
+@AutoConfigureMockMvc
 public class CustomerInformationHolderTests {
 	private CustomerAggregateRoot customerA;
 	private CustomerAggregateRoot customerB;
@@ -62,12 +67,15 @@ public class CustomerInformationHolderTests {
 
 		@Bean
 		public CustomerService customerService() {
-			return new CustomerService();
+			return Mockito.mock(CustomerService.class, CALLS_REAL_METHODS);
 		}
 	}
 
 	@Autowired
 	private MockMvc mvc;
+
+	@Autowired
+	private CustomerService customerService;
 
 	@MockBean
 	private CustomerRepository customerRepository;
@@ -110,21 +118,22 @@ public class CustomerInformationHolderTests {
 		Mockito.when(customerFactory.create(customerProfile)).thenReturn(customerA);
 
 		mvc.perform(post("/customers").content(TestUtils.asJsonString(registrationDto))
-				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-		.andExpect(status().isOk())
-		.andExpect(new CustomerResultMatcher("$", customerA));
+						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(new CustomerResultMatcher("$", customerA));
 	}
 
 	@Test
 	public void whenCustomersExist_thenGetAllCustomersShouldAllCustomers() throws Exception {
-		Mockito.when(customerRepository.findAll(Sort.by(Sort.Direction.ASC, "customerProfile.firstname", "customerProfile.lastname"))).thenReturn(Arrays.asList(customerA, customerB, customerC));
+		Mockito.when(customerService.getCustomers("", 10, 0)).thenReturn(
+				new Page<>(Arrays.asList(customerA, customerB, customerC), 0, 10, 3));
 
 		mvc.perform(get("/customers"))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.customers", hasSize(3)))
-		.andExpect(new CustomerResultMatcher("$.customers[0]", customerA))
-		.andExpect(new CustomerResultMatcher("$.customers[1]", customerB))
-		.andExpect(new CustomerResultMatcher("$.customers[2]", customerC));
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.customers", hasSize(3)))
+				.andExpect(new CustomerResultMatcher("$.customers[0]", customerA))
+				.andExpect(new CustomerResultMatcher("$.customers[1]", customerB))
+				.andExpect(new CustomerResultMatcher("$.customers[2]", customerC));
 	}
 
 	@Test
@@ -134,69 +143,69 @@ public class CustomerInformationHolderTests {
 		Mockito.when(customerRepository.findById(customerC.getId())).thenReturn(Optional.of(customerC));
 
 		mvc.perform(get("/customers/" + customerA.getId().toString()))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.customers", hasSize(1)))
-		.andExpect(new CustomerResultMatcher("$.customers[0]", customerA));
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.customers", hasSize(1)))
+				.andExpect(new CustomerResultMatcher("$.customers[0]", customerA));
 
 		mvc.perform(get("/customers/" + customerB.getId().toString()))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.customers", hasSize(1)))
-		.andExpect(new CustomerResultMatcher("$.customers[0]", customerB));
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.customers", hasSize(1)))
+				.andExpect(new CustomerResultMatcher("$.customers[0]", customerB));
 
 		mvc.perform(get("/customers/" + customerC.getId().toString()))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.customers", hasSize(1)))
-		.andExpect(new CustomerResultMatcher("$.customers[0]", customerC));
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.customers", hasSize(1)))
+				.andExpect(new CustomerResultMatcher("$.customers[0]", customerC));
 
 		mvc.perform(get("/customers/" + customerA.getId().toString() + "," + customerB.getId().toString() + "," + customerC.getId().toString()))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.customers", hasSize(3)))
-		.andExpect(new CustomerResultMatcher("$.customers[0]", customerA))
-		.andExpect(new CustomerResultMatcher("$.customers[1]", customerB))
-		.andExpect(new CustomerResultMatcher("$.customers[2]", customerC));
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.customers", hasSize(3)))
+				.andExpect(new CustomerResultMatcher("$.customers[0]", customerA))
+				.andExpect(new CustomerResultMatcher("$.customers[1]", customerB))
+				.andExpect(new CustomerResultMatcher("$.customers[2]", customerC));
 	}
 
 	@Test
 	public void whenExistingCustomerIdIsUsedWithFieldsParameter_thenCustomerFieldsShouldBeReturned() throws Exception {
 		Mockito.when(customerRepository.findById(customerA.getId())).thenReturn(Optional.of(customerA));
 
-		mvc.perform(get("/customers/" + customerA.getId().toString() + "/?fields=firstname"))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.customers", hasSize(1)))
-		.andExpect(jsonPath("$.customers[0].firstname", is(customerA.getCustomerProfile().getFirstname())))
-		.andExpect(jsonPath("$.customers[0].lastname").doesNotExist())
-		.andExpect(jsonPath("$.customers[0].streetAddress").doesNotExist())
-		.andExpect(jsonPath("$.customers[0].email").doesNotExist());
+		mvc.perform(get("/customers/" + customerA.getId().toString() + "?fields=firstname"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.customers", hasSize(1)))
+				.andExpect(jsonPath("$.customers[0].firstname", is(customerA.getCustomerProfile().getFirstname())))
+				.andExpect(jsonPath("$.customers[0].lastname").doesNotExist())
+				.andExpect(jsonPath("$.customers[0].streetAddress").doesNotExist())
+				.andExpect(jsonPath("$.customers[0].email").doesNotExist());
 
-		mvc.perform(get("/customers/" + customerA.getId().toString() + "/?fields=lastname,streetAddress,email"))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.customers", hasSize(1)))
-		.andExpect(jsonPath("$.customers[0].firstname").doesNotExist())
-		.andExpect(jsonPath("$.customers[0].lastname", is(customerA.getCustomerProfile().getLastname())))
-		.andExpect(jsonPath("$.customers[0].streetAddress", is(customerA.getCustomerProfile().getCurrentAddress().getStreetAddress())))
-		.andExpect(jsonPath("$.customers[0].email", is(customerA.getCustomerProfile().getEmail())));
+		mvc.perform(get("/customers/" + customerA.getId().toString() + "?fields=lastname,streetAddress,email"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.customers", hasSize(1)))
+				.andExpect(jsonPath("$.customers[0].firstname").doesNotExist())
+				.andExpect(jsonPath("$.customers[0].lastname", is(customerA.getCustomerProfile().getLastname())))
+				.andExpect(jsonPath("$.customers[0].streetAddress", is(customerA.getCustomerProfile().getCurrentAddress().getStreetAddress())))
+				.andExpect(jsonPath("$.customers[0].email", is(customerA.getCustomerProfile().getEmail())));
 	}
 
 	@Test
 	public void whenNoCustomersExist_thenGetAllCustomersShouldReturnEmptyArray() throws Exception {
 		mvc.perform(get("/customers")).andExpect(status().isOk())
-		.andExpect(jsonPath("$.size", is(0)))
-		.andExpect(jsonPath("$.customers", hasSize(0)));
+				.andExpect(jsonPath("$.size", is(0)))
+				.andExpect(jsonPath("$.customers", hasSize(0)));
 	}
 
 	@Test
 	public void whenNonexistingCustomerIdIsUsed_thenEmptyArrayShouldBeReturned() throws Exception {
 		mvc.perform(get("/customers/" + customerA.getId().toString()))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.customers", hasSize(0)));
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.customers", hasSize(0)));
 
 		mvc.perform(get("/customers/" + customerB.getId().toString()))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.customers", hasSize(0)));
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.customers", hasSize(0)));
 
 		mvc.perform(get("/customers/" + customerC.getId().toString()))
-		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.customers", hasSize(0)));
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.customers", hasSize(0)));
 	}
 
 	@Test
@@ -214,12 +223,12 @@ public class CustomerInformationHolderTests {
 		Mockito.when(customerRepository.findById(customerA.getId())).thenReturn(Optional.of(customerA));
 
 		mvc.perform(
-				put("/customers/" + customerA.getId().getId())
-				.content(TestUtils.asJsonString(profileUpdateRequestDto))
-				.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON))
-		.andExpect(status().isOk())
-		.andExpect(new CustomerResultMatcher("$", updatedCustomerA));
+						put("/customers/" + customerA.getId().getId())
+								.content(TestUtils.asJsonString(profileUpdateRequestDto))
+								.contentType(MediaType.APPLICATION_JSON)
+								.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(new CustomerResultMatcher("$", updatedCustomerA));
 	}
 
 	@Test
@@ -234,11 +243,11 @@ public class CustomerInformationHolderTests {
 				profile.getCurrentAddress().getPostalCode(), profile.getCurrentAddress().getCity(), profile.getEmail(), profile.getPhoneNumber());
 
 		mvc.perform(
-				put("/customers/" + customerA.getId().getId())
-				.content(TestUtils.asJsonString(profileUpdateRequestDto))
-				.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON))
-		.andExpect(status().isNotFound());
+						put("/customers/" + customerA.getId().getId())
+								.content(TestUtils.asJsonString(profileUpdateRequestDto))
+								.contentType(MediaType.APPLICATION_JSON)
+								.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNotFound());
 	}
 }
 

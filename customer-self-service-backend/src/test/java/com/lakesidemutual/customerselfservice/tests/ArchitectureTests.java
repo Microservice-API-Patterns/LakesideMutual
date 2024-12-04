@@ -113,8 +113,9 @@ public class ArchitectureTests {
 
 	@ArchTest
 	public static final ArchRule rest_controllers_should_be_suffixed = classes()
-	.that().areAnnotatedWith(RestController.class)
-	.should().haveSimpleNameEndingWith("Controller")
-	.orShould().haveSimpleNameEndingWith("DataHolder")
-	.orShould().haveSimpleNameEndingWith("InformationHolder");
+		.that().areAnnotatedWith(RestController.class)
+		.should().haveSimpleNameEndingWith("Controller")
+		.orShould().haveSimpleNameEndingWith("DataHolder")
+		.orShould().haveSimpleNameEndingWith("InformationHolder")
+		.orShould().haveSimpleNameEndingWith("RequestCoordinator");
 }

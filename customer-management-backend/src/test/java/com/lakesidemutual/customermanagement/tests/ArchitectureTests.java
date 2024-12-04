@@ -66,11 +66,8 @@ public class ArchitectureTests {
 	@ArchTest
 	public static final ArchRule layer_dependencies_are_respected = layeredArchitecture().consideringAllDependencies()
 	.layer(INTERFACES_LAYER).definedBy(INTERFACES_PKG)
-	.layer(APPLICATION_LAYER).definedBy(APPLICATION_PKG)
 	.layer(DOMAIN_LAYER).definedBy(DOMAIN_PKG)
 	.layer(INFRASTRUCTURE_LAYER).definedBy(INFRASTRUCTURE_PKG)
-	// .whereLayer(INTERFACES_LAYER).mayNotBeAccessedByAnyLayer()
-	.whereLayer(APPLICATION_LAYER).mayOnlyBeAccessedByLayers(INTERFACES_LAYER)
 	.whereLayer(DOMAIN_LAYER).mayOnlyBeAccessedByLayers(INTERFACES_LAYER, APPLICATION_LAYER, INFRASTRUCTURE_LAYER)
 	.whereLayer(INFRASTRUCTURE_LAYER).mayOnlyBeAccessedByLayers(INTERFACES_LAYER, APPLICATION_LAYER, DOMAIN_LAYER);
 

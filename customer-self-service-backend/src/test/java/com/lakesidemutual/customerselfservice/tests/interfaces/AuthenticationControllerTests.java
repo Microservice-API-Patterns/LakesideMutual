@@ -5,13 +5,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.lakesidemutual.customerselfservice.infrastructure.CustomerCoreRemoteProxy;
 import com.lakesidemutual.customerselfservice.interfaces.configuration.UnauthorizedHandler;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
@@ -35,7 +38,8 @@ import com.lakesidemutual.customerselfservice.tests.TestUtils;
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
-@WebMvcTest(value = AuthenticationController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class AuthenticationControllerTests {
 	private String email;
 	private String cleartextPassword;
@@ -65,7 +69,7 @@ public class AuthenticationControllerTests {
 	private JwtUtils tokenUtils;
 
 	@MockBean
-	private UserDetailsService userDetailsService;
+	private CustomerCoreRemoteProxy customerCoreRemoteProxy;
 
 	@MockBean
 	private UserLoginRepository userRepository;
