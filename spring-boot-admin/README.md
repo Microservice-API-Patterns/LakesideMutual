@@ -46,8 +46,4 @@ curl http://localhost:8100/actuator/health
 }
 ```
 
-## How it works when using Eureka
-
-When Eureka is used, Spring Boot applications register themselves at the Eureka Server. The Spring Boot Admin uses Eureka to discover all other Spring Boot applications. The `spring-boot-admin-starter-client` mentioned above is not needed anymore.
-
 See the [Spring Boot Admin documentation](http://codecentric.github.io/spring-boot-admin/2.1.0) to learn more about the different capabilities and configuration options.

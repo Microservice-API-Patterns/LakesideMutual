@@ -40,9 +40,6 @@ The following sections contain a short description of each service:
   The Risk-Management client is a command-line tool built with [Node.js](https://nodejs.org). It allows the
   professionals of Lakeside Mutual to periodically download a customer data report which helps them during risk assessment.
 
-- **[Eureka Server](eureka-server)**  
-  [Eureka Server](https://spring.io/guides/gs/service-registration-and-discovery/#initial) provides a service registry. It is a regular Spring Boot application to which all other Spring services can connect to access other services. For example, the Customer Self-Service Backend uses Eureka to connect to the Customer Core. Usage of Eureka is optional.
-
 - **[Spring Boot Admin](spring-boot-admin)**  
   [Spring Boot Admin](https://github.com/codecentric/spring-boot-admin) is an open source software for managing and monitoring Spring Boot applications. It *is* a Spring Boot application too. Usage within the Lakeside Mutual services is optional and only included for convenience with all security disabled.
   
@@ -77,7 +74,6 @@ consult the README of the corresponding component:
 | [Customer Management Frontend](customer-management-frontend) | 3020 (Web server) |
 | [Risk Management Server](risk-management-server) | 50051 (gRPC server) |
 | [Risk Management Client](risk-management-client) | - (CLI Client) |
-| [Eureka Server](eureka-server) | 8761 (Admin web frontend) |
 | [Spring Boot Admin](spring-boot-admin) | 9000 (Web server) |
 
 ## Docker

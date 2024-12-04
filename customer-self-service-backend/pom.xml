@@ -77,10 +77,6 @@
 			<artifactId>spring-hateoas</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-activemq</artifactId>
 		</dependency>
@@ -93,8 +89,8 @@
 			<artifactId>activemq-kahadb-store</artifactId>
 		</dependency>
 		<dependency>
-		<groupId>io.github.resilience4j</groupId>
-		<artifactId>resilience4j-spring-boot3</artifactId>
+			<groupId>io.github.resilience4j</groupId>
+			<artifactId>resilience4j-spring-boot3</artifactId>
 		</dependency>
 
 		<!-- Other Dependencies -->

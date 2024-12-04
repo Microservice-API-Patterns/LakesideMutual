@@ -17,16 +17,10 @@ class "Policy Management Frontend" as PMF <<Vue.js>>
 class "Risk Management Server" as RMS <<Node.js>>
 class "Risk Management Client" as RMC <<Node.js>>
 class "Spring Boot Admin" as SBA <<Spring Boot>>
-class "Eureka Server" as ES <<Spring Boot>>
 
 PMB -down--> CC : HTTP
 CCB -down--> CC : HTTP
 CMB -down--> CC : HTTP
-PMB -down--> ES : HTTP
-CCB -down--> ES : HTTP
-CMB -down--> ES : HTTP
-CC -right--> ES : HTTP
-SBA -left--> ES : HTTP
 CMF -down--> CMB : HTTP + WebSocket
 CMF -[hidden]> CCF
 CMB -[hidden]> CCB
