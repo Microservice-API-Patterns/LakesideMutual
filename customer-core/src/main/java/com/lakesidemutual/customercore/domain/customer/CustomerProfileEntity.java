@@ -1,10 +1,12 @@
 package com.lakesidemutual.customercore.domain.customer;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import org.microserviceapipatterns.domaindrivendesign.Entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,10 +17,14 @@ import java.util.Objects;
 /**
  * CustomerProfileEntity is an entity that contains the personal data (customer profile) of a CustomerAggregateRoot.
  */
-@Embeddable
-public class CustomerProfileEntity implements Serializable, Entity {
+@Entity
+public class CustomerProfileEntity implements Serializable, org.microserviceapipatterns.domaindrivendesign.Entity {
 
     private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String firstname;
 

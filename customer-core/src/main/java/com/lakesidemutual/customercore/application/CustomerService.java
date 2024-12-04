@@ -31,7 +31,7 @@ public class CustomerService implements ApplicationService {
 
 	public Optional<CustomerAggregateRoot> updateAddress(CustomerId customerId, Address updatedAddress) {
 		Optional<CustomerAggregateRoot> optCustomer = customerRepository.findById(customerId);
-		if (!optCustomer.isPresent()) {
+		if (optCustomer.isEmpty()) {
 			return optCustomer;
 		}
 
@@ -43,7 +43,7 @@ public class CustomerService implements ApplicationService {
 
 	public Optional<CustomerAggregateRoot> updateCustomerProfile(CustomerId customerId, CustomerProfileEntity updatedCustomerProfile) {
 		Optional<CustomerAggregateRoot> optCustomer = customerRepository.findById(customerId);
-		if (!optCustomer.isPresent()) {
+		if (optCustomer.isEmpty()) {
 			return optCustomer;
 		}
 
@@ -60,7 +60,7 @@ public class CustomerService implements ApplicationService {
 	}
 
 	public List<CustomerAggregateRoot> getCustomers(String ids) {
-		List<CustomerId> customerIds = Arrays.stream(ids.split(",")).map(id -> new CustomerId(id.trim())).collect(Collectors.toList());
+		List<CustomerId> customerIds = Arrays.stream(ids.split(",")).map(id -> new CustomerId(id.trim())).toList();
 
 		List<CustomerAggregateRoot> customers = new ArrayList<>();
 		for (CustomerId customerId : customerIds) {

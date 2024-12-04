@@ -1,9 +1,10 @@
 package com.lakesidemutual.customercore.domain.customer;
 
 import io.github.adr.embedded.MADR;
-import jakarta.persistence.Embedded;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import org.microserviceapipatterns.domaindrivendesign.RootEntity;
 
@@ -18,7 +19,7 @@ public class CustomerAggregateRoot implements RootEntity {
 	@EmbeddedId
 	private CustomerId id;
 
-	@Embedded
+	@OneToOne(cascade = CascadeType.ALL)
 	private CustomerProfileEntity customerProfile;
 
 	public CustomerAggregateRoot() {
