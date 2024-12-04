@@ -1,4 +1,4 @@
-FROM openjdk:17-slim-buster as build
+FROM openjdk:21-slim-buster as build
 
 COPY .mvn .mvn
 COPY mvnw .
@@ -10,10 +10,10 @@ COPY src src
 
 RUN ./mvnw -B package                                        
 
-FROM openjdk:17-slim-buster
+FROM openjdk:21-slim-buster
 
-COPY --from=build target/spring-boot-admin-0.0.1-SNAPSHOT.jar .
+COPY --from=build target/spring-boot-admin-0.0.2-SNAPSHOT.jar .
 
 EXPOSE 9000
 
-ENTRYPOINT ["java", "-jar", "spring-boot-admin-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "spring-boot-admin-0.0.2-SNAPSHOT.jar"]
