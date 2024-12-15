@@ -8,3 +8,8 @@ __ENV.js
 activemq-data/
 
 *.db
+
+_cacache/
+_logs/
+_npx/
+_update-notifier-last-checked
