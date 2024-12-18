@@ -1,27 +1,23 @@
 package com.lakesidemutual.customercore.tests.domain.customer;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Calendar;
 import java.util.Date;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.lakesidemutual.customercore.domain.customer.Address;
 import com.lakesidemutual.customercore.domain.customer.CustomerAggregateRoot;
 import com.lakesidemutual.customercore.domain.customer.CustomerProfileEntity;
 import com.lakesidemutual.customercore.tests.TestUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ActiveProfiles;
 
-@RunWith(SpringRunner.class)
 @ActiveProfiles("test")
 public class CustomerAggregateRootTests {
 	private CustomerAggregateRoot customerA;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		customerA = TestUtils.createTestCustomer("rgpp0wkpec", "Max", "Mustermann",
 				TestUtils.createDate(1, Calendar.JANUARY, 1990), "Oberseestrasse 10", "8640", "Rapperswil",

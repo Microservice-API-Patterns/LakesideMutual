@@ -33,7 +33,7 @@
 		<ratelimitj-inmemory.version>0.7.0</ratelimitj-inmemory.version>
 		<commons-text.version>1.12.0</commons-text.version>
 		<!-- Test Dependency Versions -->
-		<archunit-junit4.version>1.3.0</archunit-junit4.version>
+		<archunit-junit5.version>1.3.0</archunit-junit5.version>
 	</properties>
 
 	<dependencyManagement>
@@ -141,8 +141,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.tngtech.archunit</groupId>
-			<artifactId>archunit-junit4</artifactId>
-			<version>${archunit-junit4.version}</version>
+			<artifactId>archunit-junit5</artifactId>
+			<version>${archunit-junit5.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
