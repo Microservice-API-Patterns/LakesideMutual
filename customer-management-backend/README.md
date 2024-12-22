@@ -10,7 +10,7 @@ To view and edit the source code, we recommend the official Eclipse-based IDE [S
 
 The Customer Management backend is a [Spring Boot](https://projects.spring.io/spring-boot/) application and its dependencies are managed with [Apache Maven](https://maven.apache.org/). To get started, install Java and Maven:
 
-1. Make sure you have [Java 8 or higher](https://adoptium.net/) installed.
+1. Make sure you have [Java 21 or higher](https://adoptium.net/) installed.
 2. Install Maven (see [https://maven.apache.org](https://maven.apache.org) for installation instructions). Note that most IDEs, such as the Spring Tool Suite, already contain a bundled copy of Maven. If this project is only built and launched from within the IDE, this step can be skipped.
 
 ## Launch Application
