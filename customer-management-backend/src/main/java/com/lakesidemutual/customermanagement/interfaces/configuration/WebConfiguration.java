@@ -4,6 +4,7 @@ import jakarta.servlet.Filter;
 
 import jakarta.servlet.Servlet;
 import org.apache.catalina.servlets.DefaultServlet;
+import org.h2.server.web.JakartaWebServlet;
 import org.h2.server.web.WebServlet;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -20,8 +21,8 @@ public class WebConfiguration implements WebMvcConfigurer {
 	 * This web servlet makes the web console of the H2 database engine available at the "/console" endpoint.
 	 * */
 	@Bean
-	public ServletRegistrationBean<Servlet> h2servletRegistration() {
-		ServletRegistrationBean<Servlet> registrationBean = new ServletRegistrationBean<>(new DefaultServlet());
+	public ServletRegistrationBean<JakartaWebServlet> h2servletRegistration() {
+		ServletRegistrationBean<JakartaWebServlet> registrationBean = new ServletRegistrationBean<>(new JakartaWebServlet());
 		registrationBean.addUrlMappings("/console/*");
 		return registrationBean;
 	}
