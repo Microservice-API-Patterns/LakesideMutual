@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="SpringBootAdminApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="spring-boot-admin" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.lakesidemutual.springbootadmin.SpringBootAdminApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

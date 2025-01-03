@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="build_all_docker_images" type="CompoundRunConfigurationType">
+    <toRun name="build_customer-core" type="docker-deploy" />
+    <toRun name="build_customer-management-backend" type="docker-deploy" />
+    <toRun name="build_customer-management-frontend" type="docker-deploy" />
+    <toRun name="build_customer-self-service-backend" type="docker-deploy" />
+    <toRun name="build_customer-self-service-frontend" type="docker-deploy" />
+    <toRun name="build_policy-management-backend" type="docker-deploy" />
+    <toRun name="build_policy-management-frontend" type="docker-deploy" />
+    <toRun name="build_risk-management-server" type="docker-deploy" />
+    <toRun name="build_spring-boot-admin" type="docker-deploy" />
+    <method v="2" />
+  </configuration>
+</component>

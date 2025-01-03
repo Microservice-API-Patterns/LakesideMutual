@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="build_customer-management-frontend" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+    <deployment type="dockerfile">
+      <settings>
+        <option name="imageTag" value="lakesidemutual/customer-management-frontend" />
+        <option name="buildOnly" value="true" />
+        <option name="containerName" value="customer-management-frontend" />
+        <option name="sourceFilePath" value="customer-management-frontend/Dockerfile" />
+      </settings>
+    </deployment>
+    <method v="2" />
+  </configuration>
+</component>

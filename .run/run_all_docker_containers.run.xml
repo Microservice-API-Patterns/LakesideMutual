@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="run_all_docker_containers" type="CompoundRunConfigurationType">
+    <toRun name="run_docker-compose.yml" type="docker-deploy" />
+    <method v="2" />
+  </configuration>
+</component>
