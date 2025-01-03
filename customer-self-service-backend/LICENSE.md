@@ -6,34 +6,34 @@ This project is made avaible under the Eclipse Public License v 2.0. See the [LI
 
 This project directly uses the following third party projects:
 
-| GroupId                          | ArtifactId                           | Version   | Type | License                                  | Optional |
-|----------------------------------|--------------------------------------|-----------|------|------------------------------------------|----------|
-| com.fasterxml.jackson.dataformat | jackson-dataformat-csv               | 2.17.2    | jar  | The Apache Software License, Version 2.0 | No       |
-| com.fasterxml.jackson.dataformat | jackson-databind                     | 2.17.2    | jar  | The Apache Software License, Version 2.0 | No       |
-| com.googlecode.libphonenumber    | libphonenumber                       | 8.13.47   | jar  | The Apache Software License, Version 2.0 | No       |
-| com.h2database                   | h2                                   | 2.2.224   | jar  | MPL 2.0 or EPL 1.0                       | No       |
-| com.tngtech.archunit             | archunit-junit4                      | 1.3.0     | jar  | Apache License, Version 2.0              | No       |
-| de.codecentric                   | spring-boot-admin-starter-client     | 3.3.3     | jar  | Apache License, Version 2.0              | No       |
-| es.moki.ratelimitj               | ratelimitj-inmemory                  | 0.7.0     | jar  | Apache License Version 2.0               | No       |
-| io.github.adr                    | e-adr                                | 1.0.0     | jar  | Eclipse Public License - v 2.0           | No       |
-| io.github.resilience4j           | resilience4j-spring-boot3            | 2.1.0     | jar  | Apache License, Version 2.0              | No       |
-| io.jsonwebtoken                  | jjwt-api                             | 0.12.6    | jar  | Apache License, Version 2.0              | No       |
-| io.jsonwebtoken                  | jjwt-impl                            | 0.12.6    | jar  | Apache License, Version 2.0              | No       |
-| io.jsonwebtoken                  | jjwt-jackson                         | 0.12.6    | jar  | Apache License, Version 2.0              | No       |
-| org.apache.activemq              | activemq-broker                      | 6.1.3     | jar  | Apache License, Version 2.0              | No       |
-| org.apache.activemq              | activemq-kahadb-store                | 6.1.3     | jar  | Apache License, Version 2.0              | No       |
-| org.apache.commons               | commons-text                         | 1.12.0    | jar  | Apache License, Version 2.0              | No       |
-| org.microservice-api-patterns    | domaindrivendesign-library           | 0.2.4     | jar  | Eclipse Public License, Version 2.0      | No       |
-| org.springdoc                    | springdoc-openapi-starter-webmvc-ui  | 2.6.0     | jar  | Apache License, Version 2.0              | No       |
-| org.springframework.boot         | spring-boot-devtools                 | 3.3.4     | jar  | Apache License, Version 2.0              | Yes      |
-| org.springframework.boot         | spring-boot-starter-activemq         | 3.3.4     | jar  | Apache License, Version 2.0              | No       |
-| org.springframework.boot         | spring-boot-starter-actuator         | 3.3.4     | jar  | Apache License, Version 2.0              | No       |
-| org.springframework.boot         | spring-boot-starter-data-jpa         | 3.3.4     | jar  | Apache License, Version 2.0              | No       |
-| org.springframework.boot         | spring-boot-starter-security         | 3.3.4     | jar  | Apache License, Version 2.0              | No       |
-| org.springframework.boot         | spring-boot-starter-test             | 3.3.4     | jar  | Apache License, Version 2.0              | No       |
-| org.springframework.boot         | spring-boot-starter-web              | 3.3.4     | jar  | Apache License, Version 2.0              | No       |
-| org.springframework.hateoas      | spring-hateoas                       | 2.3.3     | jar  | Apache License, Version 2.0              | No       |
-| org.springframework.security     | spring-security-test                 | 6.3.3     | jar  | Apache License, Version 2.0              | No       |
+| GroupId                          | ArtifactId                                       | Version | Type | License                                  | Optional |
+|----------------------------------|--------------------------------------------------|---------|------|------------------------------------------|----------|
+| com.fasterxml.jackson.dataformat | jackson-dataformat-csv                           | 2.17.2  | jar  | The Apache Software License, Version 2.0 | No       |
+| com.fasterxml.jackson.dataformat | jackson-databind                                 | 2.17.2  | jar  | The Apache Software License, Version 2.0 | No       |
+| com.googlecode.libphonenumber    | libphonenumber                                   | 8.13.47 | jar  | The Apache Software License, Version 2.0 | No       |
+| com.h2database                   | h2                                               | 2.2.224 | jar  | MPL 2.0 or EPL 1.0                       | No       |
+| com.tngtech.archunit             | archunit-junit4                                  | 1.3.0   | jar  | Apache License, Version 2.0              | No       |
+| de.codecentric                   | spring-boot-admin-starter-client                 | 3.3.3   | jar  | Apache License, Version 2.0              | No       |
+| es.moki.ratelimitj               | ratelimitj-inmemory                              | 0.7.0   | jar  | Apache License Version 2.0               | No       |
+| io.github.adr                    | e-adr                                            | 1.0.0   | jar  | Eclipse Public License - v 2.0           | No       |
+| io.jsonwebtoken                  | jjwt-api                                         | 0.12.6  | jar  | Apache License, Version 2.0              | No       |
+| io.jsonwebtoken                  | jjwt-impl                                        | 0.12.6  | jar  | Apache License, Version 2.0              | No       |
+| io.jsonwebtoken                  | jjwt-jackson                                     | 0.12.6  | jar  | Apache License, Version 2.0              | No       |
+| org.apache.activemq              | activemq-broker                                  | 6.1.3   | jar  | Apache License, Version 2.0              | No       |
+| org.apache.activemq              | activemq-kahadb-store                            | 6.1.3   | jar  | Apache License, Version 2.0              | No       |
+| org.apache.commons               | commons-text                                     | 1.12.0  | jar  | Apache License, Version 2.0              | No       |
+| org.microservice-api-patterns    | domaindrivendesign-library                       | 0.2.4   | jar  | Eclipse Public License, Version 2.0      | No       |
+| org.springdoc                    | springdoc-openapi-starter-webmvc-ui              | 2.6.0   | jar  | Apache License, Version 2.0              | No       |
+| org.springframework.boot         | spring-boot-devtools                             | 3.3.4   | jar  | Apache License, Version 2.0              | Yes      |
+| org.springframework.boot         | spring-boot-starter-activemq                     | 3.3.4   | jar  | Apache License, Version 2.0              | No       |
+| org.springframework.boot         | spring-boot-starter-actuator                     | 3.3.4   | jar  | Apache License, Version 2.0              | No       |
+| org.springframework.boot         | spring-boot-starter-data-jpa                     | 3.3.4   | jar  | Apache License, Version 2.0              | No       |
+| org.springframework.boot         | spring-boot-starter-security                     | 3.3.4   | jar  | Apache License, Version 2.0              | No       |
+| org.springframework.boot         | spring-boot-starter-test                         | 3.3.4   | jar  | Apache License, Version 2.0              | No       |
+| org.springframework.boot         | spring-boot-starter-web                          | 3.3.4   | jar  | Apache License, Version 2.0              | No       |
+| org.springframework.cloud        | spring-cloud-starter-circuitbreaker-resilience4j | 3.1.2   | jar  | Apache License, Version 2.0              | No       |
+| org.springframework.hateoas      | spring-hateoas                                   | 2.3.3   | jar  | Apache License, Version 2.0              | No       |
+| org.springframework.security     | spring-security-test                             | 6.3.3   | jar  | Apache License, Version 2.0              | No       |
 
 
 This report can be generated by invoking `mvn project-info-reports:dependencies`. The resulting report can then be found in `target/site/dependencies.html`. The table above has been created by running the generated HTML table through the [markdownTables converter](https://jmalarcon.github.io/markdowntables/).
