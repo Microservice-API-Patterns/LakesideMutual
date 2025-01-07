@@ -106,6 +106,40 @@ Don't worry if you're getting an exception about a refused connection on startup
 
 This just means that the application was unable to connect to the [Spring Boot Admin](spring-boot-admin) application. If you haven't started the Spring Boot Admin, the warning can be safely ignored.
 
+## I'm getting a file not found: failure to deploy on docker builds
+
+````bash
+/bin/sh: 1: ./mvnw: not found
+Error response from daemon: The command '/bin/sh -c ./mvnw -B dependency:go-offline' returned a non-zero code: 127
+Failed to deploy 'lakesidemutual/customer-core Dockerfile: customer-core/Dockerfile': Can't retrieve image ID from build stream
+````
+
+This issue occurs when the mvnw file does not have the correct encoding.
+Each operating system has its own specific file encoding.
+
+- Windows: CRLF (\r\n)
+- Unix: LF (\n)
+- Mac OSX: CR (\r)
+
+While Mac OSX and Unix commonly work with LF encodings, Windows utilizes CRLF encodings.
+Typically, Docker containers rely on Unix-based images and thus require files to be encoded with LF.
+In case of additional problems, try to change the file encoding according to the tool you utilize and to your needs.
+Be aware, this issue could also occur on other occasions such as executing the run_all_applications scripts.
+
+In order to resolve potential future problems on Windows, change your personal git repository settings as follows.
+```bash
+git config core.autocrlf true
+```
+Setting core.autocrlf to true will automatically convert the file encodings to CRLF on a checkout and convert them back to LF on a commit.
+This ensures that you will have all files encoded according to your operating system, while maintaining a consistent LF encoding on the repository.
+
+Since Mac OSX and Unix work with LF encodings, it is recommended to use the following setting on those two operating systems.
+```bash
+git config core.autocrlf input
+```
+Setting core.autocrlf to input will stop files with CRLF encoding to be pushed to the repository in the first place.
+All file encodings will be set to LF on a git commit.
+
 ## Why aren't you using Lombok?
 The DTO (data transfer object) classes require a lot of repetitive code (e.g., getters, setters, code to map between entities and DTOs, etc).
 We could use a code generator like [Lombok](https://projectlombok.org/) to get rid of this boilerplate. However, we decided against using a tool

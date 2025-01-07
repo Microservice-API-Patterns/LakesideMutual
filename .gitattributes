@@ -1,0 +1,6 @@
+# Ensure all files are checked out with their respective line endings
+/mvnw text eol=lf
+/mvnw.cmd text eol=crlf
+
+*.sh text eol=lf
+*.bat text eol=crlf
