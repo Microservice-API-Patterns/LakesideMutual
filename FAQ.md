@@ -117,12 +117,11 @@ Failed to deploy 'lakesidemutual/customer-core Dockerfile: customer-core/Dockerf
 This issue occurs when the mvnw file does not have the correct encoding.
 Each operating system has its own specific file encoding.
 
-- Windows: CRLF (\r\n)
-- Unix: LF (\n)
-- Mac OSX: CR (\r)
+- Windows: CRLF (`\r\n`)
+- Linux and macOS: LF (`\n`)
 
-While Mac OSX and Unix commonly work with LF encodings, Windows utilizes CRLF encodings.
-Typically, Docker containers rely on Unix-based images and thus require files to be encoded with LF.
+While Linux and macOS commonly work with LF encodings, Windows utilizes CRLF encodings.
+Typically, Docker containers rely on Linux-based images and thus require files to be encoded with LF.
 In case of additional problems, try to change the file encoding according to the tool you utilize and to your needs.
 Be aware, this issue could also occur on other occasions such as executing the run_all_applications scripts.
 
@@ -133,7 +132,7 @@ git config core.autocrlf true
 Setting core.autocrlf to true will automatically convert the file encodings to CRLF on a checkout and convert them back to LF on a commit.
 This ensures that you will have all files encoded according to your operating system, while maintaining a consistent LF encoding on the repository.
 
-Since Mac OSX and Unix work with LF encodings, it is recommended to use the following setting on those two operating systems.
+Since Linux and macOS work with LF encodings, it is recommended to use the following setting on those two operating systems.
 ```bash
 git config core.autocrlf input
 ```
@@ -142,5 +141,4 @@ All file encodings will be set to LF on a git commit.
 
 ## Why aren't you using Lombok?
 The DTO (data transfer object) classes require a lot of repetitive code (e.g., getters, setters, code to map between entities and DTOs, etc).
-We could use a code generator like [Lombok](https://projectlombok.org/) to get rid of this boilerplate. However, we decided against using a tool
-like this, because they usually require additional IDE plug-ins which complicates the initial setup process.
+We could use a code generator like [Lombok](https://projectlombok.org/) to get rid of this boilerplate. However, we decided against using a tool like this, because they usually require additional IDE plug-ins which complicates the initial setup process.
