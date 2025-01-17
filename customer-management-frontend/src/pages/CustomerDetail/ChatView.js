@@ -1,124 +1,110 @@
 // @flow
 
-import { Fragment } from "react"
 import * as React from "react"
+import {Fragment, useEffect, useRef, useState} from "react"
 import SockJsClient from "react-stomp"
 import ChatRoom from "../../components/ChatRoom"
-import { customerManagementBackend } from "../../config"
-import { Message, Loader } from "semantic-ui-react"
+import {customerManagementBackend} from "../../config"
+import {Loader, Message} from "semantic-ui-react"
 import errorMessages from "../../errorMessages"
 
-type ReactRef<ElementType: React.ElementType> = {
-  current: null | React.ElementRef<ElementType>,
-}
-
 export type Props = {
-  customer: Customer,
-  interactionLog: InteractionLog,
-  didReceiveMessage: (MessageDto) => void,
+    customer: Customer,
+    interactionLog: InteractionLog,
+    didReceiveMessage: (MessageDto) => void,
 }
 
-type State = {
-  didTimeout: boolean,
-  isConnected: boolean,
-  messages: Array<MessageDto>,
-}
+function ChatView({customer, interactionLog, didReceiveMessage}: Props) {
+    const [didTimeout, setDidTimeout] = useState<boolean>(false)
+    const [isConnected, setIsConnected] = useState<boolean>(false)
+    const [messages, setMessages] = useState<MessageDto[]>([])
+    const [timeoutId, setTimeoutId] = useState<TimeoutID>()
+    const clientRef: React$Ref<SockJsClient> = useRef()
 
-export default class ChatView extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props)
+    useEffect(() => {
+        if (interactionLog == null) return
 
-    const { customer, interactionLog } = props
-    const interactions = interactionLog.interactions
-    const messages: Array<MessageDto> = interactions.map((interaction) => ({
-      id: interaction.id,
-      username: interactionLog.username,
-      content: interaction.content,
-      customerId: customer.customerId,
-      date: interaction.date,
-      sentByOperator: interaction.sentByOperator,
-    }))
+        setMessages(interactionLog.interactions.map((interaction) => ({
+            id: interaction.id,
+            username: interactionLog.username,
+            content: interaction.content,
+            customerId: customer.customerId,
+            date: interaction.date,
+            sentByOperator: interaction.sentByOperator,
+        })))
+    }, [interactionLog, customer]);
 
-    this.state = {
-      didTimeout: false,
-      isConnected: false,
-      messages,
+    useEffect(() => {
+        if (isConnected) return
+        const timeout = setTimeout(() => {
+            const client = clientRef.current;
+            if (!isConnected) {
+                setDidTimeout(true)
+                client?.disconnect();
+            }
+        }, 5000)
+        setTimeoutId(timeout)
+        return () => {
+            clearTimeout(timeout);
+        }
+    }, [isConnected])
+
+    function appendMessage(message: MessageDto) {
+        setMessages(messages.concat([message]))
     }
-  }
-
-  timeout: ?TimeoutID
-  clientRef: ReactRef<SockJsClient> = React.createRef()
-
-  componentDidMount() {
-    this.timeout = setTimeout(() => {
-      const client = this.clientRef.current
-      if (client) {
-        this.setState({ didTimeout: true })
-        client.disconnect()
-      }
-    }, 5000)
-  }
-
-  appendMessage = (message: MessageDto) => {
-    const messages = this.state.messages.concat([message])
-    this.setState({ messages })
-  }
-
-  render() {
-    const { messages, isConnected, didTimeout } = this.state
-    const { customer } = this.props
 
     return (
-      <Fragment>
-        <SockJsClient
-          url={`${customerManagementBackend}/ws`}
-          topics={["/topic/messages"]}
-          onMessage={(message) => {
-            this.props.didReceiveMessage(message)
-            if (customer.customerId === message.customerId) {
-              this.appendMessage(message)
-            }
-          }}
-          onConnect={() => {
-            if (this.timeout) {
-              clearTimeout(this.timeout)
-            }
-            this.setState({ isConnected: true })
-          }}
-          ref={this.clientRef}
-        />
-        {isConnected && !didTimeout && (
-          <ChatRoom
-            messages={messages}
-            onSubmit={(text) => {
-              const client = this.clientRef.current
-              if (client) {
-                const message: MessageDto = {
-                  id: null,
-                  date: null,
-                  username: `${customer.firstname} ${customer.lastname}`,
-                  content: text,
-                  customerId: customer.customerId,
-                  sentByOperator: true,
-                }
-                client.sendMessage("/chat/messages", JSON.stringify(message))
-              }
-            }}
-          />
-        )}
-        {!isConnected && !didTimeout && (
-          <Loader active inline="centered">
-            Loading
-          </Loader>
-        )}
-        {!isConnected && didTimeout && (
-          <Message
-            error
-            header="Error"
-            content={errorMessages.customerManagementBackendNotAvailable}
-          />
-        )}
-      </Fragment>
+        <>
+            <SockJsClient
+                url={`${customerManagementBackend}/ws`}
+                topics={["/topic/messages"]}
+                onMessage={(message) => {
+                    didReceiveMessage(message)
+                    if (customer.customerId === message.customerId) {
+                        appendMessage(message)
+                    }
+                }}
+                onConnect={() => {
+                    if (timeoutId != null) {
+                        clearTimeout(timeoutId)
+                        setTimeoutId(undefined)
+                    }
+                    setIsConnected(true)
+                }}
+                ref={clientRef}
+            />
+            {isConnected && !didTimeout && (
+                <ChatRoom
+                    messages={messages}
+                    onSubmit={(text) => {
+                        const client = clientRef.current
+                        if (client) {
+                            const message: MessageDto = {
+                                id: null,
+                                date: null,
+                                username: `${customer.firstname} ${customer.lastname}`,
+                                content: text,
+                                customerId: customer.customerId,
+                                sentByOperator: true,
+                            }
+                            client.sendMessage("/chat/messages", JSON.stringify(message))
+                        }
+                    }}/>
+            )}
+            {!isConnected && !didTimeout && (
+                <Loader active inline="centered">
+                    Loading
+                </Loader>
+            )}
+            {!isConnected && didTimeout && (
+                <Message
+                    error
+                    header="Error"
+                    content={errorMessages.customerManagementBackendNotAvailable}
+                />
+            )}
+        </>
     )
-  }
 }
+
+export default ChatView

@@ -1,7 +1,7 @@
 // @flow
 
 import React from "react"
-import { Link, Redirect } from "react-router-dom"
+import { Link, Navigate } from "react-router-dom"
 import { Button, Grid, Header } from "semantic-ui-react"
 import { Segment } from "semantic-ui-react"
 
@@ -11,7 +11,7 @@ export type Props = {
 
 const Home = ({ isAuthenticated }: Props) =>
   isAuthenticated ? (
-    <Redirect to={"/policies"} />
+    <Navigate to={"/policies"} />
   ) : (
     <Grid className="HomeScreen" verticalAlign="middle" centered={true}>
       <Grid.Column>

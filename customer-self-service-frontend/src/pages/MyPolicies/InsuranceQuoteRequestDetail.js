@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Fragment } from "react"
-import { Link, withRouter, type Match } from "react-router-dom"
+import { Link, type Match } from "react-router-dom"
 import {
   Breadcrumb,
   Segment,
@@ -365,4 +365,4 @@ class InsuranceQuoteRequestDetail extends React.Component<Props> {
   }
 }
 
-export default withRouter(InsuranceQuoteRequestDetail)
+export default InsuranceQuoteRequestDetail

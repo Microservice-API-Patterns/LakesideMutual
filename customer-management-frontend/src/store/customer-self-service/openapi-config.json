@@ -1,0 +1,9 @@
+{
+  "schemaFile": "http://localhost:8080/v3/api-docs",
+  "apiFile": "./customerSelfServiceBase.ts",
+  "apiImport": "customerSelfServiceBase",
+  "outputFile": "./customerSelfServiceApi.ts",
+  "exportName": "customerSelfServiceApi",
+  "hooks": true,
+  "tag": true
+}

@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Fragment } from "react"
-import { Redirect, Link } from "react-router-dom"
+import { Navigate, Link } from "react-router-dom"
 import { Segment, Breadcrumb, Step, Icon, Message } from "semantic-ui-react"
 import Step1 from "./Step1"
 import Step2 from "./Step2"
@@ -193,7 +193,7 @@ export default class RequestInsuranceCode extends React.Component<
   render() {
     const { currentStep } = this.state
     if (this.state.shouldRedirect) {
-      return <Redirect to="/policies" />
+      return <Navigate to="/policies" />
     }
 
     const formError = this.getFormError()

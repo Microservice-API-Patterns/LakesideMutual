@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Fragment } from "react"
-import { Route, Redirect } from "react-router-dom"
+import { Route, Navigate } from "react-router-dom"
 import { Loader } from "semantic-ui-react"
 import Overview from "./Overview"
 import UpdateAddressForm from "./UpdateAddressForm"
@@ -31,7 +31,7 @@ export default class MyProfile extends React.Component<Props> {
     if (isLoadingUser || isLoadingCustomer) {
       return <Loader active />
     } else if (user != null && user.customerId == null && customer == null) {
-      return <Redirect to={"/complete-registration"} />
+      return <Navigate to={"/complete-registration"} />
     } else if (customer != null) {
       return (
         <Fragment>

@@ -1,7 +1,7 @@
 // @flow
 
 import React from "react"
-import { Redirect, Link, type Location } from "react-router-dom"
+import { Navigate, Link, type Location } from "react-router-dom"
 import { Button, Grid, Header, Form, Segment, Message } from "semantic-ui-react"
 import { ApiError } from "../api/helpers"
 import errorMessages from "../errorMessages"
@@ -79,7 +79,7 @@ class Login extends React.Component<Props, State> {
     }
 
     if (this.state.shouldRedirect) {
-      return <Redirect to={from} />
+      return <Navigate to={from} />
     }
 
     return (

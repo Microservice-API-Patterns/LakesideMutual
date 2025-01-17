@@ -3,22 +3,21 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "flow-bin": "^0.196.3",
+    "flow-bin": "^0.244.0",
     "react-scripts": "5.0.1"
   },
   "dependencies": {
     "@beam-australia/react-env": "^3.1.1",
-    "documentation": "^14.0.1",
-    "moment": "^2.29.4",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
-    "react-router": "^4.3.1",
-    "react-router-dom": "^4.3.1",
+    "documentation": "^14.0.3",
+    "moment": "^2.30.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router": "^6.26.1",
+    "react-router-dom": "^6.26.1",
     "react-stomp": "^5.1.0",
     "semantic-ui-css": "^2.5.0",
-    "semantic-ui-react": "^2.1.4",
-    "unstated": "^2.1.1",
-    "whatwg-fetch": "^3.6.2"
+    "semantic-ui-react": "^2.1.5",
+    "whatwg-fetch": "^3.6.20"
   },
   "scripts": {
     "prestart": "react-env",
