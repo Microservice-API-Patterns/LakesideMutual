@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Fragment } from "react"
-import { Link, Redirect } from "react-router-dom"
+import { Link, Navigate } from "react-router-dom"
 import {
   Loader,
   Message,
@@ -164,7 +164,7 @@ export default class InsuranceQuoteRequestsOverview extends React.Component<
 
   render() {
     if (this.state.redirectLink != null) {
-      return <Redirect to={this.state.redirectLink} />
+      return <Navigate to={this.state.redirectLink} />
     }
     return (
       <Fragment>

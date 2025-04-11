@@ -1,0 +1,9 @@
+{
+  "schemaFile": "http://localhost:8100/v3/api-docs",
+  "apiFile": "./customerManagementBase.ts",
+  "apiImport": "customerManagementBase",
+  "outputFile": "./customerManagementApi.ts",
+  "exportName": "customerManagementApi",
+  "hooks": true,
+  "tag": true
+}

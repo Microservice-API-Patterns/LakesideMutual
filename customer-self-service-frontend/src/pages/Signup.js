@@ -1,7 +1,7 @@
 // @flow
 
 import React from "react"
-import { Redirect, Link } from "react-router-dom"
+import { Navigate, Link } from "react-router-dom"
 import {
   Button,
   Grid,
@@ -94,7 +94,7 @@ class Signup extends React.Component<Props, State> {
     const errorMessages = formError ? formError.errorMessages : []
 
     if (shouldRedirect) {
-      return <Redirect to="/login" />
+      return <Navigate to="/login" />
     }
 
     return (

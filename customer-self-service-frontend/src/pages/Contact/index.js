@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from "react"
-import { Redirect } from "react-router-dom"
+import { Navigate } from "react-router-dom"
 import { Loader } from "semantic-ui-react"
 import Chat from "./Chat"
 
@@ -30,7 +30,7 @@ export default class Contact extends React.Component<Props> {
     if (isLoadingUser || isLoadingCustomer) {
       return <Loader active />
     } else if (user != null && user.customerId == null && customer == null) {
-      return <Redirect to={"/complete-registration"} />
+      return <Navigate to={"/complete-registration"} />
     } else if (customer != null) {
       return (
         <Chat

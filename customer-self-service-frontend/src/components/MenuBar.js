@@ -4,7 +4,6 @@ import React, { Fragment } from "react"
 import { Menu, Segment } from "semantic-ui-react"
 import {
   Link,
-  withRouter,
   type Location,
   type RouterHistory,
 } from "react-router-dom"
@@ -71,4 +70,4 @@ const MenuBar = (props: Props) => {
   )
 }
 
-export default withRouter(MenuBar)
+export default MenuBar

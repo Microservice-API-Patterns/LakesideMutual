@@ -1,25 +1,19 @@
 // @flow
 
 import * as React from "react"
-import { Header, Segment } from "semantic-ui-react"
-import Notifications from "./Notifications"
+import {Header, Segment} from "semantic-ui-react"
 import Customers from "./Customers"
+import Notifications from "./Notifications";
 
-export type Props = {}
-
-type State = {}
-
-export default class Home extends React.Component<Props, State> {
-  state = {}
-
-  render() {
+function Home(): React$Element {
     return (
-      <Segment>
-        <Header as="h3" content="Notifications" />
-        <Notifications />
-        <Header as="h3" content="Customers" />
-        <Customers />
-      </Segment>
+        <Segment>
+            <Header as="h3" content="Notifications"/>
+            <Notifications/>
+            <Header as="h3" content="Customers"/>
+            <Customers/>
+        </Segment>
     )
-  }
 }
+
+export default Home
